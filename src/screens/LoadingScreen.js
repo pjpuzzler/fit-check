@@ -13,7 +13,13 @@ export default LoadingScreen = () => {
         setTimeout(async () => {
             const currentUser = firebaseContext.getCurrentUser();
 
-            setUser((state) => ({ ...state, isLoggedIn: currentUser != null }));
+            if (currentUser) {
+                const userInfo = await firebaseContext.getUserInfo(
+                    currentUser.uid
+                );
+
+                setUser({ isLoggedIn: true, ...userInfo });
+            } else setUser({ isLoggedIn: false });
         }, 1000);
     }, []);
 

@@ -55,6 +55,22 @@ const Firebase = {
             console.log("Error @createUser:", error.message);
         }
     },
+
+    signIn: async (email, password) => {
+        return firebase.auth().signInWithEmailAndPassword(email, password);
+    },
+
+    getUserInfo: async (uid) => {
+        try {
+            const user = await db.collection("users").doc(uid).get();
+
+            if (user.exists) {
+                return user.data();
+            }
+        } catch (error) {
+            console.log("Error @getUserInfo:", error.message);
+        }
+    },
 };
 
 const FirebaseProvider = (props) => {

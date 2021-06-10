@@ -9,7 +9,7 @@ export default TextStyle = ({ ...props }) => {
 const windowHeight = Dimensions.get("window").height;
 
 const Text = styled.Text`
-    color: ${(props) => props.color ?? "#666666"};
+    color: ${(props) => props.color ?? "#000000"};
     margin: ${(props) => props.margin ?? 0};
     padding: ${(props) => props.padding ?? 0};
 
