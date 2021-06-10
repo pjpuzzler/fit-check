@@ -1,0 +1,12 @@
+{
+  "name": "fit-check",
+  "displayName": "fit-check",
+  "expo": {
+    "name": "fit-check",
+    "slug": "fit-check",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
