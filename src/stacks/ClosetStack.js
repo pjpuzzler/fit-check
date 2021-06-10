@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Platform, StatusBar, Dimensions } from "react-native";
 import styled from "styled-components";
 
@@ -10,70 +10,53 @@ import WardrobeScreen from "../screens/WardrobeScreen";
 import Text from "../components/Text";
 
 export default ClosetStack = ({ navigation }) => {
-    const [showOutfits, setShowOutfits] = useState(true);
-
     const windowHeight = Dimensions.get("window").height;
 
-    const MainStack = createMaterialTopTabNavigator();
+    const ClosetNav = createMaterialTopTabNavigator();
 
     const tabBarOptions = {
         indicatorStyle: {
-            height: "8%",
-            backgroundColor: "#18d299",
+            opacity: 0,
         },
         iconStyle: {
             height: "100%",
             width: "100%",
+            marginTop:
+                Platform.OS === "android"
+                    ? StatusBar.currentHeight + windowHeight * 0.03
+                    : windowHeight * 0.03,
         },
         pressColor: "#18d299",
         showLabel: false,
         style: {
             backgroundColor: "#1c4068",
-            height: "8%",
-            justifyContent: "center",
+            height:
+                Platform.OS === "android"
+                    ? StatusBar.currentHeight + windowHeight * 0.08
+                    : windowHeight * 0.08,
         },
         showIcon: true,
     };
 
     const screenOptions = ({ route }) => ({
         tabBarIcon: ({ focused }) => {
-            return <Text color={focused ? "1c4068" : null}>{route.name}</Text>;
+            return (
+                <Text color={focused ? "#18d299" : "#ffffff"}>
+                    {route.name}
+                </Text>
+            );
         },
     });
 
     return (
-        <MainStack.Navigator
+        <ClosetNav.Navigator
             tabBarOptions={tabBarOptions}
             screenOptions={screenOptions}
+            swipeEnabled={false}
         >
-            <MainStack.Screen name="Outfits" component={OutfitsScreen} />
-            <MainStack.Screen name="Wardrobe" component={WardrobeScreen} />
-        </MainStack.Navigator>
-    );
-
-    return (
-        <Container>
-            <TopBar
-                style={{
-                    paddingTop:
-                        Platform.OS === "android"
-                            ? StatusBar.currentHeight + windowHeight / 50
-                            : windowHeight / 50,
-                }}
-            >
-                <TopBarCircle
-                    style={{
-                        width: windowWidth / 1.5,
-                        height: windowWidth / 6,
-                        borderRadius: windowWidth,
-                    }}
-                >
-                    <Text large bold>
-                        {showOutfits ? "outfits" : "wardrobe"}
-                    </Text>
-                </TopBarCircle>
-            </TopBar>
-        </Container>
+            <ClosetNav.Screen name="Outfits" component={OutfitsScreen} />
+            <ClosetNav.Screen name="Wardrobe" component={WardrobeScreen} />
+        </ClosetNav.Navigator>
     );
 };
 

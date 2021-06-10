@@ -11,7 +11,7 @@ import UserScreen from "../screens/UserScreen";
 export default MainStack = () => {
     const windowHeight = Dimensions.get("window").height;
 
-    const MainStack = createMaterialTopTabNavigator();
+    const MainNav = createMaterialTopTabNavigator();
 
     const tabBarOptions = {
         indicatorStyle: {
@@ -61,15 +61,15 @@ export default MainStack = () => {
     });
 
     return (
-        <MainStack.Navigator
+        <MainNav.Navigator
             initialRouteName="Main"
             tabBarOptions={tabBarOptions}
             tabBarPosition="bottom"
             screenOptions={screenOptions}
         >
-            <MainStack.Screen name="Closet" component={ClosetStack} />
-            <MainStack.Screen name="Main" component={MainScreen} />
-            <MainStack.Screen name="User" component={UserScreen} />
-        </MainStack.Navigator>
+            <MainNav.Screen name="Closet" component={ClosetStack} />
+            <MainNav.Screen name="Main" component={MainScreen} />
+            <MainNav.Screen name="User" component={UserScreen} />
+        </MainNav.Navigator>
     );
 };
