@@ -125,7 +125,10 @@ export default SignInScreen = ({ navigation }) => {
                             </InvalidSignInContainer>
                         ) : null}
                         <SignInContainer
-                            style={{ borderRadius: windowHeight / 30 }}
+                            style={{
+                                borderRadius: windowHeight / 30,
+                                opacity: loading ? 0.5 : null,
+                            }}
                             onPress={signIn}
                             disabled={loading}
                         >

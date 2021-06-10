@@ -11,15 +11,24 @@ export default LoadingScreen = () => {
 
     useEffect(() => {
         setTimeout(async () => {
-            const currentUser = firebaseContext.getCurrentUser();
+            let isLoggedIn = false;
 
-            if (currentUser) {
-                const userInfo = await firebaseContext.getUserInfo(
-                    currentUser.uid
-                );
+            try {
+                const currentUser = firebaseContext.getCurrentUser();
 
-                setUser({ isLoggedIn: true, ...userInfo });
-            } else setUser({ isLoggedIn: false });
+                if (currentUser) {
+                    const userInfo = await firebaseContext.getUserInfo(
+                        currentUser.uid
+                    );
+
+                    isLoggedIn = true;
+                }
+            } catch (error) {
+                console.log("Error @load");
+            } finally {
+                if (isLoggedIn) setUser({ isLoggedIn: true, ...userInfo });
+                else setUser({ isLoggedIn: false });
+            }
         }, 1000);
     }, []);
 

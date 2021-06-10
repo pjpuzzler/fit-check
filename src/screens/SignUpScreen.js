@@ -186,8 +186,11 @@ export default SignUpScreen = ({ navigation }) => {
                             </InvalidSignUpMessageContainer>
                         ) : null}
 
-                        <ContinueContainer
-                            style={{ borderRadius: windowHeight / 30 }}
+                        <SignUpContainer
+                            style={{
+                                borderRadius: windowHeight / 30,
+                                opacity: loading ? 0.5 : null,
+                            }}
                             onPress={signUp}
                             disabled={loading}
                         >
@@ -198,7 +201,7 @@ export default SignUpScreen = ({ navigation }) => {
                                     sign up
                                 </Text>
                             )}
-                        </ContinueContainer>
+                        </SignUpContainer>
 
                         <SignIn
                             onPress={() => navigation.navigate("SignIn")}
@@ -257,7 +260,7 @@ const InvalidSignUpMessageContainer = styled.SafeAreaView`
     bottom: 91%;
 `;
 
-const ContinueContainer = styled.TouchableOpacity`
+const SignUpContainer = styled.TouchableOpacity`
     width: 75%
     height: 40%;
     align-items: center;

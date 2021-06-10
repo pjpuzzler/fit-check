@@ -3,20 +3,29 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import { UserContext } from "../context/UserContext";
 
-import AuthStack from "./AuthStack";
-import MainStack from "./MainStack";
 import LoadingScreen from "../screens/LoadingScreen";
+import MainStack from "./MainStack";
+import SelectSexScreen from "../screens/SelectSexScreen";
+import AuthStack from "./AuthStack";
 
 export default AppStack = () => {
-    const AppStack = createStackNavigator();
     const [user] = useContext(UserContext);
+
+    const AppStack = createStackNavigator();
 
     return (
         <AppStack.Navigator headerMode="none">
             {user.isLoggedIn === null ? (
                 <AppStack.Screen name="Loading" component={LoadingScreen} />
             ) : user.isLoggedIn ? (
-                <AppStack.Screen name="Main" component={MainStack} />
+                user.sex ? (
+                    <AppStack.Screen name="Main" component={MainStack} />
+                ) : (
+                    <AppStack.Screen
+                        name="SelectSex"
+                        component={SelectSexScreen}
+                    />
+                )
             ) : (
                 <AppStack.Screen name="Auth" component={AuthStack} />
             )}

@@ -1,5 +1,7 @@
 import React, { createContext } from "react";
-import firebase from "firebase";
+import { firebase } from "@firebase/app";
+import "@firebase/firestore";
+import "@firebase/auth";
 import config from "../config/firebase";
 
 const FirebaseContext = createContext();
@@ -45,6 +47,7 @@ const Firebase = {
             await db.collection("users").doc(uid).set({
                 email: user.email,
                 outfits: [],
+                sex: "",
                 username: user.username,
                 wardrobe: [],
             });
@@ -71,6 +74,16 @@ const Firebase = {
             }
         } catch (error) {
             console.log("Error @getUserInfo:", error.message);
+        }
+    },
+
+    updateData: async (dataObj) => {
+        try {
+            const uid = Firebase.getCurrentUser().uid;
+
+            await db.collection("users").doc(uid).update(dataObj);
+        } catch (error) {
+            console.log("Error @updateData:", error.message);
         }
     },
 };
