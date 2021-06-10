@@ -43,8 +43,10 @@ const Firebase = {
             const uid = currentUser.uid;
 
             await db.collection("users").doc(uid).set({
-                username: user.username,
                 email: user.email,
+                outfits: [],
+                username: user.username,
+                wardrobe: [],
             });
 
             delete user.password;
