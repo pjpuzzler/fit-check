@@ -11,10 +11,10 @@ export default SignInScreen = ({ navigation }) => {
     const [_, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [invalidSignInMessage, setInvalidSignInMessage] = useState();
+    const [invalidSignInMessage, setInvalidSignInMessage] = useState("");
     const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     const windowHeight = Dimensions.get("window").height;
@@ -41,19 +41,13 @@ export default SignInScreen = ({ navigation }) => {
 
     const signIn = async () => {
         setLoading(true);
+        
+        const [success, res] = await firebase.signIn(email, password);
 
-        let signedIn = false;
-
-        try {
-            signedIn = await firebase.signIn(email, password);
-        } catch (error) {
-            console.log("Error @signIn: ", error.message);
-        } finally {
-            if (signedIn) setUser({ isLoggedIn: null });
-            else {
-                setInvalidSignInMessage("invalid email and/or password");
-                setLoading(false);
-            }
+        if (success) setUser({ isLoggedIn: null });
+        else {
+            setInvalidSignInMessage(res ? res : "An unknown error occurred");
+            setLoading(false);
         }
     };
 
@@ -83,7 +77,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
                             keyboardType="email-address"
-                            onChangeText={(email) => setEmail(email.trim())}
+                            onChangeText={email => setEmail(email.trim())}
                             onSubmitEditing={() => signIn()}
                             placeholder="email"
                             style={{
@@ -100,7 +94,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCompleteType="password"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={(password) =>
+                            onChangeText={password =>
                                 setPassword(password.trim())
                             }
                             onSubmitEditing={() => signIn()}
