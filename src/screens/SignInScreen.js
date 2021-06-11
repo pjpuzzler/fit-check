@@ -8,13 +8,14 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default SignInScreen = ({ navigation }) => {
+    const [_, setUser] = useContext(UserContext);
+    const firebase = useContext(FirebaseContext);
+
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [loading, setLoading] = useState(false);
     const [invalidSignInMessage, setInvalidSignInMessage] = useState();
     const [keyboardVisible, setKeyboardVisible] = useState(false);
-    const [_, setUser] = useContext(UserContext);
-    const firebase = useContext(FirebaseContext);
 
     const windowHeight = Dimensions.get("window").height;
 
@@ -48,14 +49,11 @@ export default SignInScreen = ({ navigation }) => {
         } catch (error) {
             console.log("Error @signIn: ", error.message);
         } finally {
-            if (signedIn) {
-                setUser({
-                    isLoggedIn: null,
-                });
-            } else {
+            if (signedIn) setUser({ isLoggedIn: null });
+            else {
                 setInvalidSignInMessage("invalid email and/or password");
+                setLoading(false);
             }
-            setLoading(false);
         }
     };
 
@@ -89,8 +87,9 @@ export default SignInScreen = ({ navigation }) => {
                             onSubmitEditing={() => signIn()}
                             placeholder="email"
                             style={{
+                                color: "#1c4068",
                                 borderBottomWidth: windowHeight / 700,
-                                borderBottomColor: "#666666",
+                                borderBottomColor: "#1c4068",
                             }}
                             value={email}
                         />
@@ -108,8 +107,9 @@ export default SignInScreen = ({ navigation }) => {
                             placeholder="password"
                             secureTextEntry={true}
                             style={{
+                                color: "#1c4068",
                                 borderBottomWidth: windowHeight / 700,
-                                borderBottomColor: "#666666",
+                                borderBottomColor: "#1c4068",
                             }}
                             value={password}
                         />
@@ -144,9 +144,7 @@ export default SignInScreen = ({ navigation }) => {
                             onPress={() => navigation.navigate("SignUp")}
                             style={{ padding: windowHeight / 100 }}
                         >
-                            <Text medium center>
-                                need an account?
-                            </Text>
+                            <Text color="#1c4068">need an account?</Text>
                         </SignUp>
                     </BottomContainer>
                 ) : null}
@@ -202,7 +200,7 @@ const SignInContainer = styled.TouchableOpacity`
     height: 40%;
     align-items: center;
     justify-content: center;
-    background-color: #1c4068;
+    background-color: #18d299;
     position: absolute;
     bottom: 44%;
 `;

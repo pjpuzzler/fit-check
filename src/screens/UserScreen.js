@@ -9,16 +9,9 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default UserScreen = ({ navigation }) => {
-    const [user, setUser] = useContext(UserContext);
-    const firebase = useContext(FirebaseContext);
+    const [user, _] = useContext(UserContext);
 
     const windowHeight = Dimensions.get("window").height;
-
-    const logOut = async () => {
-        const loggedOut = await firebase.logOut();
-
-        if (loggedOut) setUser((state) => ({ ...state, isLoggedIn: false }));
-    };
 
     return (
         <Container>
@@ -28,21 +21,23 @@ export default UserScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <IconContainer onPress={() => {}}>
-                    <MaterialCommunityIcons
-                        name="cog"
-                        size={windowHeight / 16}
-                        color="#1c4068"
-                    />
-                </IconContainer>
+                <MaterialCommunityIcons
+                    name="cog"
+                    size={windowHeight / 16}
+                    style={{ opacity: 0 }}
+                />
 
-                <Text large bold>
+                <Text large bold color="#18d299">
                     {user.username}
                 </Text>
 
-                <IconContainer onPress={logOut}>
+                <IconContainer
+                    onPress={() => {
+                        navigation.navigate("Settings");
+                    }}
+                >
                     <MaterialCommunityIcons
-                        name="logout"
+                        name="cog"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />

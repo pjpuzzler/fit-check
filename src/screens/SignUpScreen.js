@@ -9,14 +9,15 @@ import { UserContext } from "../context/UserContext";
 import Text from "../components/Text";
 
 export default SignUpScreen = ({ navigation }) => {
+    const [_, setUser] = useContext(UserContext);
+    const firebase = useContext(FirebaseContext);
+
     const [keyboardVisible, setKeyboardVisible] = useState(false);
     const [username, setUsername] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [invalidSignUpMessage, setInvalidSignUpMessage] = useState();
     const [loading, setLoading] = useState(false);
-    const [_, setUser] = useContext(UserContext);
-    const firebase = useContext(FirebaseContext);
 
     const windowHeight = Dimensions.get("window").height;
 
@@ -92,10 +93,9 @@ export default SignUpScreen = ({ navigation }) => {
                 setUser({ ...createdUser, isLoggedIn: null });
             } catch (error) {
                 console.log("Error @signUp: ", error);
+                setLoading(false);
             }
         }
-
-        setLoading(false);
     };
 
     return (
@@ -130,8 +130,9 @@ export default SignUpScreen = ({ navigation }) => {
                             onSubmitEditing={() => signUp()}
                             placeholder="username"
                             style={{
+                                color: "#1c4068",
                                 borderBottomWidth: windowHeight / 700,
-                                borderBottomColor: "#666666",
+                                borderBottomColor: "#1c4068",
                             }}
                             value={username}
                         />
@@ -148,8 +149,9 @@ export default SignUpScreen = ({ navigation }) => {
                             onSubmitEditing={() => signUp()}
                             placeholder="email"
                             style={{
+                                color: "#1c4068",
                                 borderBottomWidth: windowHeight / 700,
-                                borderBottomColor: "#666666",
+                                borderBottomColor: "#1c4068",
                             }}
                             value={email}
                         />
@@ -168,8 +170,9 @@ export default SignUpScreen = ({ navigation }) => {
                             placeholder="password"
                             secureTextEntry={true}
                             style={{
+                                color: "#1c4068",
                                 borderBottomWidth: windowHeight / 700,
-                                borderBottomColor: "#666666",
+                                borderBottomColor: "#1c4068",
                             }}
                             value={password}
                         />
@@ -207,9 +210,7 @@ export default SignUpScreen = ({ navigation }) => {
                             onPress={() => navigation.navigate("SignIn")}
                             style={{ padding: windowHeight / 100 }}
                         >
-                            <Text medium center>
-                                have an account?
-                            </Text>
+                            <Text color="#1c4068">have an account?</Text>
                         </SignIn>
                     </BottomContainer>
                 ) : null}
@@ -265,7 +266,7 @@ const SignUpContainer = styled.TouchableOpacity`
     height: 40%;
     align-items: center;
     justify-content: center;
-    background-color: #1c4068;
+    background-color: #18d299;
     position: absolute;
     bottom: 44%;
 `;

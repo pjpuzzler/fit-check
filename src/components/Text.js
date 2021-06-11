@@ -22,13 +22,13 @@ const Text = styled.Text`
                 return "font-size: " + (windowWidth / 12).toString() + "px;";
 
             case medium:
-                return "font-size: " + (windowWidth / 14).toString() + "px;";
+                return "font-size: " + (windowWidth / 16).toString() + "px;";
 
             case small:
-                return "font-size: " + (windowWidth / 24).toString() + "px;";
+                return "font-size: " + (windowWidth / 20).toString() + "px;";
 
             case tiny:
-                return "font-size: " + (windowWidth / 32).toString() + "px;";
+                return "font-size: " + (windowWidth / 26).toString() + "px;";
 
             default:
                 return "font-size: " + (windowWidth / 16).toString() + "px;";

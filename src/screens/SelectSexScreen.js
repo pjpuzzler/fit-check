@@ -9,11 +9,11 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default SelectSexScreen = () => {
-    const [sex, setSex] = useState("");
-    const [loading, setLoading] = useState(false);
-
     const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
+
+    const [sex, setSex] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const windowHeight = Dimensions.get("window").height;
 
@@ -25,8 +25,6 @@ export default SelectSexScreen = () => {
 
             await firebase.updateData({ sex });
         }
-
-        setLoading(false);
     };
 
     return (
@@ -37,7 +35,9 @@ export default SelectSexScreen = () => {
         >
             <Container>
                 <Container2>
-                    <Text bold>Select Type of Clothing</Text>
+                    <Text large heavy center>
+                        Preferred Clothing?
+                    </Text>
                     <Text small>(This can be changed later)</Text>
                     <Container3>
                         <BothContainer>
@@ -49,7 +49,7 @@ export default SelectSexScreen = () => {
                                 <MaterialCommunityIcons
                                     name="gender-male-female"
                                     size={windowHeight / 5.5}
-                                    color={sex === "b" ? "#1c4058" : "#666666"}
+                                    color={sex === "b" ? "#b2acd8" : "#666666"}
                                 />
                             </IconContainer>
                         </BothContainer>
@@ -62,7 +62,7 @@ export default SelectSexScreen = () => {
                                 <MaterialCommunityIcons
                                     name="gender-male"
                                     size={windowHeight / 5.5}
-                                    color={sex === "m" ? "#1c4068" : "#666666"}
+                                    color={sex === "m" ? "#6ca0dc" : "#666666"}
                                 />
                             </IconContainer>
                             <IconContainer
@@ -73,7 +73,7 @@ export default SelectSexScreen = () => {
                                 <MaterialCommunityIcons
                                     name="gender-female"
                                     size={windowHeight / 5.5}
-                                    color={sex === "f" ? "#1c4068" : "#666666"}
+                                    color={sex === "f" ? "#f8b9d4" : "#666666"}
                                 />
                             </IconContainer>
                         </MFContainer>
@@ -143,7 +143,7 @@ const ContinueButton = styled.TouchableOpacity`
     justify-content: center;
     width: 50%;
     height: 12%;
-    background-color: #1c4068;
+    background-color: #18d299;
 `;
 
 const Loading = styled.ActivityIndicator.attrs((props) => ({
