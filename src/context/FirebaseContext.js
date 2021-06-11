@@ -26,31 +26,29 @@ const Firebase = {
         return snapshot.empty;
     },
 
-    createUser: async (user) => {
-        const errorCode = await firebase
+    createUser: async (username, email, password) => {
+        const [success, res] = await firebase
                 .auth()
-                .createUserWithEmailAndPassword(user.email, user.password).catch((error) => error.code);
+                .createUserWithEmailAndPassword(email, password).then(userCredential => [true, userCredential.user]).catch(error => [false, error]);
         
-        if (errorCode) return errorCode;
+        if (!success) return [success, res];
         
         try {
-            const currentUser = Firebase.getCurrentUser();
-            const uid = currentUser.uid;
-
+            const uid = res.uid;
+            
             await db.collection("users").doc(uid).set({
-                email: user.email,
+                following: [],
                 outfits: [],
                 sex: "",
                 username: user.username,
                 wardrobe: [],
             });
 
-            delete user.password;
-
-            return { ...user, uid };
+            return [success, null];
         } catch (error) {
             currentUser.delete();
             console.log("Error @createUser:", error.message);
+            return [false, null];
         }
     },
 
