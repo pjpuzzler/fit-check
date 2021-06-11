@@ -27,11 +27,13 @@ const Firebase = {
     },
 
     createUser: async (user) => {
-        try {
-            await firebase
+        const errorCode = await firebase
                 .auth()
-                .createUserWithEmailAndPassword(user.email, user.password);
-
+                .createUserWithEmailAndPassword(user.email, user.password).catch((error) => error.code);
+        
+        if (errorCode) return errorCode;
+        
+        try {
             const currentUser = Firebase.getCurrentUser();
             const uid = currentUser.uid;
 
