@@ -27,14 +27,20 @@ const Firebase = {
     },
 
     createUser: async (username, email, password) => {
-        const [success, res] = await firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password).then(userCredential => [true, userCredential.user]).catch(error => [false, error]);
-        
-        if (!success) return [success, res];
+        const res;
         
         try {
-            const uid = res.uid;
+            res = await firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password);
+        } catch (error) {
+            return [false, error]
+        }
+        
+        const success;
+        
+        try {
+            const uid = res.user.uid;
             
             await db.collection("users").doc(uid).set({
                 following: [],
@@ -44,16 +50,28 @@ const Firebase = {
                 wardrobe: [],
             });
 
-            return [success, null];
+            success = true;
         } catch (error) {
             currentUser.delete();
             console.log("Error @createUser:", error.message);
-            return [false, null];
+            success = false;
+        } finally {
+            return [success, null];
         }
     },
 
     signIn: async (email, password) => {
-        return firebase.auth().signInWithEmailAndPassword(email, password);
+        const success, res;
+        
+        try {
+            res = await firebase.auth().signInWithEmailAndPassword(email, password);
+            success = true;
+        } catch (error) {
+            res = error;
+            success = false;
+        } finally {
+            return [success, res];
+        }
     },
 
     getUserInfo: async (uid) => {
