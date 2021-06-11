@@ -7,7 +7,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
-export default MainScreen = ({ navigation }) => {
+export default MainScreen = () => {
     return (
         <Container>
             <TopBar

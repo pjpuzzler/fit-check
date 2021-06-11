@@ -6,32 +6,32 @@ export default TextStyle = ({ ...props }) => {
     return <Text {...props}>{props.children}</Text>;
 };
 
-const windowHeight = Dimensions.get("window").height;
+const windowWidth = Dimensions.get("window").width;
 
 const Text = styled.Text`
-    color: ${(props) => props.color ?? "#666666"};
+    color: ${(props) => props.color ?? "#1c4068"};
     margin: ${(props) => props.margin ?? 0};
     padding: ${(props) => props.padding ?? 0};
 
     ${({ title, large, medium, small, tiny }) => {
         switch (true) {
             case title:
-                return "font-size: " + (windowHeight / 14).toString() + "px;";
+                return "font-size: " + (windowWidth / 8).toString() + "px;";
 
             case large:
-                return "font-size: " + (windowHeight / 20).toString() + "px;";
+                return "font-size: " + (windowWidth / 12).toString() + "px;";
 
             case medium:
-                return "font-size: " + (windowHeight / 28).toString() + "px;";
+                return "font-size: " + (windowWidth / 14).toString() + "px;";
 
             case small:
-                return "font-size: " + (windowHeight / 37).toString() + "px;";
+                return "font-size: " + (windowWidth / 24).toString() + "px;";
 
             case tiny:
-                return "font-size: " + (windowHeight / 50).toString() + "px;";
+                return "font-size: " + (windowWidth / 32).toString() + "px;";
 
             default:
-                return "font-size: " + (windowHeight / 28).toString() + "px;";
+                return "font-size: " + (windowWidth / 16).toString() + "px;";
         }
     }}
 

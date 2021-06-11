@@ -17,13 +17,16 @@ export default SelectSexScreen = () => {
 
     const windowHeight = Dimensions.get("window").height;
 
-    const submit = async () => {
+    const continue_ = async () => {
+        setLoading(true);
+
         if (sex) {
-            console.log(user);
             setUser((state) => ({ ...state, sex }));
 
             await firebase.updateData({ sex });
         }
+
+        setLoading(false);
     };
 
     return (
@@ -75,22 +78,22 @@ export default SelectSexScreen = () => {
                             </IconContainer>
                         </MFContainer>
                     </Container3>
-                    <SubmitButton
+                    <ContinueButton
                         style={{
                             borderRadius: windowHeight / 30,
                             opacity: loading || !sex ? 0.5 : null,
                         }}
-                        onPress={submit}
+                        onPress={continue_}
                         disabled={loading || !sex}
                     >
                         {loading ? (
                             <Loading />
                         ) : (
                             <Text bold center color="#ffffff">
-                                Submit
+                                Continue
                             </Text>
                         )}
-                    </SubmitButton>
+                    </ContinueButton>
                 </Container2>
             </Container>
         </TWF>
@@ -135,7 +138,7 @@ const MFContainer = styled.SafeAreaView`
 
 const IconContainer = styled.TouchableOpacity``;
 
-const SubmitButton = styled.TouchableOpacity`
+const ContinueButton = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
     width: 50%;

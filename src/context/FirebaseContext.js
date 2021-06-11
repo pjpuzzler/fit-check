@@ -86,6 +86,18 @@ const Firebase = {
             console.log("Error @updateData:", error.message);
         }
     },
+
+    logOut: async () => {
+        try {
+            await firebase.auth().signOut();
+
+            return true;
+        } catch (error) {
+            console.log("Error @logOut:", error.message);
+        }
+
+        return false;
+    },
 };
 
 const FirebaseProvider = (props) => {

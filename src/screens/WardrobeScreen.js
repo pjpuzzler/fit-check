@@ -7,7 +7,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
-export default WardrobeScreen = ({ navigation }) => {
+export default WardrobeScreen = () => {
     const windowHeight = Dimensions.get("window").height;
     const windowWidth = Dimensions.get("window").width;
 

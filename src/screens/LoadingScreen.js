@@ -12,12 +12,13 @@ export default LoadingScreen = () => {
     useEffect(() => {
         setTimeout(async () => {
             let isLoggedIn = false;
+            let userInfo;
 
             try {
                 const currentUser = firebaseContext.getCurrentUser();
 
                 if (currentUser) {
-                    const userInfo = await firebaseContext.getUserInfo(
+                    userInfo = await firebaseContext.getUserInfo(
                         currentUser.uid
                     );
 
