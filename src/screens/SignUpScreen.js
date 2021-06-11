@@ -64,20 +64,6 @@ export default SignUpScreen = ({ navigation }) => {
             );
         } else if (!(await firebase.usernameIsAvailable(username))) {
             setInvalidSignUpMessage("username is in use");
-        } else if (
-            !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-                email
-            )
-        ) {
-            setInvalidSignUpMessage("email must be valid");
-        } else if (await firebase.emailIsInUse(email)) {
-            setInvalidSignUpMessage("email is in use");
-        } else if (!password || password.length < 8 || password.length > 20) {
-            setInvalidSignUpMessage("password must be 8-20 characters");
-        } else if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])./.test(password)) {
-            setInvalidSignUpMessage(
-                "password must contain lowercase, uppercase, and a digit"
-            );
         } else {
             setInvalidSignUpMessage();
 
@@ -87,14 +73,13 @@ export default SignUpScreen = ({ navigation }) => {
                 password,
             };
 
-            try {
-                const createdUser = await firebase.createUser(user);
-
-                setUser({ ...createdUser, isLoggedIn: null });
-            } catch (error) {
-                console.log("Error @signUp: ", error);
-                setLoading(false);
-            }
+            const res = await firebase.createUser(user);
+            
+            if (res) {
+                if (typeof res === "string") {
+                    setInvalidSignUpMessage(res);
+                } else setUser({ isLoggedIn: null });
+            } else setInvalidSignUpMessage("an unknown error occurred");
         }
     };
 
