@@ -46,7 +46,7 @@ export default SignInScreen = ({ navigation }) => {
 
         if (success) setUser({ isLoggedIn: null });
         else {
-            setInvalidSignInMessage(res ? res : "An unknown error occurred");
+            setInvalidSignInMessage(res ? res.message : "An unknown error occurred");
             setLoading(false);
         }
     };
