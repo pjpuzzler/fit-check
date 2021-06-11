@@ -61,17 +61,17 @@ export default SignUpScreen = ({ navigation }) => {
             setInvalidSignUpMessage("username must be 3-15 characters");
         } else if (!/^[0-9a-zA-Z_.-]+$/.test(username)) {
             setInvalidSignUpMessage(
-                "username must contain only letters, numbers, and _/./-"
+                "Username must contain only letters, numbers, and _/./-"
             );
         } else if (!(await firebase.usernameIsAvailable(username))) {
-            setInvalidSignUpMessage("username is in use");
+            setInvalidSignUpMessage("Username is in use");
         } else {
             const [success, res] = await firebase.createUser(username, email, password);
             
             if (success) setUser({ isLoggedIn: null });
             else {
-                if (res) setInvalidSignUpMessage(res);
-                else setInvalidSignUpMessage("an unknown error occurred");
+                if (res) setInvalidSignUpMessage(res.message);
+                else setInvalidSignUpMessage("An unknown error occurred");
                 
                 setLoading(false);
             }
