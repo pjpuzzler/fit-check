@@ -70,9 +70,7 @@ export default SignUpScreen = ({ navigation }) => {
             
             if (success) setUser({ isLoggedIn: null });
             else {
-                if (res) setInvalidSignUpMessage(res.message);
-                else setInvalidSignUpMessage("An unknown error occurred");
-                
+                setInvalidSignUpMessage(res ? res.message : "An unknown error occurred");
                 setLoading(false);
             }
         }
