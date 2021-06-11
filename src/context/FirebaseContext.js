@@ -26,15 +26,6 @@ const Firebase = {
         return snapshot.empty;
     },
 
-    emailIsInUse: async (email) => {
-        const snapshot = await db
-            .collection("users")
-            .where("email", "==", email)
-            .get();
-
-        return !snapshot.empty;
-    },
-
     createUser: async (user) => {
         try {
             await firebase
