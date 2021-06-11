@@ -54,6 +54,7 @@ export default SignUpScreen = ({ navigation }) => {
     }, []);
 
     const signUp = async () => {
+        setInvalidSignUpMessage();
         setLoading(true);
 
         if (!username || username.length < 3 || username.length > 15) {
@@ -65,21 +66,15 @@ export default SignUpScreen = ({ navigation }) => {
         } else if (!(await firebase.usernameIsAvailable(username))) {
             setInvalidSignUpMessage("username is in use");
         } else {
-            setInvalidSignUpMessage();
-
-            const user = {
-                username,
-                email,
-                password,
-            };
-
-            const res = await firebase.createUser(user);
+            const [success, res] = await firebase.createUser(username, email, password);
             
-            if (res) {
-                if (typeof res === "string") {
-                    setInvalidSignUpMessage(res);
-                } else setUser({ isLoggedIn: null });
-            } else setInvalidSignUpMessage("an unknown error occurred");
+            if (success) setUser({ isLoggedIn: null });
+            else {
+                if (res) setInvalidSignUpMessage(res);
+                else setInvalidSignUpMessage("an unknown error occurred");
+                
+                setLoading(false);
+            }
         }
     };
 
