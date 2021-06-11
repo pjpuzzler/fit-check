@@ -13,10 +13,10 @@ export default SignUpScreen = ({ navigation }) => {
     const firebase = useContext(FirebaseContext);
 
     const [keyboardVisible, setKeyboardVisible] = useState(false);
-    const [username, setUsername] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [invalidSignUpMessage, setInvalidSignUpMessage] = useState();
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [invalidSignUpMessage, setInvalidSignUpMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
     const windowHeight = Dimensions.get("window").height;
@@ -54,11 +54,11 @@ export default SignUpScreen = ({ navigation }) => {
     }, []);
 
     const signUp = async () => {
-        setInvalidSignUpMessage();
+        setInvalidSignUpMessage("");
         setLoading(true);
 
-        if (!username || username.length < 3 || username.length > 15) {
-            setInvalidSignUpMessage("username must be 3-15 characters");
+        if (username.length < 3 || username.length > 15) {
+            setInvalidSignUpMessage("Username must be 3-15 characters");
         } else if (!/^[0-9a-zA-Z_.-]+$/.test(username)) {
             setInvalidSignUpMessage(
                 "Username must contain only letters, numbers, and _/./-"
@@ -104,7 +104,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCompleteType="username"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={(username) => {
+                            onChangeText={username => {
                                 setUsername(username.trim());
                             }}
                             onSubmitEditing={() => signUp()}
@@ -125,7 +125,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
                             keyboardType="email-address"
-                            onChangeText={(email) => setEmail(email.trim())}
+                            onChangeText={email => setEmail(email.trim())}
                             onSubmitEditing={() => signUp()}
                             placeholder="email"
                             style={{
@@ -143,7 +143,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCompleteType="password"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={(password) =>
+                            onChangeText={password =>
                                 setPassword(password.trim())
                             }
                             onSubmitEditing={() => signUp()}
