@@ -39,7 +39,7 @@ export default SignUpScreen = ({ navigation }) => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
         };
-    });
+    }, []);
 
     const signUp = async () => {
         setInvalidSignUpMessage("");
@@ -162,7 +162,7 @@ export default SignUpScreen = ({ navigation }) => {
                     <BottomContainer>
                         {invalidSignUpMessage ? (
                             <InvalidSignUpMessageContainer>
-                                <Text tiny light color="#ff0000">
+                                <Text tiny light center color="#ff0000">
                                     {invalidSignUpMessage}
                                 </Text>
                             </InvalidSignUpMessageContainer>
@@ -235,9 +235,12 @@ const BottomContainer = styled.SafeAreaView`
 `;
 
 const InvalidSignUpMessageContainer = styled.SafeAreaView`
+    justify-content: center;
     opacity: 0.75;
     position: absolute;
-    bottom: 91%;
+    bottom: 85.5%;
+    width: 95%;
+    height: 20%;
 `;
 
 const SignUpContainer = styled.TouchableOpacity`

@@ -149,6 +149,11 @@ const Firebase = {
             const currentUser = Firebase.getCurrentUser();
 
             if (currentUser) {
+                const docRef = db.collection("users").doc(currentUser.uid);
+                const doc = await docRef.get();
+
+                if (doc.exists) await docRef.delete();
+
                 await currentUser.delete();
                 success = true;
             }

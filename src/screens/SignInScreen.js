@@ -115,11 +115,11 @@ export default SignInScreen = ({ navigation }) => {
                 {!keyboardVisible || Platform.OS === "ios" ? (
                     <BottomContainer>
                         {invalidSignInMessage ? (
-                            <InvalidSignInContainer>
-                                <Text tiny light color="#ff0000">
+                            <InvalidSignInMessageContainer>
+                                <Text tiny light center color="#ff0000">
                                     {invalidSignInMessage}
                                 </Text>
-                            </InvalidSignInContainer>
+                            </InvalidSignInMessageContainer>
                         ) : null}
                         <SignInContainer
                             style={{
@@ -186,10 +186,13 @@ const BottomContainer = styled.SafeAreaView`
     bottom: 0;
 `;
 
-const InvalidSignInContainer = styled.SafeAreaView`
+const InvalidSignInMessageContainer = styled.SafeAreaView`
+    justify-content: center;
     opacity: 0.75;
     position: absolute;
-    bottom: 91%;
+    bottom: 85.5%;
+    width: 95%;
+    height: 20%;
 `;
 
 const SignInContainer = styled.TouchableOpacity`

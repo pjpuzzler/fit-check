@@ -41,19 +41,19 @@ export default MarketplaceScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <IconContainer onPress={() => {}}>
+                <TO onPress={() => {}}>
                     <MaterialCommunityIcons
                         name="magnify"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
-                </IconContainer>
+                </TO>
 
                 <Text large bold>
                     Marketplace
                 </Text>
 
-                <IconContainer onPress={changeSexFilter}>
+                <TO onPress={changeSexFilter}>
                     <MaterialCommunityIcons
                         name={
                             sexFilter === "b"
@@ -65,7 +65,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
-                </IconContainer>
+                </TO>
             </TopBar>
         </Container>
     );
@@ -83,4 +83,4 @@ const TopBar = styled.SafeAreaView`
     justify-content: space-between;
 `;
 
-const IconContainer = styled.TouchableOpacity``;
+const TO = styled.TouchableOpacity``;

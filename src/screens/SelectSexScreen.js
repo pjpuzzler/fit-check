@@ -25,7 +25,7 @@ export default SelectSexScreen = () => {
 
             const updated = await firebase.updateData({ sex });
 
-            if (!updated) setUser((state) => ({ ...state, sex: "" }));
+            if (!updated) setUser({ isLoggedIn: null });
         }
     };
 
@@ -43,7 +43,7 @@ export default SelectSexScreen = () => {
                     <Text small>(This can be changed later)</Text>
                     <Container3>
                         <BothContainer>
-                            <IconContainer
+                            <TO
                                 onPress={() => {
                                     setSex(sex === "b" ? "" : "b");
                                 }}
@@ -53,10 +53,10 @@ export default SelectSexScreen = () => {
                                     size={windowHeight / 5.5}
                                     color={sex === "b" ? "#b2acd8" : "#666666"}
                                 />
-                            </IconContainer>
+                            </TO>
                         </BothContainer>
                         <MFContainer>
-                            <IconContainer
+                            <TO
                                 onPress={() => {
                                     setSex(sex === "m" ? "" : "m");
                                 }}
@@ -66,8 +66,8 @@ export default SelectSexScreen = () => {
                                     size={windowHeight / 5.5}
                                     color={sex === "m" ? "#6ca0dc" : "#666666"}
                                 />
-                            </IconContainer>
-                            <IconContainer
+                            </TO>
+                            <TO
                                 onPress={() => {
                                     setSex(sex === "f" ? "" : "f");
                                 }}
@@ -77,7 +77,7 @@ export default SelectSexScreen = () => {
                                     size={windowHeight / 5.5}
                                     color={sex === "f" ? "#f8b9d4" : "#666666"}
                                 />
-                            </IconContainer>
+                            </TO>
                         </MFContainer>
                     </Container3>
                     <ContinueButton
@@ -138,7 +138,7 @@ const MFContainer = styled.SafeAreaView`
     flex-direction: row;
 `;
 
-const IconContainer = styled.TouchableOpacity``;
+const TO = styled.TouchableOpacity``;
 
 const ContinueButton = styled.TouchableOpacity`
     align-items: center;

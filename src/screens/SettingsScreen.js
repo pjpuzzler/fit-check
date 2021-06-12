@@ -23,7 +23,7 @@ export default SettingsScreen = ({ navigation }) => {
     const changeSex = async (sex) => {
         if (sex === user.sex) return;
 
-        const prevSex = sex;
+        const prevSex = user.sex;
 
         setUser((state) => ({ ...state, sex }));
 
@@ -64,25 +64,25 @@ export default SettingsScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <IconContainer onPress={navigation.goBack}>
+                <TO onPress={navigation.goBack}>
                     <MaterialCommunityIcons
                         name="arrow-left"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
-                </IconContainer>
+                </TO>
 
                 <Text large bold>
                     Settings
                 </Text>
 
-                <IconContainer onPress={logOut}>
+                <TO onPress={logOut}>
                     <MaterialCommunityIcons
                         name="logout"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
-                </IconContainer>
+                </TO>
             </TopBar>
 
             <Container2 contentContainerStyle={{ alignItems: "center" }}>
@@ -91,7 +91,7 @@ export default SettingsScreen = ({ navigation }) => {
                 </SectionTitle>
 
                 <Container3>
-                    <IconContainer
+                    <TO
                         onPress={() => {
                             changeSex("m");
                         }}
@@ -101,8 +101,8 @@ export default SettingsScreen = ({ navigation }) => {
                             size={windowHeight / 10}
                             color={user.sex === "m" ? "#6ca0dc" : "#666666"}
                         />
-                    </IconContainer>
-                    <IconContainer
+                    </TO>
+                    <TO
                         onPress={() => {
                             changeSex("b");
                         }}
@@ -112,8 +112,8 @@ export default SettingsScreen = ({ navigation }) => {
                             size={windowHeight / 10}
                             color={user.sex === "b" ? "#b2acd8" : "#666666"}
                         />
-                    </IconContainer>
-                    <IconContainer
+                    </TO>
+                    <TO
                         onPress={() => {
                             changeSex("f");
                         }}
@@ -123,7 +123,7 @@ export default SettingsScreen = ({ navigation }) => {
                             size={windowHeight / 10}
                             color={user.sex === "f" ? "#f8b9d4" : "#666666"}
                         />
-                    </IconContainer>
+                    </TO>
                 </Container3>
 
                 <SectionTitle>
@@ -131,13 +131,15 @@ export default SettingsScreen = ({ navigation }) => {
                 </SectionTitle>
 
                 <Container4>
-                    <Text
-                        color="#ff0000"
-                        style={{ textDecorationLine: "underline" }}
-                        onPress={startDelete}
-                    >
-                        Delete Account
-                    </Text>
+                    <TO>
+                        <Text
+                            color="#ff0000"
+                            style={{ textDecorationLine: "underline" }}
+                            onPress={async () => await startDelete()}
+                        >
+                            Delete Account
+                        </Text>
+                    </TO>
                 </Container4>
 
                 <SectionTitle>
@@ -145,28 +147,32 @@ export default SettingsScreen = ({ navigation }) => {
                 </SectionTitle>
 
                 <Container4>
-                    <Text
-                        style={{ textDecorationLine: "underline" }}
-                        onPress={() =>
-                            Linking.openURL(
-                                "https://lottiefiles.com/user/37464"
-                            )
-                        }
-                    >
-                        Loading Animation
-                    </Text>
+                    <TO>
+                        <Text
+                            style={{ textDecorationLine: "underline" }}
+                            onPress={() =>
+                                Linking.openURL(
+                                    "https://lottiefiles.com/user/37464"
+                                )
+                            }
+                        >
+                            Loading Animation
+                        </Text>
+                    </TO>
 
-                    <Text
-                        margin="5% 0 0 0"
-                        style={{ textDecorationLine: "underline" }}
-                        onPress={() =>
-                            Linking.openURL(
-                                "https://www.youtube.com/c/DesignIntoCode"
-                            )
-                        }
-                    >
-                        Tutorials
-                    </Text>
+                    <TO>
+                        <Text
+                            margin="5% 0 0 0"
+                            style={{ textDecorationLine: "underline" }}
+                            onPress={() =>
+                                Linking.openURL(
+                                    "https://www.youtube.com/c/DesignIntoCode"
+                                )
+                            }
+                        >
+                            Tutorials
+                        </Text>
+                    </TO>
                 </Container4>
             </Container2>
         </Container>
@@ -185,7 +191,7 @@ const TopBar = styled.SafeAreaView`
     justify-content: space-between;
 `;
 
-const IconContainer = styled.TouchableOpacity``;
+const TO = styled.TouchableOpacity``;
 
 const Container2 = styled.ScrollView`
     width: 100%;

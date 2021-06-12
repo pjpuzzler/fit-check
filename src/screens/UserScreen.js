@@ -31,7 +31,7 @@ export default UserScreen = ({ navigation }) => {
                     {user.username}
                 </Text>
 
-                <IconContainer
+                <TO
                     onPress={() => {
                         navigation.navigate("Settings");
                     }}
@@ -41,7 +41,7 @@ export default UserScreen = ({ navigation }) => {
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
-                </IconContainer>
+                </TO>
             </TopBar>
         </Container>
     );
@@ -59,4 +59,4 @@ const TopBar = styled.SafeAreaView`
     justify-content: space-between;
 `;
 
-const IconContainer = styled.TouchableOpacity``;
+const TO = styled.TouchableOpacity``;
