@@ -79,19 +79,17 @@ const Firebase = {
 
     signIn: async (email, password) => {
         let success = false,
-            res;
+            err = null;
 
         try {
-            res = await firebase
-                .auth()
-                .signInWithEmailAndPassword(email, password);
+            await firebase.auth().signInWithEmailAndPassword(email, password);
 
             success = true;
         } catch (error) {
             console.log("Error @signIn:", error.message);
-            res = error;
+            err = error;
         } finally {
-            return [success, res];
+            return [success, err];
         }
     },
 

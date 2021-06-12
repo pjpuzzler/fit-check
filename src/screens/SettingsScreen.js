@@ -163,7 +163,7 @@ export default SettingsScreen = ({ navigation }) => {
                                 )
                             }
                         >
-                            Loading Animation
+                            Loading Animations
                         </Text>
                     </TO>
 

@@ -48,31 +48,36 @@ export default SignUpScreen = ({ navigation }) => {
         setLoading(true);
 
         let newInvalidSignUpMessage;
-        const usernameIsAvailable = await firebase.usernameIsAvailable(
-            username
-        );
 
-        if (usernameIsAvailable === null)
-            newInvalidSignUpMessage = "An unknown error occured";
-        if (username.length < 3 || username.length > 15)
-            newInvalidSignUpMessage = "Username must be 3-15 characters";
-        else if (!/^[0-9a-zA-Z_.-]+$/.test(username))
-            newInvalidSignUpMessage =
-                "Username must contain only letters, numbers, and _/./-";
-        else if (!usernameIsAvailable)
-            newInvalidSignUpMessage = "Username is in use";
+        if (!username || !email || !password)
+            newInvalidSignUpMessage = "One or more fields are empty";
         else {
-            const [success, res] = await firebase.createUser(
-                username,
-                email,
-                password
+            const usernameIsAvailable = await firebase.usernameIsAvailable(
+                username
             );
 
-            if (success) {
-                setUser({ isLoggedIn: null });
-                return;
-            } else if (res) newInvalidSignUpMessage = res.message;
-            else newInvalidSignUpMessage = "An unknown error occurred";
+            if (usernameIsAvailable === null)
+                newInvalidSignUpMessage = "An unknown error occured";
+            if (username.length < 3 || username.length > 15)
+                newInvalidSignUpMessage = "Username must be 3-15 characters";
+            else if (!/^[0-9a-zA-Z_.-]+$/.test(username))
+                newInvalidSignUpMessage =
+                    "Username must contain only letters, numbers, and _/./-";
+            else if (!usernameIsAvailable)
+                newInvalidSignUpMessage = "Username is in use";
+            else {
+                const [success, error] = await firebase.createUser(
+                    username,
+                    email,
+                    password
+                );
+
+                if (success) {
+                    setUser({ isLoggedIn: null });
+                    return;
+                } else if (error) newInvalidSignUpMessage = error.message;
+                else newInvalidSignUpMessage = "An unknown error occurred";
+            }
         }
 
         setInvalidSignUpMessage(newInvalidSignUpMessage);

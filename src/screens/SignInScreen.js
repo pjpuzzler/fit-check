@@ -45,15 +45,22 @@ export default SignInScreen = ({ navigation }) => {
     const signIn = async () => {
         setLoading(true);
 
-        const [success, res] = await firebase.signIn(email, password);
+        let newInvalidSignInMessage;
 
-        if (success) setUser({ isLoggedIn: null });
+        if (!email || !password)
+            newInvalidSignInMessage = "One or more fields are empty";
         else {
-            setInvalidSignInMessage(
-                res ? res.message : "An unknown error occurred"
-            );
-            setLoading(false);
+            const [success, error] = await firebase.signIn(email, password);
+
+            if (success) {
+                setUser({ isLoggedIn: null });
+                return;
+            } else if (error) newInvalidSignInMessage = error.message;
+            else newInvalidSignInMessage = "An unknown error occurred";
         }
+
+        setInvalidSignInMessage(newInvalidSignInMessage);
+        setLoading(false);
     };
 
     return (

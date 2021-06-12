@@ -9,7 +9,7 @@ import MainScreen from "../screens/MainScreen";
 import UserScreen from "../screens/UserScreen";
 
 export default UserStack = () => {
-    const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     const MainNav = createMaterialTopTabNavigator();
 
@@ -53,7 +53,7 @@ export default UserStack = () => {
             return (
                 <MaterialCommunityIcons
                     name={iconName}
-                    size={windowHeight / 24}
+                    size={windowWidth / 16}
                     color={focused ? "#18d299" : "#ffffff"}
                 />
             );
