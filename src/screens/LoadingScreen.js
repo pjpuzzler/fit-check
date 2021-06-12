@@ -5,6 +5,8 @@ import LottieView from "lottie-react-native";
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
 
+import Text from "../components/Text";
+
 export default LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
@@ -36,6 +38,10 @@ export default LoadingScreen = () => {
                 autoPlay
                 loop
             />
+
+            <Text tiny center style={{ position: "absolute", bottom: "2%" }}>
+                {"© 2021 Fit Check - Team Fit Check\nMade in Centre Hall, PA"}
+            </Text>
         </Container>
     );
 };
