@@ -101,7 +101,7 @@ export default SelectProfilePhotoScreen = () => {
                 }}
             >
                 {uri ? (
-                    <ProfilePhoto source={{ uri: uri }} />
+                    <ProfilePhoto source={{ uri }} />
                 ) : (
                     <MaterialCommunityIcons
                         size={windowWidth / 12}

@@ -53,7 +53,7 @@ export default UserStack = () => {
             return (
                 <MaterialCommunityIcons
                     name={iconName}
-                    size={windowWidth / 16}
+                    size={windowWidth / 12}
                     color={focused ? "#18d299" : "#ffffff"}
                 />
             );

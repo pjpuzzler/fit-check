@@ -18,7 +18,7 @@ const Text = styled.Text`
                 return "font-size: " + (windowWidth / 8).toString() + "px;";
 
             case large:
-                return "font-size: " + (windowWidth / 12).toString() + "px;";
+                return "font-size: " + (windowWidth / 10).toString() + "px;";
 
             case medium:
                 return "font-size: " + (windowWidth / 16).toString() + "px;";

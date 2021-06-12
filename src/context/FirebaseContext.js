@@ -60,6 +60,8 @@ const Firebase = {
 
         try {
             await db.collection("users").doc(uid).set({
+                downloads: 0,
+                followers: 0,
                 following: [],
                 outfits: [],
                 profilePhotoUrl: "",

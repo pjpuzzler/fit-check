@@ -21,13 +21,31 @@ export default UserScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <MaterialCommunityIcons
-                    name="cog"
-                    size={windowWidth / 10}
-                    style={{ opacity: 0 }}
-                />
+                <ProfilePhotoBorder
+                    style={{
+                        borderRadius: windowWidth * 0.125,
+                        width: windowWidth * 0.125,
+                        height: windowWidth * 0.125,
+                    }}
+                >
+                    <ProfilePhotoContainer
+                        style={{
+                            borderRadius: windowWidth * 0.125 * 0.9,
+                            width: windowWidth * 0.125 * 0.9,
+                            height: windowWidth * 0.125 * 0.9,
+                        }}
+                    >
+                        <ProfilePhoto
+                            source={
+                                user.profilePhotoUrl === "default"
+                                    ? require("../../assets/defaultProfilePhoto.jpg")
+                                    : { uri: user.profilePhotoUrl }
+                            }
+                        />
+                    </ProfilePhotoContainer>
+                </ProfilePhotoBorder>
 
-                <Text large bold color="#18d299">
+                <Text large bold color="#1c4068">
                     {user.username}
                 </Text>
 
@@ -38,7 +56,7 @@ export default UserScreen = ({ navigation }) => {
                 >
                     <MaterialCommunityIcons
                         name="cog"
-                        size={windowWidth / 10}
+                        size={windowWidth / 8}
                         color="#1c4068"
                     />
                 </TO>
@@ -57,6 +75,24 @@ const TopBar = styled.SafeAreaView`
     width: 95%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+`;
+
+const ProfilePhotoBorder = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+    background-color: #1c4068;
+`;
+
+const ProfilePhotoContainer = styled.SafeAreaView`
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+`;
+
+const ProfilePhoto = styled.Image`
+    width: 100%;
+    height: 100%;
 `;
 
 const TO = styled.TouchableOpacity``;

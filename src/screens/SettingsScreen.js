@@ -74,7 +74,7 @@ export default SettingsScreen = ({ navigation }) => {
                 <TO onPress={navigation.goBack}>
                     <MaterialCommunityIcons
                         name="arrow-left"
-                        size={windowWidth / 10}
+                        size={windowWidth / 8}
                         color="#1c4068"
                     />
                 </TO>
@@ -86,7 +86,7 @@ export default SettingsScreen = ({ navigation }) => {
                 <TO onPress={logOut}>
                     <MaterialCommunityIcons
                         name="logout"
-                        size={windowWidth / 10}
+                        size={windowWidth / 8}
                         color="#1c4068"
                     />
                 </TO>
@@ -94,7 +94,9 @@ export default SettingsScreen = ({ navigation }) => {
 
             <Container2 contentContainerStyle={{ alignItems: "center" }}>
                 <SectionTitle>
-                    <Text color="#18d299">Preferred Clothing Type</Text>
+                    <Text bold color="#18d299">
+                        Preferred Clothing Type
+                    </Text>
                 </SectionTitle>
 
                 <Container3>
@@ -105,8 +107,8 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-male"
-                            size={windowWidth / 6}
-                            color={user.sex === "m" ? "#6ca0dc" : "#666666"}
+                            size={windowWidth / 5}
+                            color={user.sex === "m" ? "#5ca0dc" : "#666666"}
                         />
                     </TO>
                     <TO
@@ -116,7 +118,7 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-male-female"
-                            size={windowWidth / 6}
+                            size={windowWidth / 5}
                             color={user.sex === "b" ? "#b2acd8" : "#666666"}
                         />
                     </TO>
@@ -127,19 +129,22 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-female"
-                            size={windowWidth / 6}
+                            size={windowWidth / 5}
                             color={user.sex === "f" ? "#f8b9d4" : "#666666"}
                         />
                     </TO>
                 </Container3>
 
                 <SectionTitle>
-                    <Text color="#18d299">Account</Text>
+                    <Text bold color="#18d299">
+                        Account
+                    </Text>
                 </SectionTitle>
 
                 <Container4>
                     <TO>
                         <Text
+                            heavy
                             color="#ff0000"
                             style={{ textDecorationLine: "underline" }}
                             onPress={startDelete}
@@ -150,12 +155,15 @@ export default SettingsScreen = ({ navigation }) => {
                 </Container4>
 
                 <SectionTitle>
-                    <Text color="#18d299">Credits</Text>
+                    <Text bold color="#18d299">
+                        Credits
+                    </Text>
                 </SectionTitle>
 
                 <Container4>
                     <TO>
                         <Text
+                            bold
                             style={{ textDecorationLine: "underline" }}
                             onPress={() =>
                                 Linking.openURL(
@@ -169,6 +177,7 @@ export default SettingsScreen = ({ navigation }) => {
 
                     <TO>
                         <Text
+                            bold
                             margin="2% 0 0 0"
                             style={{ textDecorationLine: "underline" }}
                             onPress={() =>
@@ -196,6 +205,7 @@ const TopBar = styled.SafeAreaView`
     width: 95%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 `;
 
 const TO = styled.TouchableOpacity``;
@@ -211,6 +221,7 @@ const SectionTitle = styled.SafeAreaView`
     align-items: center;
     justify-content: center;
     margin: 2% 0;
+    padding: 2% 0;
 `;
 
 const Container3 = styled.SafeAreaView`

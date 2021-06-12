@@ -44,7 +44,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                 <TO onPress={() => {}}>
                     <MaterialCommunityIcons
                         name="magnify"
-                        size={windowWidth / 10}
+                        size={windowWidth / 8}
                         color="#1c4068"
                     />
                 </TO>
@@ -62,7 +62,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                                 ? "gender-male"
                                 : "gender-female"
                         }
-                        size={windowWidth / 10}
+                        size={windowWidth / 8}
                         color="#1c4068"
                     />
                 </TO>
@@ -81,6 +81,7 @@ const TopBar = styled.SafeAreaView`
     width: 95%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 `;
 
 const TO = styled.TouchableOpacity``;

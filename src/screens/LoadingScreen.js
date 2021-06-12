@@ -36,6 +36,7 @@ export default LoadingScreen = () => {
                 source={require("../../assets/loadingAnimation.json")}
                 autoPlay
                 loop
+                style={{ width: "100%" }}
             />
 
             <Text tiny center style={{ position: "absolute", bottom: "2%" }}>
