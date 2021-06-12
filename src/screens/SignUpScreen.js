@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { BackHandler, Dimensions, Keyboard, Platform } from "react-native";
 import styled from "styled-components";
-import { Ionicons } from "@expo/vector-icons";
 
 import { FirebaseContext } from "../context/FirebaseContext";
 import { UserContext } from "../context/UserContext";
@@ -66,11 +65,17 @@ export default SignUpScreen = ({ navigation }) => {
         } else if (!(await firebase.usernameIsAvailable(username))) {
             setInvalidSignUpMessage("Username is in use");
         } else {
-            const [success, res] = await firebase.createUser(username, email, password);
-            
+            const [success, res] = await firebase.createUser(
+                username,
+                email,
+                password
+            );
+
             if (success) setUser({ isLoggedIn: null });
             else {
-                setInvalidSignUpMessage(res ? res.message : "An unknown error occurred");
+                setInvalidSignUpMessage(
+                    res ? res.message : "An unknown error occurred"
+                );
                 setLoading(false);
             }
         }
@@ -102,7 +107,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCompleteType="username"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={username => {
+                            onChangeText={(username) => {
                                 setUsername(username.trim());
                             }}
                             onSubmitEditing={() => signUp()}
@@ -123,7 +128,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
                             keyboardType="email-address"
-                            onChangeText={email => setEmail(email.trim())}
+                            onChangeText={(email) => setEmail(email.trim())}
                             onSubmitEditing={() => signUp()}
                             placeholder="email"
                             style={{
@@ -141,7 +146,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCompleteType="password"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={password =>
+                            onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
                             onSubmitEditing={() => signUp()}
