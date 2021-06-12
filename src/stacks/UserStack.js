@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-import MarketScreen from "../screens/MarketScreen";
+import MarketScreen from "../screens/MarketplaceScreen";
 import MainScreen from "../screens/MainScreen";
 import UserScreen from "../screens/UserScreen";
 

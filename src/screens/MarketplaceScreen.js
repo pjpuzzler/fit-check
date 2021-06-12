@@ -8,7 +8,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
-export default MarketScreen = ({ navigation }) => {
+export default MarketplaceScreen = ({ navigation }) => {
     const [user, _] = useContext(UserContext);
 
     const [sexFilter, setSexFilter] = useState(user.sex);
@@ -43,7 +43,7 @@ export default MarketScreen = ({ navigation }) => {
             >
                 <IconContainer onPress={() => {}}>
                     <MaterialCommunityIcons
-                        name="account-search"
+                        name="search"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />

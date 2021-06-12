@@ -27,32 +27,32 @@ const Firebase = {
     },
 
     createUser: async (username, email, password) => {
-        const res;
-        
+        let res;
+
         try {
             res = await firebase
                 .auth()
                 .createUserWithEmailAndPassword(email, password);
         } catch (error) {
-            return [false, error]
+            return [false, error];
         }
-        
-        const success;
-        
+
+        let success;
+        const user = res.user;
+
         try {
-            const uid = res.user.uid;
-            
-            await db.collection("users").doc(uid).set({
+            await db.collection("users").doc(user.uid).set({
                 following: [],
                 outfits: [],
                 sex: "",
-                username: user.username,
+                username,
                 wardrobe: [],
             });
 
             success = true;
         } catch (error) {
-            currentUser.delete();
+            await Firebase.logOut();
+            await user.delete();
             console.log("Error @createUser:", error.message);
             success = false;
         } finally {
@@ -61,10 +61,12 @@ const Firebase = {
     },
 
     signIn: async (email, password) => {
-        const success, res;
-        
+        let success, res;
+
         try {
-            res = await firebase.auth().signInWithEmailAndPassword(email, password);
+            res = await firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password);
             success = true;
         } catch (error) {
             res = error;
