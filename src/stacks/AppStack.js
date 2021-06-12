@@ -4,8 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { UserContext } from "../context/UserContext";
 
 import LoadingScreen from "../screens/LoadingScreen";
-import MainStack from "./MainStack";
+import SelectProfilePhotoScreen from "../screens/SelectProfilePhotoScreen";
 import SelectSexScreen from "../screens/SelectSexScreen";
+import MainStack from "./MainStack";
 import AuthStack from "./AuthStack";
 
 export default AppStack = () => {
@@ -18,13 +19,18 @@ export default AppStack = () => {
             {user.isLoggedIn === null ? (
                 <AppStack.Screen name="Loading" component={LoadingScreen} />
             ) : user.isLoggedIn ? (
-                user.sex ? (
-                    <AppStack.Screen name="Main" component={MainStack} />
-                ) : (
+                !user.profilePhotoUrl ? (
+                    <AppStack.Screen
+                        name="SelectProfilePhoto"
+                        component={SelectProfilePhotoScreen}
+                    />
+                ) : !user.sex ? (
                     <AppStack.Screen
                         name="SelectSex"
                         component={SelectSexScreen}
                     />
+                ) : (
+                    <AppStack.Screen name="Main" component={MainStack} />
                 )
             ) : (
                 <AppStack.Screen name="Auth" component={AuthStack} />

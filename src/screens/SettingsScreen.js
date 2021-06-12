@@ -12,34 +12,32 @@ export default SettingsScreen = ({ navigation }) => {
     const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
-    const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     const logOut = async () => {
         const loggedOut = await firebase.logOut();
 
-        if (loggedOut) setUser((state) => ({ ...state, isLoggedIn: null }));
+        if (loggedOut) setUser({ isLoggedIn: null });
     };
 
     const changeSex = async (sex) => {
         if (sex === user.sex) return;
 
-        const prevSex = user.sex;
-
         setUser((state) => ({ ...state, sex }));
 
         const updated = await firebase.updateData({ sex });
 
-        if (!updated) setUser((state) => ({ ...state, sex: prevSex }));
+        if (!updated) setUser({ isLoggedIn: null });
     };
 
     const startDelete = async () => {
-        const del = await deleteAlert();
+        const res = await reseteAlert();
 
-        if (del) await deleteAccount();
+        if (res) await deleteAccount();
     };
 
     const deleteAlert = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _) => {
             Alert.alert(
                 "Delete Account",
                 "Are you sure you want to delete your account?",
@@ -62,7 +60,7 @@ export default SettingsScreen = ({ navigation }) => {
     const deleteAccount = async () => {
         const deleted = await firebase.deleteAccount();
 
-        if (deleted) setUser((state) => ({ ...state, isLoggedIn: null }));
+        if (deleted) setUser({ isLoggedIn: null });
     };
 
     return (
@@ -76,7 +74,7 @@ export default SettingsScreen = ({ navigation }) => {
                 <TO onPress={navigation.goBack}>
                     <MaterialCommunityIcons
                         name="arrow-left"
-                        size={windowHeight / 16}
+                        size={windowWidth / 10}
                         color="#1c4068"
                     />
                 </TO>
@@ -88,7 +86,7 @@ export default SettingsScreen = ({ navigation }) => {
                 <TO onPress={logOut}>
                     <MaterialCommunityIcons
                         name="logout"
-                        size={windowHeight / 16}
+                        size={windowWidth / 10}
                         color="#1c4068"
                     />
                 </TO>
@@ -107,7 +105,7 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-male"
-                            size={windowHeight / 10}
+                            size={windowWidth / 6}
                             color={user.sex === "m" ? "#6ca0dc" : "#666666"}
                         />
                     </TO>
@@ -118,7 +116,7 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-male-female"
-                            size={windowHeight / 10}
+                            size={windowWidth / 6}
                             color={user.sex === "b" ? "#b2acd8" : "#666666"}
                         />
                     </TO>
@@ -129,7 +127,7 @@ export default SettingsScreen = ({ navigation }) => {
                     >
                         <MaterialCommunityIcons
                             name="gender-female"
-                            size={windowHeight / 10}
+                            size={windowWidth / 6}
                             color={user.sex === "f" ? "#f8b9d4" : "#666666"}
                         />
                     </TO>
@@ -171,7 +169,7 @@ export default SettingsScreen = ({ navigation }) => {
 
                     <TO>
                         <Text
-                            margin="5% 0 0 0"
+                            margin="2% 0 0 0"
                             style={{ textDecorationLine: "underline" }}
                             onPress={() =>
                                 Linking.openURL(
@@ -212,7 +210,7 @@ const SectionTitle = styled.SafeAreaView`
     background-color: #1c4068;
     align-items: center;
     justify-content: center;
-    padding: 2% 0;
+    margin: 2% 0;
 `;
 
 const Container3 = styled.SafeAreaView`
@@ -220,12 +218,11 @@ const Container3 = styled.SafeAreaView`
     align-items: center;
     flex-direction: row;
     width: 100%;
-    margin: 5% 0;
 `;
 
 const Container4 = styled.SafeAreaView`
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin: 5% 0;
+    margin: 2% 0;
 `;

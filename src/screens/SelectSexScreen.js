@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Dimensions } from "react-native";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import LottieView from "lottie-react-native";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -15,18 +16,16 @@ export default SelectSexScreen = () => {
     const [sex, setSex] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     const continue_ = async () => {
         setLoading(true);
 
-        if (sex) {
-            setUser((state) => ({ ...state, sex }));
+        setUser((state) => ({ ...state, sex }));
 
-            const updated = await firebase.updateData({ sex });
+        const updated = await firebase.updateData({ sex });
 
-            if (!updated) setUser({ isLoggedIn: null });
-        }
+        if (!updated) setUser({ isLoggedIn: null });
     };
 
     return (
@@ -36,67 +35,69 @@ export default SelectSexScreen = () => {
             }}
         >
             <Container>
-                <Container2>
+                <TitleContainer>
                     <Text large heavy center>
-                        Preferred Clothing?
+                        Preferred Clothing
                     </Text>
-                    <Text small>(This can be changed later)</Text>
-                    <Container3>
-                        <BothContainer>
-                            <TO
-                                onPress={() => {
-                                    setSex(sex === "b" ? "" : "b");
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="gender-male-female"
-                                    size={windowHeight / 5.5}
-                                    color={sex === "b" ? "#b2acd8" : "#666666"}
-                                />
-                            </TO>
-                        </BothContainer>
-                        <MFContainer>
-                            <TO
-                                onPress={() => {
-                                    setSex(sex === "m" ? "" : "m");
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="gender-male"
-                                    size={windowHeight / 5.5}
-                                    color={sex === "m" ? "#6ca0dc" : "#666666"}
-                                />
-                            </TO>
-                            <TO
-                                onPress={() => {
-                                    setSex(sex === "f" ? "" : "f");
-                                }}
-                            >
-                                <MaterialCommunityIcons
-                                    name="gender-female"
-                                    size={windowHeight / 5.5}
-                                    color={sex === "f" ? "#f8b9d4" : "#666666"}
-                                />
-                            </TO>
-                        </MFContainer>
-                    </Container3>
-                    <ContinueButton
-                        style={{
-                            borderRadius: windowHeight / 30,
-                            opacity: loading || !sex ? 0.5 : null,
+                    <Text small center>
+                        (This can be changed later)
+                    </Text>
+                </TitleContainer>
+                <TO
+                    onPress={() => {
+                        setSex(sex === "b" ? "" : "b");
+                    }}
+                >
+                    <MaterialCommunityIcons
+                        name="gender-male-female"
+                        size={windowWidth / 3}
+                        color={sex === "b" ? "#b2acd8" : "#666666"}
+                    />
+                </TO>
+                <MFContainer>
+                    <TO
+                        onPress={() => {
+                            setSex(sex === "m" ? "" : "m");
                         }}
-                        onPress={continue_}
-                        disabled={loading || !sex}
                     >
-                        {loading ? (
-                            <Loading />
-                        ) : (
-                            <Text bold center color="#ffffff">
-                                Continue
-                            </Text>
-                        )}
-                    </ContinueButton>
-                </Container2>
+                        <MaterialCommunityIcons
+                            name="gender-male"
+                            size={windowWidth / 3}
+                            color={sex === "m" ? "#6ca0dc" : "#666666"}
+                        />
+                    </TO>
+                    <TO
+                        onPress={() => {
+                            setSex(sex === "f" ? "" : "f");
+                        }}
+                    >
+                        <MaterialCommunityIcons
+                            name="gender-female"
+                            size={windowWidth / 3}
+                            color={sex === "f" ? "#f8b9d4" : "#666666"}
+                        />
+                    </TO>
+                </MFContainer>
+                <ContinueButton
+                    style={{
+                        borderRadius: windowWidth / 20,
+                        opacity: loading || !sex ? 0.5 : null,
+                    }}
+                    onPress={continue_}
+                    disabled={loading || !sex}
+                >
+                    {loading ? (
+                        <LottieView
+                            source={require("../../assets/loadingAnimation2.json")}
+                            autoPlay
+                            loop
+                        />
+                    ) : (
+                        <Text bold center color="#ffffff">
+                            Continue
+                        </Text>
+                    )}
+                </ContinueButton>
             </Container>
         </TWF>
     );
@@ -111,30 +112,12 @@ const Container = styled.SafeAreaView`
     height: 100%;
 `;
 
-const Container2 = styled.SafeAreaView`
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-`;
-
-const Container3 = styled.SafeAreaView`
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    height: 60%;
-    margin: 5% 0;
-`;
-
-const BothContainer = styled.SafeAreaView`
-    align-items: center;
-    justify-content: center;
-    height: 50%;
+const TitleContainer = styled.SafeAreaView`
+    position: absolute;
+    top: 10%;
 `;
 
 const MFContainer = styled.SafeAreaView`
-    justify-content: space-around;
-    width: 100%;
-    height: 50%;
     flex-direction: row;
 `;
 
@@ -143,11 +126,9 @@ const TO = styled.TouchableOpacity``;
 const ContinueButton = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
-    width: 50%;
-    height: 12%;
+    width: 75%;
+    height: 10%;
     background-color: #18d299;
+    position: absolute;
+    bottom: 10%;
 `;
-
-const Loading = styled.ActivityIndicator.attrs((props) => ({
-    size: "large",
-}))``;

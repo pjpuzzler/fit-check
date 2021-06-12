@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Dimensions, Keyboard, Platform } from "react-native";
 import styled from "styled-components";
+import LottieView from "lottie-react-native";
 
 import { FirebaseContext } from "../context/FirebaseContext";
 import { UserContext } from "../context/UserContext";
@@ -18,6 +19,7 @@ export default SignUpScreen = ({ navigation }) => {
     const [invalidSignUpMessage, setInvalidSignUpMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const windowWidth = Dimensions.get("window").width;
     const windowHeight = Dimensions.get("window").height;
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export default SignUpScreen = ({ navigation }) => {
 
         if (usernameIsAvailable === null)
             newInvalidSignUpMessage = "An unknown error occured";
-        else if (username.length < 3 || username.length > 15)
+        if (username.length < 3 || username.length > 15)
             newInvalidSignUpMessage = "Username must be 3-15 characters";
         else if (!/^[0-9a-zA-Z_.-]+$/.test(username))
             newInvalidSignUpMessage =
@@ -102,7 +104,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="username"
                             autoCorrect={false}
-                            fontSize={windowHeight / 28}
+                            fontSize={windowWidth / 16}
                             onChangeText={(username) => {
                                 setUsername(username.trim());
                             }}
@@ -122,7 +124,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="email"
                             autoCorrect={false}
-                            fontSize={windowHeight / 28}
+                            fontSize={windowWidth / 16}
                             keyboardType="email-address"
                             onChangeText={(email) => setEmail(email.trim())}
                             onSubmitEditing={() => signUp()}
@@ -141,7 +143,7 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="password"
                             autoCorrect={false}
-                            fontSize={windowHeight / 28}
+                            fontSize={windowWidth / 16}
                             onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
@@ -170,14 +172,18 @@ export default SignUpScreen = ({ navigation }) => {
 
                         <SignUpContainer
                             style={{
-                                borderRadius: windowHeight / 30,
+                                borderRadius: windowWidth / 20,
                                 opacity: loading ? 0.5 : null,
                             }}
                             onPress={signUp}
                             disabled={loading}
                         >
                             {loading ? (
-                                <Loading color="#ffffff" />
+                                <LottieView
+                                    source={require("../../assets/loadingAnimation2.json")}
+                                    autoPlay
+                                    loop
+                                />
                             ) : (
                                 <Text bold large center color="#ffffff">
                                     sign up
@@ -185,10 +191,7 @@ export default SignUpScreen = ({ navigation }) => {
                             )}
                         </SignUpContainer>
 
-                        <SignIn
-                            onPress={() => navigation.navigate("SignIn")}
-                            style={{ padding: windowHeight / 100 }}
-                        >
+                        <SignIn onPress={() => navigation.navigate("SignIn")}>
                             <Text color="#1c4068">have an account?</Text>
                         </SignIn>
                     </BottomContainer>
@@ -238,9 +241,9 @@ const InvalidSignUpMessageContainer = styled.SafeAreaView`
     justify-content: center;
     opacity: 0.75;
     position: absolute;
-    bottom: 85.5%;
+    bottom: 80.1%;
     width: 95%;
-    height: 20%;
+    height: 27%;
 `;
 
 const SignUpContainer = styled.TouchableOpacity`
@@ -250,14 +253,10 @@ const SignUpContainer = styled.TouchableOpacity`
     justify-content: center;
     background-color: #18d299;
     position: absolute;
-    bottom: 44%;
+    bottom: 40%;
 `;
-
-const Loading = styled.ActivityIndicator.attrs((props) => ({
-    size: "large",
-}))``;
 
 const SignIn = styled.TouchableOpacity`
     position: absolute;
-    bottom: 9.5%;
+    bottom: 10%;
 `;

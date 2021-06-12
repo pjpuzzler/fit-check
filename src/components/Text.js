@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions } from "react-native";
-import styled from "styled-components/native";
+import styled from "styled-components";
 
 export default TextStyle = ({ ...props }) => {
     return <Text {...props}>{props.children}</Text>;
@@ -11,7 +11,6 @@ const windowWidth = Dimensions.get("window").width;
 const Text = styled.Text`
     color: ${(props) => props.color ?? "#1c4068"};
     margin: ${(props) => props.margin ?? 0};
-    padding: ${(props) => props.padding ?? 0};
 
     ${({ title, large, medium, small, tiny }) => {
         switch (true) {

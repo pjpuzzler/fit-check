@@ -1,7 +1,8 @@
 import React, { createContext } from "react";
-import { firebase } from "@firebase/app";
-import "@firebase/firestore";
-import "@firebase/auth";
+import firebase from "firebase";
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/storage";
 import config from "../config/firebase";
 
 const FirebaseContext = createContext();
@@ -61,6 +62,7 @@ const Firebase = {
             await db.collection("users").doc(uid).set({
                 following: [],
                 outfits: [],
+                profilePhotoUrl: "",
                 sex: "",
                 username,
                 wardrobe: [],
@@ -91,6 +93,42 @@ const Firebase = {
         } finally {
             return [success, res];
         }
+    },
+
+    uploadProfilePhoto: async (uri) => {
+        let url = null;
+
+        try {
+            const photo = await Firebase.getBlob(uri);
+            const uid = Firebase.getCurrentUser().uid;
+            const imageRef = firebase.storage().ref("profilePhotos").child(uid);
+
+            await imageRef.put(photo);
+
+            url = await imageRef.getDownloadURL();
+        } catch (error) {
+            console.log("Error @uploadProfilePhoto:", error.message);
+        } finally {
+            return url;
+        }
+    },
+
+    getBlob: async (uri) => {
+        return await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.onload = () => {
+                resolve(xhr.response);
+            };
+
+            xhr.onerror = () => {
+                reject(new TypeError("Network request failed"));
+            };
+
+            xhr.responseType = "blob";
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
     },
 
     getUserInfo: async (uid) => {

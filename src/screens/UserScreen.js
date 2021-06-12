@@ -11,7 +11,7 @@ import Text from "../components/Text";
 export default UserScreen = ({ navigation }) => {
     const [user] = useContext(UserContext);
 
-    const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     return (
         <Container>
@@ -23,7 +23,7 @@ export default UserScreen = ({ navigation }) => {
             >
                 <MaterialCommunityIcons
                     name="cog"
-                    size={windowHeight / 16}
+                    size={windowWidth / 10}
                     style={{ opacity: 0 }}
                 />
 
@@ -38,7 +38,7 @@ export default UserScreen = ({ navigation }) => {
                 >
                     <MaterialCommunityIcons
                         name="cog"
-                        size={windowHeight / 16}
+                        size={windowWidth / 10}
                         color="#1c4068"
                     />
                 </TO>

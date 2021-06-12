@@ -13,7 +13,7 @@ export default MarketplaceScreen = ({ navigation }) => {
 
     const [sexFilter, setSexFilter] = useState(user.sex);
 
-    const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     const changeSexFilter = () => {
         let newSexFilter;
@@ -44,7 +44,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                 <TO onPress={() => {}}>
                     <MaterialCommunityIcons
                         name="magnify"
-                        size={windowHeight / 16}
+                        size={windowWidth / 10}
                         color="#1c4068"
                     />
                 </TO>
@@ -62,7 +62,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                                 ? "gender-male"
                                 : "gender-female"
                         }
-                        size={windowHeight / 16}
+                        size={windowWidth / 10}
                         color="#1c4068"
                     />
                 </TO>

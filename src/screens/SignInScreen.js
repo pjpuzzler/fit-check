@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Dimensions, Keyboard, Platform } from "react-native";
 import styled from "styled-components";
+import LottieView from "lottie-react-native";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -18,6 +19,7 @@ export default SignInScreen = ({ navigation }) => {
     const [keyboardVisible, setKeyboardVisible] = useState(false);
 
     const windowHeight = Dimensions.get("window").height;
+    const windowWidth = Dimensions.get("window").width;
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -78,7 +80,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="email"
                             autoCorrect={false}
-                            fontSize={windowHeight / 28}
+                            fontSize={windowWidth / 16}
                             keyboardType="email-address"
                             onChangeText={(email) => setEmail(email.trim())}
                             onSubmitEditing={() => signIn()}
@@ -96,7 +98,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="password"
                             autoCorrect={false}
-                            fontSize={windowHeight / 28}
+                            fontSize={windowWidth / 16}
                             onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
@@ -123,24 +125,25 @@ export default SignInScreen = ({ navigation }) => {
                         ) : null}
                         <SignInContainer
                             style={{
-                                borderRadius: windowHeight / 30,
+                                borderRadius: windowWidth / 20,
                                 opacity: loading ? 0.5 : null,
                             }}
                             onPress={signIn}
                             disabled={loading}
                         >
                             {loading ? (
-                                <Loading color="#ffffff" />
+                                <LottieView
+                                    source={require("../../assets/loadingAnimation2.json")}
+                                    autoPlay
+                                    loop
+                                />
                             ) : (
                                 <Text bold large center color="#ffffff">
                                     sign in
                                 </Text>
                             )}
                         </SignInContainer>
-                        <SignUp
-                            onPress={() => navigation.navigate("SignUp")}
-                            style={{ padding: windowHeight / 100 }}
-                        >
+                        <SignUp onPress={() => navigation.navigate("SignUp")}>
                             <Text color="#1c4068">need an account?</Text>
                         </SignUp>
                     </BottomContainer>
@@ -190,9 +193,9 @@ const InvalidSignInMessageContainer = styled.SafeAreaView`
     justify-content: center;
     opacity: 0.75;
     position: absolute;
-    bottom: 85.5%;
+    bottom: 80.1%;
     width: 95%;
-    height: 20%;
+    height: 27%;
 `;
 
 const SignInContainer = styled.TouchableOpacity`
@@ -202,14 +205,10 @@ const SignInContainer = styled.TouchableOpacity`
     justify-content: center;
     background-color: #18d299;
     position: absolute;
-    bottom: 44%;
+    bottom: 40%;
 `;
-
-const Loading = styled.ActivityIndicator.attrs((props) => ({
-    size: "large",
-}))``;
 
 const SignUp = styled.TouchableOpacity`
     position: absolute;
-    bottom: 9.5%;
+    bottom: 10%;
 `;
