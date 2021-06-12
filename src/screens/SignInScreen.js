@@ -26,6 +26,7 @@ export default SignInScreen = ({ navigation }) => {
                 setKeyboardVisible(true);
             }
         );
+
         const keyboardDidHideListener = Keyboard.addListener(
             "keyboardDidHide",
             () => {
@@ -37,22 +38,24 @@ export default SignInScreen = ({ navigation }) => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
         };
-    }, []);
+    });
 
     const signIn = async () => {
         setLoading(true);
-        
+
         const [success, res] = await firebase.signIn(email, password);
 
         if (success) setUser({ isLoggedIn: null });
         else {
-            setInvalidSignInMessage(res ? res.message : "An unknown error occurred");
+            setInvalidSignInMessage(
+                res ? res.message : "An unknown error occurred"
+            );
             setLoading(false);
         }
     };
 
     return (
-        <TouchableWithoutFeedback accessible={false} onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
                 <Main>
                     <Text title semi center>
@@ -77,7 +80,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
                             keyboardType="email-address"
-                            onChangeText={email => setEmail(email.trim())}
+                            onChangeText={(email) => setEmail(email.trim())}
                             onSubmitEditing={() => signIn()}
                             placeholder="email"
                             style={{
@@ -94,7 +97,7 @@ export default SignInScreen = ({ navigation }) => {
                             autoCompleteType="password"
                             autoCorrect={false}
                             fontSize={windowHeight / 28}
-                            onChangeText={password =>
+                            onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
                             onSubmitEditing={() => signIn()}

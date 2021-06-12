@@ -14,16 +14,32 @@ const db = firebase.firestore();
 
 const Firebase = {
     getCurrentUser: () => {
-        return firebase.auth().currentUser;
+        let currentUser = null;
+
+        try {
+            currentUser = firebase.auth().currentUser;
+        } catch (error) {
+            console.log("Error @getCurrentUser:", error.message);
+        } finally {
+            return currentUser;
+        }
     },
 
     usernameIsAvailable: async (username) => {
-        const snapshot = await db
-            .collection("users")
-            .where("username", "==", username)
-            .get();
+        let available = null;
 
-        return snapshot.empty;
+        try {
+            const snapshot = await db
+                .collection("users")
+                .where("username", "==", username)
+                .get();
+
+            available = snapshot.empty;
+        } catch (error) {
+            console.log("Error @usernameIsAvailable:", erorr.message);
+        } finally {
+            return available;
+        }
     },
 
     createUser: async (username, email, password) => {
@@ -34,14 +50,15 @@ const Firebase = {
                 .auth()
                 .createUserWithEmailAndPassword(email, password);
         } catch (error) {
+            console.log("Error @createUser:", error.message);
             return [false, error];
         }
 
-        let success;
-        const user = res.user;
+        let success = false;
+        const uid = res.user.uid;
 
         try {
-            await db.collection("users").doc(user.uid).set({
+            await db.collection("users").doc(uid).set({
                 following: [],
                 outfits: [],
                 sex: "",
@@ -51,63 +68,95 @@ const Firebase = {
 
             success = true;
         } catch (error) {
-            await Firebase.logOut();
-            await user.delete();
             console.log("Error @createUser:", error.message);
-            success = false;
+            await Firebase.deleteAccount();
         } finally {
             return [success, null];
         }
     },
 
     signIn: async (email, password) => {
-        let success, res;
+        let success = false,
+            res;
 
         try {
             res = await firebase
                 .auth()
                 .signInWithEmailAndPassword(email, password);
+
             success = true;
         } catch (error) {
+            console.log("Error @signIn:", error.message);
             res = error;
-            success = false;
         } finally {
             return [success, res];
         }
     },
 
     getUserInfo: async (uid) => {
+        let userInfo = null;
+
         try {
             const user = await db.collection("users").doc(uid).get();
 
-            if (user.exists) {
-                return user.data();
-            }
+            if (user.exists) userInfo = user.data();
         } catch (error) {
             console.log("Error @getUserInfo:", error.message);
+        } finally {
+            return userInfo;
         }
     },
 
     updateData: async (dataObj) => {
-        try {
-            const uid = Firebase.getCurrentUser().uid;
+        let success = false;
 
-            await db.collection("users").doc(uid).update(dataObj);
+        try {
+            const currentUser = Firebase.getCurrentUser();
+
+            if (currentUser) {
+                await db
+                    .collection("users")
+                    .doc(currentUser.uid)
+                    .update(dataObj);
+
+                success = true;
+            }
         } catch (error) {
             console.log("Error @updateData:", error.message);
+        } finally {
+            return success;
         }
     },
 
     logOut: async () => {
+        let success = false;
+
         try {
             await firebase.auth().signOut();
 
-            return true;
+            success = true;
         } catch (error) {
             console.log("Error @logOut:", error.message);
+        } finally {
+            return success;
         }
+    },
 
-        return false;
+    deleteAccount: async () => {
+        let success = false;
+
+        try {
+            const currentUser = Firebase.getCurrentUser();
+
+            if (currentUser) {
+                await currentUser.delete();
+                success = true;
+            }
+        } catch (error) {
+            console.log("Error @deleteAccount:", error.message);
+        } finally {
+            return success;
+        }
     },
 };
 

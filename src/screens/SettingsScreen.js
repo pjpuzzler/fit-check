@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Platform, StatusBar, Dimensions, Linking } from "react-native";
+import React, { useContext } from "react";
+import { Platform, StatusBar, Dimensions, Linking, Alert } from "react-native";
 import styled from "styled-components";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
@@ -17,15 +17,43 @@ export default SettingsScreen = ({ navigation }) => {
     const logOut = async () => {
         const loggedOut = await firebase.logOut();
 
-        if (loggedOut) setUser((state) => ({ ...state, isLoggedIn: false }));
+        if (loggedOut) setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     const changeSex = async (sex) => {
         if (sex === user.sex) return;
 
+        const prevSex = sex;
+
         setUser((state) => ({ ...state, sex }));
 
-        await firebase.updateData({ sex });
+        const updated = await firebase.updateData({ sex });
+
+        if (!updated) setUser((state) => ({ ...state, sex: prevSex }));
+    };
+
+    const startDelete = async () => {
+        Alert.alert(
+            "Delete Account",
+            "Are you sure you want to delete your account?",
+            [
+                {
+                    text: "No",
+                    style: "cancel",
+                },
+                {
+                    text: "Delete",
+                    onPress: await deleteAccount(),
+                    style: "destructive",
+                },
+            ]
+        );
+    };
+
+    const deleteAccount = async () => {
+        const deleted = await firebase.deleteAccount();
+
+        if (deleted) setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     return (
@@ -71,7 +99,7 @@ export default SettingsScreen = ({ navigation }) => {
                         <MaterialCommunityIcons
                             name="gender-male"
                             size={windowHeight / 10}
-                            color={user.sex === "m" ? "#18d299" : "#666666"}
+                            color={user.sex === "m" ? "#6ca0dc" : "#666666"}
                         />
                     </IconContainer>
                     <IconContainer
@@ -82,7 +110,7 @@ export default SettingsScreen = ({ navigation }) => {
                         <MaterialCommunityIcons
                             name="gender-male-female"
                             size={windowHeight / 10}
-                            color={user.sex === "b" ? "#18d299" : "#666666"}
+                            color={user.sex === "b" ? "#b2acd8" : "#666666"}
                         />
                     </IconContainer>
                     <IconContainer
@@ -93,36 +121,53 @@ export default SettingsScreen = ({ navigation }) => {
                         <MaterialCommunityIcons
                             name="gender-female"
                             size={windowHeight / 10}
-                            color={user.sex === "f" ? "#18d299" : "#666666"}
+                            color={user.sex === "f" ? "#f8b9d4" : "#666666"}
                         />
                     </IconContainer>
                 </Container3>
 
                 <SectionTitle>
+                    <Text color="#18d299">Account</Text>
+                </SectionTitle>
+
+                <Container4>
+                    <Text
+                        color="#ff0000"
+                        style={{ textDecorationLine: "underline" }}
+                        onPress={startDelete}
+                    >
+                        Delete Account
+                    </Text>
+                </Container4>
+
+                <SectionTitle>
                     <Text color="#18d299">Credits</Text>
                 </SectionTitle>
 
-                <Text
-                    margin="5% 0 0 0"
-                    style={{ textDecorationLine: "underline" }}
-                    onPress={() =>
-                        Linking.openURL("https://lottiefiles.com/user/37464")
-                    }
-                >
-                    Loading Animation
-                </Text>
+                <Container4>
+                    <Text
+                        style={{ textDecorationLine: "underline" }}
+                        onPress={() =>
+                            Linking.openURL(
+                                "https://lottiefiles.com/user/37464"
+                            )
+                        }
+                    >
+                        Loading Animation
+                    </Text>
 
-                <Text
-                    margin="5% 0 0 0"
-                    style={{ textDecorationLine: "underline" }}
-                    onPress={() =>
-                        Linking.openURL(
-                            "https://www.youtube.com/c/DesignIntoCode"
-                        )
-                    }
-                >
-                    Tutorials
-                </Text>
+                    <Text
+                        margin="5% 0 0 0"
+                        style={{ textDecorationLine: "underline" }}
+                        onPress={() =>
+                            Linking.openURL(
+                                "https://www.youtube.com/c/DesignIntoCode"
+                            )
+                        }
+                    >
+                        Tutorials
+                    </Text>
+                </Container4>
             </Container2>
         </Container>
     );
@@ -157,7 +202,15 @@ const SectionTitle = styled.SafeAreaView`
 
 const Container3 = styled.SafeAreaView`
     justify-content: space-around;
+    align-items: center;
     flex-direction: row;
+    width: 100%;
+    margin: 5% 0;
+`;
+
+const Container4 = styled.SafeAreaView`
+    justify-content: center;
+    align-items: center;
     width: 100%;
     margin: 5% 0;
 `;

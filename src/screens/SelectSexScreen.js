@@ -9,7 +9,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default SelectSexScreen = () => {
-    const [user, setUser] = useContext(UserContext);
+    const [_, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
     const [sex, setSex] = useState("");
@@ -23,7 +23,9 @@ export default SelectSexScreen = () => {
         if (sex) {
             setUser((state) => ({ ...state, sex }));
 
-            await firebase.updateData({ sex });
+            const updated = await firebase.updateData({ sex });
+
+            if (!updated) setUser((state) => ({ ...state, sex: "" }));
         }
     };
 

@@ -9,7 +9,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default UserScreen = ({ navigation }) => {
-    const [user, _] = useContext(UserContext);
+    const [user] = useContext(UserContext);
 
     const windowHeight = Dimensions.get("window").height;
 

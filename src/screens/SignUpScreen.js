@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { BackHandler, Dimensions, Keyboard, Platform } from "react-native";
+import { Dimensions, Keyboard, Platform } from "react-native";
 import styled from "styled-components";
 
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -27,45 +27,39 @@ export default SignUpScreen = ({ navigation }) => {
                 setKeyboardVisible(true);
             }
         );
+
         const keyboardDidHideListener = Keyboard.addListener(
             "keyboardDidHide",
             () => {
                 setKeyboardVisible(false);
             }
         );
-        const backAction = () => {
-            if (overlayVisible) {
-                setOverlayVisible(false);
-            } else {
-                navigation.goBack();
-            }
-            return true;
-        };
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
+
         return () => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
-            backHandler.remove();
         };
-    }, []);
+    });
 
     const signUp = async () => {
         setInvalidSignUpMessage("");
         setLoading(true);
 
         let newInvalidSignUpMessage;
+        const usernameIsAvailable = await firebase.usernameIsAvailable(
+            username
+        );
 
-        if (username.length < 3 || username.length > 15) {
+        if (usernameIsAvailable === null)
+            newInvalidSignUpMessage = "An unknown error occured";
+        else if (username.length < 3 || username.length > 15)
             newInvalidSignUpMessage = "Username must be 3-15 characters";
-        } else if (!/^[0-9a-zA-Z_.-]+$/.test(username)) {
+        else if (!/^[0-9a-zA-Z_.-]+$/.test(username))
             newInvalidSignUpMessage =
                 "Username must contain only letters, numbers, and _/./-";
-        } else if (!(await firebase.usernameIsAvailable(username))) {
+        else if (!usernameIsAvailable)
             newInvalidSignUpMessage = "Username is in use";
-        } else {
+        else {
             const [success, res] = await firebase.createUser(
                 username,
                 email,
@@ -84,7 +78,7 @@ export default SignUpScreen = ({ navigation }) => {
     };
 
     return (
-        <TouchableWithoutFeedback accessible={false} onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container>
                 <Main>
                     <Text title semi center>

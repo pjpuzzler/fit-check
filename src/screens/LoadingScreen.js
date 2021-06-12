@@ -7,31 +7,27 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 export default LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext);
-    const firebaseContext = useContext(FirebaseContext);
+    const firebase = useContext(FirebaseContext);
 
     useEffect(() => {
-        setTimeout(async () => {
-            let isLoggedIn = false;
-            let userInfo;
+        setTimeout(load, 1000);
+    });
 
-            try {
-                const currentUser = firebaseContext.getCurrentUser();
+    const load = async () => {
+        let success = false,
+            userInfo;
 
-                if (currentUser) {
-                    userInfo = await firebaseContext.getUserInfo(
-                        currentUser.uid
-                    );
+        const currentUser = await firebase.getCurrentUser();
 
-                    isLoggedIn = true;
-                }
-            } catch (error) {
-                console.log("Error @load");
-            } finally {
-                if (isLoggedIn) setUser({ isLoggedIn: true, ...userInfo });
-                else setUser({ isLoggedIn: false });
-            }
-        }, 1000);
-    }, []);
+        if (currentUser) {
+            userInfo = await firebase.getUserInfo(currentUser.uid);
+
+            if (userInfo) success = true;
+        }
+
+        if (success) setUser({ isLoggedIn: true, ...userInfo });
+        else setUser({ isLoggedIn: false });
+    };
 
     return (
         <Container>
@@ -39,7 +35,6 @@ export default LoadingScreen = () => {
                 source={require("../../assets/loadingAnimation.json")}
                 autoPlay
                 loop
-                style={{ width: "45%" }}
             />
         </Container>
     );

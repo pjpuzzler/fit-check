@@ -43,7 +43,7 @@ export default MarketplaceScreen = ({ navigation }) => {
             >
                 <IconContainer onPress={() => {}}>
                     <MaterialCommunityIcons
-                        name="search"
+                        name="magnify"
                         size={windowHeight / 16}
                         color="#1c4068"
                     />
