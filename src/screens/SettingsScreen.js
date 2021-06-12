@@ -33,21 +33,30 @@ export default SettingsScreen = ({ navigation }) => {
     };
 
     const startDelete = async () => {
-        Alert.alert(
-            "Delete Account",
-            "Are you sure you want to delete your account?",
-            [
-                {
-                    text: "No",
-                    style: "cancel",
-                },
-                {
-                    text: "Delete",
-                    onPress: await deleteAccount(),
-                    style: "destructive",
-                },
-            ]
-        );
+        const del = await deleteAlert();
+
+        if (del) await deleteAccount();
+    };
+
+    const deleteAlert = () => {
+        return new Promise((resolve, reject) => {
+            Alert.alert(
+                "Delete Account",
+                "Are you sure you want to delete your account?",
+                [
+                    {
+                        text: "NO",
+                        onPress: () => resolve(false),
+                        style: "cancel",
+                    },
+                    {
+                        text: "DELETE",
+                        onPress: () => resolve(true),
+                        style: "destructive",
+                    },
+                ]
+            );
+        });
     };
 
     const deleteAccount = async () => {
@@ -135,7 +144,7 @@ export default SettingsScreen = ({ navigation }) => {
                         <Text
                             color="#ff0000"
                             style={{ textDecorationLine: "underline" }}
-                            onPress={async () => await startDelete()}
+                            onPress={startDelete}
                         >
                             Delete Account
                         </Text>
