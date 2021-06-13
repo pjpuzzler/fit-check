@@ -215,7 +215,7 @@ const Firebase = {
         }
     },
 
-    searchUsers: async (search) => {
+    searchUsers: async (search, username) => {
         let res = null;
 
         try {
@@ -223,9 +223,12 @@ const Firebase = {
 
             res = await docs
                 .where("username", ">=", search)
+                .where("username", "<=", search + "~")
+                .where("username", "!=", username)
                 .orderBy("username")
                 .limit(10)
                 .get();
+            res = res.docs.map((doc) => doc.data());
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {

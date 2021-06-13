@@ -22,11 +22,14 @@ export default SearchScreen = ({ navigation }) => {
     const submitSearch = async () => {
         let res;
 
-        res = await firebase.searchUsers(search);
+        res = await firebase.searchUsers(search, user.username);
 
-        console.log(typeof res);
+        if (res) setSearchResults(res);
+        else setUser({ isLoggedIn: null });
+    };
 
-        if (!res) setUser({ isLoggedIn: null });
+    const renderSearchResult = ({ item }) => {
+        return <Text center>{item.username}</Text>;
     };
 
     return (
@@ -83,6 +86,12 @@ export default SearchScreen = ({ navigation }) => {
                         />
                     </TO>
                 </TopBar>
+
+                <SearchResults
+                    data={searchResults}
+                    keyExtractor={(item) => item.uid}
+                    renderItem={renderSearchResult}
+                ></SearchResults>
             </Container>
         </TWF>
     );
@@ -111,7 +120,7 @@ const SearchBar = styled.TextInput`
     width: 60%;
 `;
 
-const Container2 = styled.SafeAreaView`
+const SearchResults = styled.FlatList`
     width: 100%;
-    flex-direction: row;
+    height: 100%;
 `;
