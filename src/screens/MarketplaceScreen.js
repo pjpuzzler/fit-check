@@ -41,7 +41,11 @@ export default MarketplaceScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <TO onPress={() => {}}>
+                <TO
+                    onPress={() => {
+                        navigation.navigate("Search");
+                    }}
+                >
                     <MaterialCommunityIcons
                         name="magnify"
                         size={windowWidth / 8}

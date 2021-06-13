@@ -15,9 +15,29 @@ export default SettingsScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get("window").width;
 
     const logOut = async () => {
-        const loggedOut = await firebase.logOut();
+        const res = await logOutAlert();
 
-        if (loggedOut) setUser({ isLoggedIn: null });
+        if (res) {
+            const loggedOut = await firebase.logOut();
+
+            if (loggedOut) setUser({ isLoggedIn: null });
+        }
+    };
+
+    const logOutAlert = () => {
+        return new Promise((resolve, _) => {
+            Alert.alert("Log Out", "Are you sure you want to log out?", [
+                {
+                    text: "NO",
+                    onPress: () => resolve(false),
+                    style: "cancel",
+                },
+                {
+                    text: "YES",
+                    onPress: () => resolve(true),
+                },
+            ]);
+        });
     };
 
     const changeSex = async (sex) => {
@@ -31,7 +51,7 @@ export default SettingsScreen = ({ navigation }) => {
     };
 
     const startDelete = async () => {
-        const res = await reseteAlert();
+        const res = await deleteAlert();
 
         if (res) await deleteAccount();
     };
@@ -137,56 +157,79 @@ export default SettingsScreen = ({ navigation }) => {
 
                 <SectionTitle>
                     <Text bold color="#18d299">
-                        Account
+                        Credits
                     </Text>
                 </SectionTitle>
 
                 <Container4>
-                    <TO>
+                    <TO
+                        onPress={() =>
+                            Linking.openURL(
+                                "https://lottiefiles.com/user/37464"
+                            )
+                        }
+                    >
+                        <Text bold style={{ textDecorationLine: "underline" }}>
+                            Loading Animations
+                        </Text>
+                    </TO>
+
+                    <TO
+                        onPress={() =>
+                            Linking.openURL(
+                                "https://www.youtube.com/c/DesignIntoCode"
+                            )
+                        }
+                    >
                         <Text
-                            heavy
-                            color="#ff0000"
+                            bold
+                            margin="2% 0 0 0"
                             style={{ textDecorationLine: "underline" }}
-                            onPress={startDelete}
                         >
-                            Delete Account
+                            Tutorials
                         </Text>
                     </TO>
                 </Container4>
 
                 <SectionTitle>
                     <Text bold color="#18d299">
-                        Credits
+                        Support
                     </Text>
                 </SectionTitle>
 
                 <Container4>
-                    <TO>
-                        <Text
-                            bold
-                            style={{ textDecorationLine: "underline" }}
-                            onPress={() =>
-                                Linking.openURL(
-                                    "https://lottiefiles.com/user/37464"
-                                )
-                            }
-                        >
-                            Loading Animations
-                        </Text>
-                    </TO>
+                    <Text small center>
+                        Question, concern, or suggestion?
+                    </Text>
 
-                    <TO>
+                    <TO
+                        onPress={() =>
+                            Linking.openURL(
+                                "mailto:contact.teamfitcheck@gmail.com"
+                            )
+                        }
+                    >
                         <Text
-                            bold
+                            small
+                            heavy
                             margin="2% 0 0 0"
                             style={{ textDecorationLine: "underline" }}
-                            onPress={() =>
-                                Linking.openURL(
-                                    "https://www.youtube.com/c/DesignIntoCode"
-                                )
-                            }
                         >
-                            Tutorials
+                            contact.teamfitcheck@gmail.com
+                        </Text>
+                    </TO>
+                </Container4>
+
+                <SectionTitle>
+                    <Text bold color="#18d299">
+                        Account
+                    </Text>
+                </SectionTitle>
+
+                <Container4>
+                    <TO onPress={startDelete}>
+                        <Text heavy color="#ff0000">
+                            Delete Account
                         </Text>
                     </TO>
                 </Container4>

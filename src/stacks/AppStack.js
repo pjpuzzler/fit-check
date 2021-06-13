@@ -6,7 +6,7 @@ import { UserContext } from "../context/UserContext";
 import LoadingScreen from "../screens/LoadingScreen";
 import SelectProfilePhotoScreen from "../screens/SelectProfilePhotoScreen";
 import SelectSexScreen from "../screens/SelectSexScreen";
-import MainStack from "./MainStack";
+import ClosetStack from "./ClosetStack";
 import AuthStack from "./AuthStack";
 
 export default AppStack = () => {
