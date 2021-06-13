@@ -179,7 +179,7 @@ export default ClosetScreen = ({ navigation }) => {
                                 />
                             </TO>
 
-                            <Text large bold color="#1c4068">
+                            <Text large bold color="#18d299">
                                 {user.username}
                             </Text>
 
@@ -244,11 +244,15 @@ export default ClosetScreen = ({ navigation }) => {
                                 <StatsContainer>
                                     <StatContainer>
                                         <Text>Followers</Text>
-                                        <Text large>{user.followers}</Text>
+                                        <Text large color="#18d299">
+                                            {user.followers}
+                                        </Text>
                                     </StatContainer>
                                     <StatContainer>
                                         <Text>Downloads</Text>
-                                        <Text large>{user.downloads}</Text>
+                                        <Text large color="#18d299">
+                                            {user.downloads}
+                                        </Text>
                                     </StatContainer>
                                 </StatsContainer>
 
@@ -282,7 +286,7 @@ const TopBar = styled.SafeAreaView`
 const ProfilePhotoBorder = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
-    background-color: #1c4068;
+    background-color: #18d299;
 `;
 
 const ProfilePhotoContainer = styled.SafeAreaView`
