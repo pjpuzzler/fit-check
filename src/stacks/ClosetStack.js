@@ -6,12 +6,12 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 import MarketScreen from "../screens/MarketplaceScreen";
 import MainScreen from "../screens/MainScreen";
-import UserScreen from "../screens/UserScreen";
+import ClosetScreen from "../screens/ClosetScreen";
 
-export default UserStack = () => {
+export default ClosetStack = () => {
     const windowWidth = Dimensions.get("window").width;
 
-    const MainNav = createMaterialTopTabNavigator();
+    const Nav = createMaterialTopTabNavigator();
 
     const tabBarOptions = {
         indicatorStyle: {
@@ -45,7 +45,7 @@ export default UserStack = () => {
                     iconName = "tshirt-crew";
                     break;
 
-                case "User":
+                case "Closet":
                     iconName = "wardrobe";
                     break;
             }
@@ -61,15 +61,15 @@ export default UserStack = () => {
     });
 
     return (
-        <MainNav.Navigator
+        <Nav.Navigator
             initialRouteName="Main"
             tabBarOptions={tabBarOptions}
             tabBarPosition="bottom"
             screenOptions={screenOptions}
         >
-            <MainNav.Screen name="Market" component={MarketScreen} />
-            <MainNav.Screen name="Main" component={MainScreen} />
-            <MainNav.Screen name="User" component={UserScreen} />
-        </MainNav.Navigator>
+            <Nav.Screen name="Market" component={MarketScreen} />
+            <Nav.Screen name="Main" component={MainScreen} />
+            <Nav.Screen name="Closet" component={ClosetScreen} />
+        </Nav.Navigator>
     );
 };

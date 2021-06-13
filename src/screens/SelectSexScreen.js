@@ -88,7 +88,7 @@ export default SelectSexScreen = () => {
                 >
                     {loading ? (
                         <LottieView
-                            source={require("../../assets/loadingAnimation2.json")}
+                            source={require("../../assets/loadingAnimation2White.json")}
                             autoPlay
                             loop
                         />

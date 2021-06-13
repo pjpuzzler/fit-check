@@ -20,19 +20,41 @@ export default SelectProfilePhotoScreen = () => {
     const windowWidth = Dimensions.get("window").width;
 
     const addImage = async () => {
-        try {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 0.5,
-            });
+        const result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.5,
+        });
 
-            if (!result.cancelled) {
-                setUri(result.uri);
-            }
-        } catch (error) {
-            console.log("Error @pickImage: ", error.message);
+        if (!result.cancelled) {
+            setUri(result.uri);
         }
+    };
+
+    const removeImage = async () => {
+        const res = await removeImageAlert();
+
+        if (res) setUri("");
+    };
+
+    const removeImageAlert = () => {
+        return new Promise((resolve, _) => {
+            Alert.alert(
+                "Remove Image",
+                "Are you sure you want to remove this image?",
+                [
+                    {
+                        text: "NO",
+                        onPress: () => resolve(false),
+                        style: "cancel",
+                    },
+                    {
+                        text: "YES",
+                        onPress: () => resolve(true),
+                    },
+                ]
+            );
+        });
     };
 
     const continue_ = async () => {
@@ -93,11 +115,13 @@ export default SelectProfilePhotoScreen = () => {
                 </Text>
             </TitleContainer>
             <ProfilePhotoContainer
-                onPress={uri ? () => setUri("") : addImage}
+                onPress={addImage}
+                onLongPress={removeImage}
                 style={{
                     borderRadius: windowWidth * 0.6,
                     width: windowWidth * 0.6,
                     height: windowWidth * 0.6,
+                    backgroundColor: !uri ? "#666666" : null,
                 }}
             >
                 {uri ? (
@@ -120,7 +144,7 @@ export default SelectProfilePhotoScreen = () => {
             >
                 {loading ? (
                     <LottieView
-                        source={require("../../assets/loadingAnimation2.json")}
+                        source={require("../../assets/loadingAnimation2White.json")}
                         autoPlay
                         loop
                     />
@@ -147,7 +171,6 @@ const TitleContainer = styled.SafeAreaView`
 `;
 
 const ProfilePhotoContainer = styled.TouchableOpacity`
-    background-color: #666666;
     justify-content: center;
     overflow: hidden;
     align-items: center;

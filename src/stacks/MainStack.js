@@ -1,16 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import UserStack from "./UserStack";
+import ClosetStack from "./ClosetStack";
 import SettingsScreen from "../screens/SettingsScreen";
 
 export default MainStack = () => {
-    const UserNav = createStackNavigator();
+    const Nav = createStackNavigator();
 
     return (
-        <UserNav.Navigator headerMode={false}>
-            <UserNav.Screen name="User" component={UserStack} />
-            <UserNav.Screen name="Settings" component={SettingsScreen} />
-        </UserNav.Navigator>
+        <Nav.Navigator headerMode={false}>
+            <Nav.Screen name="Closet" component={ClosetStack} />
+            <Nav.Screen name="Settings" component={SettingsScreen} />
+        </Nav.Navigator>
     );
 };

@@ -201,6 +201,16 @@ const Firebase = {
             return success;
         }
     },
+
+    deleteProfilePhoto: async (url) => {
+        try {
+            const ref = firebase.storage().refFromURL(url);
+
+            await ref.delete();
+        } catch (error) {
+            console.log("Error @deleteProfilePhoto:", error.message);
+        }
+    },
 };
 
 const FirebaseProvider = (props) => {
