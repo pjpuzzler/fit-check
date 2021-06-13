@@ -122,35 +122,37 @@ export default SettingsScreen = ({ navigation }) => {
                 <Container3>
                     <TO
                         onPress={() => {
-                            changeSex("m");
+                            changeSex("male");
                         }}
                     >
                         <MaterialCommunityIcons
                             name="gender-male"
                             size={windowWidth / 5}
-                            color={user.sex === "m" ? "#5ca0dc" : "#666666"}
+                            color={user.sex === "male" ? "#5ca0dc" : "#666666"}
                         />
                     </TO>
                     <TO
                         onPress={() => {
-                            changeSex("b");
+                            changeSex("inter");
                         }}
                     >
                         <MaterialCommunityIcons
                             name="gender-male-female"
                             size={windowWidth / 5}
-                            color={user.sex === "b" ? "#b2acd8" : "#666666"}
+                            color={user.sex === "inter" ? "#b2acd8" : "#666666"}
                         />
                     </TO>
                     <TO
                         onPress={() => {
-                            changeSex("f");
+                            changeSex("female");
                         }}
                     >
                         <MaterialCommunityIcons
                             name="gender-female"
                             size={windowWidth / 5}
-                            color={user.sex === "f" ? "#f8b9d4" : "#666666"}
+                            color={
+                                user.sex === "female" ? "#f8b9d4" : "#666666"
+                            }
                         />
                     </TO>
                 </Container3>

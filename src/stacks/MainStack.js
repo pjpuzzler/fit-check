@@ -8,7 +8,7 @@ import MarketplaceScreen from "../screens/MarketplaceScreen";
 import MainScreen from "../screens/MainScreen";
 import ClosetScreen from "../screens/ClosetScreen";
 
-export default MainStack = () => {
+export default HiddenStack = () => {
     const windowWidth = Dimensions.get("window").width;
 
     const Tab = createMaterialTopTabNavigator();
@@ -37,7 +37,7 @@ export default MainStack = () => {
             let iconName;
 
             switch (route.name) {
-                case "Market":
+                case "Marketplace":
                     iconName = "store";
                     break;
 

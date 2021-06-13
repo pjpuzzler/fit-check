@@ -19,14 +19,14 @@ export default MarketplaceScreen = ({ navigation }) => {
         let newSexFilter;
 
         switch (sexFilter) {
-            case "b":
-                newSexFilter = "m";
+            case "inter":
+                newSexFilter = "male";
                 break;
-            case "m":
-                newSexFilter = "f";
+            case "male":
+                newSexFilter = "female";
                 break;
-            case "f":
-                newSexFilter = "b";
+            case "female":
+                newSexFilter = "inter";
                 break;
         }
 
@@ -47,7 +47,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                     }}
                 >
                     <MaterialCommunityIcons
-                        name="magnify"
+                        name="account-search"
                         size={windowWidth / 8}
                         color="#1c4068"
                     />
@@ -60,9 +60,9 @@ export default MarketplaceScreen = ({ navigation }) => {
                 <TO onPress={changeSexFilter}>
                     <MaterialCommunityIcons
                         name={
-                            sexFilter === "b"
+                            sexFilter === "inter"
                                 ? "gender-male-female"
-                                : sexFilter === "m"
+                                : sexFilter === "male"
                                 ? "gender-male"
                                 : "gender-female"
                         }

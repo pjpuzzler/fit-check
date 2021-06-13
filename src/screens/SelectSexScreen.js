@@ -45,36 +45,36 @@ export default SelectSexScreen = () => {
                 </TitleContainer>
                 <TO
                     onPress={() => {
-                        setSex(sex === "b" ? "" : "b");
+                        setSex(sex === "inter" ? "" : "inter");
                     }}
                 >
                     <MaterialCommunityIcons
                         name="gender-male-female"
                         size={windowWidth / 3}
-                        color={sex === "b" ? "#b2acd8" : "#666666"}
+                        color={sex === "inter" ? "#b2acd8" : "#666666"}
                     />
                 </TO>
                 <MFContainer>
                     <TO
                         onPress={() => {
-                            setSex(sex === "m" ? "" : "m");
+                            setSex(sex === "male" ? "" : "male");
                         }}
                     >
                         <MaterialCommunityIcons
                             name="gender-male"
                             size={windowWidth / 3}
-                            color={sex === "m" ? "#6ca0dc" : "#666666"}
+                            color={sex === "male" ? "#6ca0dc" : "#666666"}
                         />
                     </TO>
                     <TO
                         onPress={() => {
-                            setSex(sex === "f" ? "" : "f");
+                            setSex(sex === "female" ? "" : "female");
                         }}
                     >
                         <MaterialCommunityIcons
                             name="gender-female"
                             size={windowWidth / 3}
-                            color={sex === "f" ? "#f8b9d4" : "#666666"}
+                            color={sex === "female" ? "#f8b9d4" : "#666666"}
                         />
                     </TO>
                 </MFContainer>

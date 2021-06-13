@@ -214,6 +214,24 @@ const Firebase = {
             console.log("Error @deleteProfilePhoto:", error.message);
         }
     },
+
+    searchUsers: async (search) => {
+        let res = null;
+
+        try {
+            let docs = db.collection("users");
+
+            res = await docs
+                .where("username", ">=", search)
+                .orderBy("username")
+                .limit(10)
+                .get();
+        } catch (error) {
+            console.log("Error @searchUsers:", error.message);
+        } finally {
+            return res;
+        }
+    },
 };
 
 const FirebaseProvider = (props) => {
