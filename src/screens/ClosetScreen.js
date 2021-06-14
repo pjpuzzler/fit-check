@@ -65,7 +65,9 @@ export default ClosetScreen = ({ navigation }) => {
         if (profilePhotoUrl) {
             setUser((state) => ({ ...state, profilePhotoUrl }));
 
-            const updated = await firebase.updateData({ profilePhotoUrl });
+            const updated = await firebase.updateData(user.uid, {
+                profilePhotoUrl,
+            });
 
             if (!updated) {
                 setUser({ isLoggedIn: null });

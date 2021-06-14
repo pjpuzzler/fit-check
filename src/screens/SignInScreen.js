@@ -181,12 +181,10 @@ const Auth = styled.KeyboardAvoidingView`
 
 const AuthContainer = styled.SafeAreaView`
     justify-content: center;
-    height: 45%;
+    height: 50%;
 `;
 
-const AuthField = styled.TextInput`
-    height: 100%;
-`;
+const AuthField = styled.TextInput``;
 
 const BottomContainer = styled.SafeAreaView`
     width: 100%;

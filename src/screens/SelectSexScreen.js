@@ -10,7 +10,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default SelectSexScreen = () => {
-    const [_, setUser] = useContext(UserContext);
+    const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
     const [sex, setSex] = useState("");
@@ -23,7 +23,7 @@ export default SelectSexScreen = () => {
 
         setUser((state) => ({ ...state, sex }));
 
-        const updated = await firebase.updateData({ sex });
+        const updated = await firebase.updateData(user.uid, { sex });
 
         if (!updated) setUser({ isLoggedIn: null });
     };

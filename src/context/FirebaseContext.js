@@ -65,6 +65,7 @@ const Firebase = {
                 downloads: 0,
                 followers: 0,
                 following: [],
+                lastCheckIn: Date.now(),
                 outfits: [],
                 premium: false,
                 profilePhotoUrl: "",
@@ -76,7 +77,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @createUser:", error.message);
-            await Firebase.deleteAccount();
+            Firebase.deleteAccount();
         } finally {
             return [success, null];
         }
@@ -148,20 +149,13 @@ const Firebase = {
         }
     },
 
-    updateData: async (dataObj) => {
+    updateData: async (uid, dataObj) => {
         let success = false;
 
         try {
-            const currentUser = Firebase.getCurrentUser();
+            await db.collection("users").doc(uid).update(dataObj);
 
-            if (currentUser) {
-                await db
-                    .collection("users")
-                    .doc(currentUser.uid)
-                    .update(dataObj);
-
-                success = true;
-            }
+            success = true;
         } catch (error) {
             console.log("Error @updateData:", error.message);
         } finally {
@@ -184,8 +178,6 @@ const Firebase = {
     },
 
     deleteAccount: async () => {
-        let success = false;
-
         try {
             const currentUser = Firebase.getCurrentUser();
 
@@ -193,15 +185,18 @@ const Firebase = {
                 const docRef = db.collection("users").doc(currentUser.uid);
                 const doc = await docRef.get();
 
-                if (doc.exists) await docRef.delete();
+                if (doc.exists) {
+                    const profilePhotoUrl = doc.data().profilePhotoUrl;
+                    if (profilePhotoUrl !== "default")
+                        await Firebase.deleteProfilePhoto(profilePhotoUrl);
+
+                    await docRef.delete();
+                }
 
                 await currentUser.delete();
-                success = true;
             }
         } catch (error) {
             console.log("Error @deleteAccount:", error.message);
-        } finally {
-            return success;
         }
     },
 

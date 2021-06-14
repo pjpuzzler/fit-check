@@ -11,7 +11,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 
 export default SelectProfilePhotoScreen = () => {
-    const [_, setUser] = useContext(UserContext);
+    const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
     const [uri, setUri] = useState("");
@@ -79,7 +79,9 @@ export default SelectProfilePhotoScreen = () => {
 
         setUser((state) => ({ ...state, profilePhotoUrl }));
 
-        const updated = await firebase.updateData({ profilePhotoUrl });
+        const updated = await firebase.updateData(user.uid, {
+            profilePhotoUrl,
+        });
 
         if (!updated) setUser({ isLoggedIn: null });
     };

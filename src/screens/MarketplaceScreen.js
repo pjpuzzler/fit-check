@@ -41,22 +41,6 @@ export default MarketplaceScreen = ({ navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <TO
-                    onPress={() => {
-                        navigation.navigate("Search");
-                    }}
-                >
-                    <MaterialCommunityIcons
-                        name="account-search"
-                        size={windowWidth / 8}
-                        color="#1c4068"
-                    />
-                </TO>
-
-                <Text large bold>
-                    Marketplace
-                </Text>
-
                 <TO onPress={changeSexFilter}>
                     <MaterialCommunityIcons
                         name={
@@ -66,6 +50,22 @@ export default MarketplaceScreen = ({ navigation }) => {
                                 ? "gender-male"
                                 : "gender-female"
                         }
+                        size={windowWidth / 8}
+                        color="#1c4068"
+                    />
+                </TO>
+
+                <Text large bold>
+                    Marketplace
+                </Text>
+
+                <TO
+                    onPress={() => {
+                        navigation.navigate("Search");
+                    }}
+                >
+                    <MaterialCommunityIcons
+                        name="account-search"
                         size={windowWidth / 8}
                         color="#1c4068"
                     />

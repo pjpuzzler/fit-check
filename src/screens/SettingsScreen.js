@@ -45,7 +45,7 @@ export default SettingsScreen = ({ navigation }) => {
 
         setUser((state) => ({ ...state, sex }));
 
-        const updated = await firebase.updateData({ sex });
+        const updated = await firebase.updateData(user.uid, { sex });
 
         if (!updated) setUser({ isLoggedIn: null });
     };
@@ -78,9 +78,9 @@ export default SettingsScreen = ({ navigation }) => {
     };
 
     const deleteAccount = async () => {
-        const deleted = await firebase.deleteAccount();
+        await firebase.deleteAccount();
 
-        if (deleted) setUser({ isLoggedIn: null });
+        setUser({ isLoggedIn: null });
     };
 
     return (

@@ -45,27 +45,42 @@ export default PremiumScreen = ({ navigation }) => {
             </TopBar>
 
             <Text large heavy center margin="5% 0 0">
-                With{" "}
-                <Text large heavy color="#ffd700">
-                    Premium
-                </Text>
-                , you get access to:
+                With Premium, you get access to:
             </Text>
 
-            <Text heavy center margin="9% 0 0">
+            <Text
+                heavy
+                center
+                margin="9% 0 0"
+                style={{ textDecorationLine: "underline" }}
+            >
                 Unlimited outfit slots
             </Text>
 
-            <Text heavy center margin="18% 0 0">
+            <Text
+                heavy
+                center
+                margin="18% 0 0"
+                style={{ textDecorationLine: "underline" }}
+            >
                 All clothing items
             </Text>
 
-            <Text heavy center margin="18% 0 0" color="#ffd700">
-                Premium
-                <Text heavy> flair</Text>
+            <Text
+                heavy
+                center
+                margin="18% 0 0"
+                style={{ textDecorationLine: "underline" }}
+            >
+                Premium flair
             </Text>
 
-            <Text heavy center margin="18% 0 0">
+            <Text
+                heavy
+                center
+                margin="18% 0 0"
+                style={{ textDecorationLine: "underline" }}
+            >
                 Upcoming smart-pick tech
             </Text>
 
