@@ -65,7 +65,7 @@ const Firebase = {
                 downloads: 0,
                 followers: 0,
                 following: [],
-                lastCheckIn: firebase.firestore.Timestamp.now(),
+                lastCheckIn: Firebase.getTimestamp(),
                 outfits: [],
                 premium: false,
                 profilePhotoUrl: "",
@@ -82,6 +82,8 @@ const Firebase = {
             return [success, null];
         }
     },
+
+    getTimestamp: () => firebase.firestore.Timestamp.now(),
 
     signIn: async (email, password) => {
         let success = false,
@@ -139,9 +141,12 @@ const Firebase = {
         let userInfo = null;
 
         try {
-            const user = await db.collection("users").doc(uid).get();
+            const userRef = db.collection("users").doc(uid);
+            await db.runTransaction(async (t) => {
+                const user = await t.get(userRef);
 
-            if (user.exists) userInfo = user.data();
+                if (user.exists) userInfo = user.data();
+            });
         } catch (error) {
             console.log("Error @getUserInfo:", error.message);
         } finally {

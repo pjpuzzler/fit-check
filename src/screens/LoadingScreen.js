@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { Alert } from "react-native";
 import styled from "styled-components";
 import LottieView from "lottie-react-native";
 
@@ -27,6 +28,24 @@ export default LoadingScreen = () => {
             userInfo = await firebase.getUserInfo(uid);
 
             if (userInfo) {
+                const lastCheckIn = firebase.getTimestamp();
+
+                if (
+                    (lastCheckIn.toDate().getTime() -
+                        userInfo.lastCheckIn.toDate().getTime()) /
+                        (1000 * 3600 * 24) >=
+                    1
+                ) {
+                    const coins = userInfo.coins + 5;
+
+                    await firebase.updateData(uid, { coins, lastCheckIn });
+
+                    Alert.alert("Daily Check-In", "+5 Coins!", [
+                        {
+                            text: "YAY!",
+                        },
+                    ]);
+                }
                 isLoggedIn = true;
                 userInfo = { ...userInfo, uid };
             }
