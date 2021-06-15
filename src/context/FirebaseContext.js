@@ -142,11 +142,12 @@ const Firebase = {
 
         try {
             const userRef = db.collection("users").doc(uid);
-            await db.runTransaction(async (t) => {
-                const user = await t.get(userRef);
 
-                if (user.exists) userInfo = user.data();
+            const userDoc = await db.runTransaction(async (t) => {
+                return await t.get(userRef);
             });
+
+            if (userDoc.exists) userInfo = userDoc.data();
         } catch (error) {
             console.log("Error @getUserInfo:", error.message);
         } finally {

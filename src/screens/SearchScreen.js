@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { Platform, StatusBar, Dimensions, Keyboard } from "react-native";
 import styled from "styled-components";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
@@ -66,7 +66,7 @@ export default SearchScreen = ({ navigation }) => {
                             setSearch(search.trim());
                             if (search) getSearchResults();
                         }}
-                        placeholder="search user"
+                        placeholder="username"
                         style={{
                             color: "#1c4068",
                             borderBottomWidth: windowHeight / 700,
@@ -86,19 +86,29 @@ export default SearchScreen = ({ navigation }) => {
                     </TO>
                 </TopBar>
 
-                {loading ? (
-                    <LottieView
-                        source={require("../../assets/loadingAnimation2Primary.json")}
-                        autoPlay
-                        loop
-                    />
-                ) : (
-                    <SearchResults
-                        data={searchResults}
-                        keyExtractor={(item) => item.uid}
-                        renderItem={renderSearchResult}
-                    />
-                )}
+                <SearchContentContainer>
+                    {loading ? (
+                        <LottieView
+                            source={require("../../assets/loadingAnimation2Primary.json")}
+                            autoPlay
+                            loop
+                        />
+                    ) : !search ? (
+                        <Text large bold>
+                            Enter Search
+                        </Text>
+                    ) : searchResults.length === 0 ? (
+                        <Text large bold>
+                            No Results
+                        </Text>
+                    ) : (
+                        <SearchResults
+                            data={searchResults}
+                            keyExtractor={(item) => item.uid}
+                            renderItem={renderSearchResult}
+                        />
+                    )}
+                </SearchContentContainer>
             </Container>
         </TWF>
     );
@@ -125,6 +135,13 @@ const TO = styled.TouchableOpacity`
 
 const SearchBar = styled.TextInput`
     width: 60%;
+`;
+
+const SearchContentContainer = styled.SafeAreaView`
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 `;
 
 const SearchResults = styled.FlatList`
