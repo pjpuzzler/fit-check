@@ -68,7 +68,7 @@ export default SettingsScreen = ({ navigation }) => {
         if (res) {
             const loggedOut = await firebase.logOut();
 
-            if (loggedOut) setUser({ isLoggedIn: null });
+            if (loggedOut) setUser((state) => ({ ...state, isLoggedIn: null }));
         }
     };
 
@@ -95,7 +95,7 @@ export default SettingsScreen = ({ navigation }) => {
 
         const updated = await firebase.updateData(user.uid, { sex });
 
-        if (!updated) setUser({ isLoggedIn: null });
+        if (!updated) setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     const authenticate = async () => {
@@ -153,7 +153,7 @@ export default SettingsScreen = ({ navigation }) => {
     const deleteAccount = async () => {
         await firebase.deleteAccount();
 
-        setUser({ isLoggedIn: null });
+        setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     return (

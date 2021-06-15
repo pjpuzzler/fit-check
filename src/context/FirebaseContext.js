@@ -65,7 +65,7 @@ const Firebase = {
                 downloads: 0,
                 followers: 0,
                 following: [],
-                lastCheckIn: Firebase.getTimestamp(),
+                lastDailyCheckIn: Firebase.getTimestamp(),
                 outfits: [],
                 premium: false,
                 profilePhotoUrl: "",
@@ -256,6 +256,76 @@ const Firebase = {
             err = error;
         } finally {
             return [success, err];
+        }
+    },
+
+    unfollow: async (uid1, uid2) => {
+        let following = null;
+
+        try {
+            const userRef1 = db.collection("users").doc(uid1);
+            const userRef2 = db.collection("users").doc(uid2);
+
+            following = await db.runTransaction(async (t) => {
+                const userDoc1 = await t.get(userRef1);
+                const userData1 = userDoc1.data();
+
+                if (!userData1.following.includes(uid2)) return;
+
+                const userDoc2 = await t.get(userRef2);
+
+                following = userData1.following.filter(
+                    (followingUid) => followingUid !== uid2
+                );
+
+                t.update(userRef1, {
+                    following,
+                });
+
+                t.update(userRef2, {
+                    followers: userDoc2.data().followers - 1,
+                });
+
+                return following;
+            });
+        } catch (error) {
+            console.log("Error @unfollow:", error.message);
+        } finally {
+            return following;
+        }
+    },
+
+    follow: async (uid1, uid2) => {
+        let following = null;
+
+        try {
+            const userRef1 = db.collection("users").doc(uid1);
+            const userRef2 = db.collection("users").doc(uid2);
+
+            following = await db.runTransaction(async (t) => {
+                const userDoc1 = await t.get(userRef1);
+                const userData1 = userDoc1.data();
+
+                if (userData1.following.includes(uid2)) return;
+
+                const userDoc2 = await t.get(userRef2);
+
+                following = [...userData1.following, uid2];
+
+                t.update(userRef1, {
+                    following,
+                });
+
+                t.update(userRef2, {
+                    followers: userDoc2.data().followers + 1,
+                });
+
+                return following;
+            });
+        } catch (error) {
+            console.log("Error @follow:", error.message);
+        } finally {
+            return following;
         }
     },
 };

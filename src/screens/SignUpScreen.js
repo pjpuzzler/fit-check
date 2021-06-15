@@ -85,7 +85,7 @@ export default SignUpScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        new user?
+                        New User?
                     </Text>
                 </Main>
 
@@ -190,7 +190,7 @@ export default SignUpScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    sign up
+                                    Sign Up
                                 </Text>
                             )}
                         </SignUpContainer>
@@ -199,7 +199,7 @@ export default SignUpScreen = ({ navigation }) => {
                             disabled={loading}
                             onPress={() => navigation.navigate("SignIn")}
                         >
-                            <Text color="#1c4068">have an account?</Text>
+                            <Text color="#1c4068">Have an account?</Text>
                         </SignIn>
                     </BottomContainer>
                 ) : null}

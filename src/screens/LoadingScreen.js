@@ -28,17 +28,17 @@ export default LoadingScreen = () => {
             userInfo = await firebase.getUserInfo(uid);
 
             if (userInfo) {
-                const lastCheckIn = firebase.getTimestamp();
+                const lastDailyCheckIn = firebase.getTimestamp();
 
                 if (
-                    (lastCheckIn.toDate().getTime() -
-                        userInfo.lastCheckIn.toDate().getTime()) /
+                    (lastDailyCheckIn.toDate().getTime() -
+                        userInfo.lastDailyCheckIn.toDate().getTime()) /
                         (1000 * 3600 * 24) >=
                     1
                 ) {
                     await firebase.updateData(uid, {
                         coins: userInfo.coins + 5,
-                        lastCheckIn,
+                        lastDailyCheckIn,
                     });
 
                     Alert.alert("Daily Check-In", "+5 Coins!", [
@@ -47,7 +47,7 @@ export default LoadingScreen = () => {
                         },
                     ]);
 
-                    userInfo = { ...userInfo, coins, lastCheckIn, uid };
+                    userInfo = { ...userInfo, coins, lastDailyCheckIn, uid };
                 } else userInfo = { ...userInfo, uid };
                 isLoggedIn = true;
             }

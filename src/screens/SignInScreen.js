@@ -64,7 +64,7 @@ export default SignInScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        returning user?
+                        Returning User?
                     </Text>
                 </Main>
                 <Auth
@@ -144,7 +144,7 @@ export default SignInScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    sign in
+                                    Sign In
                                 </Text>
                             )}
                         </SignInContainer>
@@ -152,7 +152,7 @@ export default SignInScreen = ({ navigation }) => {
                             disabled={loading}
                             onPress={() => navigation.navigate("SignUp")}
                         >
-                            <Text color="#1c4068">need an account?</Text>
+                            <Text color="#1c4068">Need an account?</Text>
                         </SignUp>
                     </BottomContainer>
                 ) : null}

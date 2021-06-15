@@ -1,5 +1,12 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { Platform, StatusBar, Dimensions, Keyboard } from "react-native";
+import {
+    Platform,
+    StatusBar,
+    Dimensions,
+    Keyboard,
+    Alert,
+    BackHandler,
+} from "react-native";
 import styled from "styled-components";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import LottieView from "lottie-react-native";
@@ -16,11 +23,29 @@ export default SearchScreen = ({ navigation }) => {
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    const [searchResultOverlayIndex, setSearchResultOverlayIndex] =
+        useState(null);
+    const [searchResultOverlayLoading, setSearchResultOverlayLoading] =
+        useState(false);
 
     const windowWidth = Dimensions.get("window").width;
     const windowHeight = Dimensions.get("window").height;
 
     const searchBarRef = useRef(null);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => {
+                if (searchResultOverlayIndex !== null) {
+                    setSearchResultOverlayIndex(null);
+                    return true;
+                }
+            }
+        );
+
+        return backHandler.remove;
+    });
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () =>
@@ -33,24 +58,26 @@ export default SearchScreen = ({ navigation }) => {
     useEffect(() => {
         if (search) getSearchResults();
         else setSearchResults([]);
-    }, [search]);
+    }, [search, user.following]);
 
     const getSearchResults = async () => {
         setLoading(true);
 
-        let res;
-
-        res = await firebase.searchUsers(search, user.username);
+        const res = await firebase.searchUsers(search, user.username);
 
         if (res) {
             setSearchResults(res);
             setLoading(false);
-        } else setUser({ isLoggedIn: null });
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
-    const renderSearchResult = ({ item }) => {
+    const renderSearchResult = ({ item, index }) => {
         return (
             <SearchResultContainer
+                onPress={() => {
+                    setSearchResultOverlayIndex(index);
+                    Keyboard.dismiss();
+                }}
                 style={{
                     paddingTop: windowWidth / 20,
                     paddingBottom: windowWidth / 20,
@@ -90,105 +117,324 @@ export default SearchScreen = ({ navigation }) => {
         );
     };
 
+    const unfollow = async () => {
+        const res = await unfollowAlert();
+
+        if (!res) return;
+
+        setSearchResultOverlayLoading(true);
+
+        const following = await firebase.unfollow(
+            user.uid,
+            searchResults[searchResultOverlayIndex].uid
+        );
+
+        if (following) {
+            setUser((state) => ({ ...state, following }));
+            setSearchResultOverlayLoading(false);
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
+    const unfollowAlert = () => {
+        return new Promise((resolve, _) => {
+            Alert.alert(
+                "Unfollow",
+                "Are you sure you want to unfollow this user?",
+                [
+                    {
+                        text: "NO",
+                        onPress: () => resolve(false),
+                        style: "cancel",
+                    },
+                    {
+                        text: "YES",
+                        onPress: () => resolve(true),
+                    },
+                ]
+            );
+        });
+    };
+
+    const follow = async () => {
+        setSearchResultOverlayLoading(true);
+
+        const following = await firebase.follow(
+            user.uid,
+            searchResults[searchResultOverlayIndex].uid
+        );
+
+        if (following) {
+            setUser((state) => ({ ...state, following }));
+            setSearchResultOverlayLoading(false);
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
     return (
-        <TWF onPress={Keyboard.dismiss}>
-            <Container>
-                <TopBar
-                    style={{
-                        paddingTop:
-                            Platform.OS === "android"
-                                ? StatusBar.currentHeight
-                                : 0,
-                    }}
-                >
-                    <TO onPress={navigation.goBack}>
-                        <MaterialCommunityIcons
-                            name="arrow-left"
-                            size={windowWidth / 8}
-                            color="#1c4068"
-                        />
-                    </TO>
-
-                    <SearchBar
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        autoFocus={true}
-                        fontSize={windowWidth / 16}
-                        maxLength={15}
-                        onChangeText={(newSearch) =>
-                            setSearch(newSearch.trim())
-                        }
-                        placeholder="username"
-                        ref={searchBarRef}
+        <Container>
+            <TWF onPress={Keyboard.dismiss}>
+                <Container>
+                    <TopBar
                         style={{
-                            color: "#1c4068",
-                            borderBottomWidth: windowHeight / 700,
-                            borderBottomColor: "#1c4068",
+                            paddingTop:
+                                Platform.OS === "android"
+                                    ? StatusBar.currentHeight
+                                    : 0,
                         }}
-                        textAlign="center"
-                        value={search}
-                    />
+                    >
+                        <TO onPress={navigation.goBack}>
+                            <MaterialCommunityIcons
+                                name="arrow-left"
+                                size={windowWidth / 8}
+                                color="#1c4068"
+                            />
+                        </TO>
 
-                    <TO disabled={!search} onPress={() => setSearch("")}>
-                        <MaterialCommunityIcons
-                            name="close"
-                            size={windowWidth / 8}
-                            color="#1c4068"
-                            style={{ opacity: !search ? 0 : null }}
+                        <SearchBar
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            autoFocus={true}
+                            fontSize={windowWidth / 16}
+                            maxLength={15}
+                            onChangeText={(newSearch) =>
+                                setSearch(newSearch.trim())
+                            }
+                            placeholder="username"
+                            ref={searchBarRef}
+                            style={{
+                                color: "#1c4068",
+                                borderBottomWidth: windowHeight / 700,
+                                borderBottomColor: "#1c4068",
+                            }}
+                            textAlign="center"
+                            value={search}
                         />
-                    </TO>
-                </TopBar>
 
-                <SearchContentContainer>
-                    {loading ? (
-                        <LottieView
-                            source={require("../../assets/loadingAnimation2Primary.json")}
-                            autoPlay
-                            loop
-                        />
-                    ) : !search ? (
-                        <Text large bold>
-                            Enter Search
-                        </Text>
-                    ) : searchResults.length === 0 ? (
-                        <Text large bold>
-                            No Results
-                        </Text>
-                    ) : (
-                        <SearchResults
-                            data={searchResults}
-                            keyboardShouldPersistTaps="handled"
-                            keyExtractor={(item) => item.uid}
-                            renderItem={renderSearchResult}
-                        />
-                    )}
-                </SearchContentContainer>
-            </Container>
-        </TWF>
+                        <TO disabled={!search} onPress={() => setSearch("")}>
+                            <MaterialCommunityIcons
+                                name="close"
+                                size={windowWidth / 8}
+                                color="#1c4068"
+                                style={{ opacity: !search ? 0 : null }}
+                            />
+                        </TO>
+                    </TopBar>
+
+                    <SearchContentContainer>
+                        {loading ? (
+                            <LottieView
+                                source={require("../../assets/loadingAnimation2Primary.json")}
+                                autoPlay
+                                loop
+                            />
+                        ) : !search ? (
+                            <Text large bold>
+                                Enter Search
+                            </Text>
+                        ) : searchResults.length === 0 ? (
+                            <Text large bold>
+                                No Results
+                            </Text>
+                        ) : (
+                            <SearchResults
+                                data={searchResults}
+                                keyboardShouldPersistTaps="handled"
+                                keyExtractor={(item) => item.uid}
+                                renderItem={renderSearchResult}
+                            />
+                        )}
+                    </SearchContentContainer>
+                </Container>
+            </TWF>
+
+            {searchResultOverlayIndex !== null ? (
+                <Container
+                    style={{ position: "absolute", justifyContent: "center" }}
+                >
+                    <TWF onPress={() => setSearchResultOverlayIndex(null)}>
+                        <SearchResultOverlayBackground />
+                    </TWF>
+
+                    <SearchResultOverlay
+                        style={{ borderRadius: windowWidth / 20 }}
+                    >
+                        <TopBar>
+                            <TO
+                                onPress={() =>
+                                    setSearchResultOverlayIndex(null)
+                                }
+                            >
+                                <MaterialCommunityIcons
+                                    name="close"
+                                    size={windowWidth / 8}
+                                    color="#1c4068"
+                                />
+                            </TO>
+
+                            <Text
+                                color={
+                                    searchResults[searchResultOverlayIndex]
+                                        .premium
+                                        ? "#ffd700"
+                                        : "#1c4068"
+                                }
+                                style={{
+                                    fontWeight: searchResults[
+                                        searchResultOverlayIndex
+                                    ].premium
+                                        ? "700"
+                                        : "500",
+                                    fontSize:
+                                        windowWidth /
+                                        (1.5 *
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].username.length),
+                                }}
+                            >
+                                {
+                                    searchResults[searchResultOverlayIndex]
+                                        .username
+                                }
+                            </Text>
+
+                            <MaterialCommunityIcons
+                                name="close"
+                                size={windowWidth / 8}
+                                style={{ opacity: 0 }}
+                            />
+                        </TopBar>
+
+                        <SearchResultOverlayContent>
+                            <ProfilePhotoBorder
+                                style={{
+                                    borderRadius: windowWidth * 0.6 * 0.75,
+                                    width: windowWidth * 0.6 * 0.75,
+                                    height: windowWidth * 0.6 * 0.75,
+                                    marginTop: "10%",
+                                    backgroundColor: searchResults[
+                                        searchResultOverlayIndex
+                                    ].premium
+                                        ? "#ffd700"
+                                        : "#1c4068",
+                                }}
+                            >
+                                <ProfilePhotoContainer
+                                    style={{
+                                        borderRadius:
+                                            windowWidth * 0.6 * 0.75 * 0.9,
+                                        width: windowWidth * 0.6 * 0.75 * 0.9,
+                                        height: windowWidth * 0.6 * 0.75 * 0.9,
+                                    }}
+                                >
+                                    <ProfilePhoto
+                                        source={
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].profilePhotoUrl === "default"
+                                                ? require("../../assets/defaultProfilePhoto.jpg")
+                                                : {
+                                                      uri: searchResults[
+                                                          searchResultOverlayIndex
+                                                      ].profilePhotoUrl,
+                                                  }
+                                        }
+                                    />
+                                </ProfilePhotoContainer>
+                            </ProfilePhotoBorder>
+
+                            <StatsContainer>
+                                <StatContainer>
+                                    <Text>Followers</Text>
+                                    <Text
+                                        large
+                                        color={
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].premium
+                                                ? "#ffd700"
+                                                : "#1c4068"
+                                        }
+                                    >
+                                        {
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].followers
+                                        }
+                                    </Text>
+                                </StatContainer>
+                                <StatContainer>
+                                    <Text>Downloads</Text>
+                                    <Text
+                                        large
+                                        color={
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].premium
+                                                ? "#ffd700"
+                                                : "#1c4068"
+                                        }
+                                    >
+                                        {
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].downloads
+                                        }
+                                    </Text>
+                                </StatContainer>
+                            </StatsContainer>
+
+                            <TO>
+                                <Text large heavy margin="10% 0 0">
+                                    Outfits
+                                </Text>
+                            </TO>
+
+                            <FollowContainer
+                                style={{
+                                    borderRadius: windowWidth / 20,
+                                    opacity: searchResultOverlayLoading
+                                        ? 0.5
+                                        : null,
+                                }}
+                                onPress={
+                                    user.following.includes(
+                                        searchResults[searchResultOverlayIndex]
+                                            .uid
+                                    )
+                                        ? unfollow
+                                        : follow
+                                }
+                                disabled={searchResultOverlayLoading}
+                            >
+                                {searchResultOverlayLoading ? (
+                                    <LottieView
+                                        source={require("../../assets/loadingAnimation2White.json")}
+                                        autoPlay
+                                        loop
+                                    />
+                                ) : (
+                                    <MaterialCommunityIcons
+                                        name={
+                                            user.following.includes(
+                                                searchResults[
+                                                    searchResultOverlayIndex
+                                                ].uid
+                                            )
+                                                ? "account-minus"
+                                                : "account-plus"
+                                        }
+                                        size={windowWidth / 8}
+                                        color="#ffffff"
+                                    />
+                                )}
+                            </FollowContainer>
+                        </SearchResultOverlayContent>
+                    </SearchResultOverlay>
+                </Container>
+            ) : null}
+        </Container>
     );
 };
-
-const SearchResultContainer = styled.TouchableOpacity`
-    flex-direction: row;
-    align-items: center;
-    background-color: #66666640;
-`;
-
-const ProfilePhotoBorder = styled.TouchableOpacity`
-    justify-content: center;
-    align-items: center;
-`;
-
-const ProfilePhotoContainer = styled.SafeAreaView`
-    justify-content: center;
-    overflow: hidden;
-    align-items: center;
-`;
-
-const ProfilePhoto = styled.Image`
-    width: 100%;
-    height: 100%;
-`;
 
 const TWF = styled.TouchableWithoutFeedback``;
 
@@ -223,4 +469,69 @@ const SearchContentContainer = styled.SafeAreaView`
 const SearchResults = styled.FlatList`
     width: 100%;
     height: 100%;
+`;
+
+const SearchResultContainer = styled.TouchableOpacity`
+    flex-direction: row;
+    align-items: center;
+    background-color: #66666640;
+`;
+
+const ProfilePhotoBorder = styled.SafeAreaView`
+    justify-content: center;
+    align-items: center;
+`;
+
+const ProfilePhotoContainer = styled.SafeAreaView`
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+`;
+
+const ProfilePhoto = styled.Image`
+    width: 100%;
+    height: 100%;
+`;
+
+const SearchResultOverlayBackground = styled.SafeAreaView`
+    position: absolute;
+    background-color: #00000040;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const SearchResultOverlay = styled.SafeAreaView`
+    background-color: #ffffff;
+    width: 75%;
+    height: 75%;
+    align-items: center;
+`;
+
+const SearchResultOverlayContent = styled.SafeAreaView`
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
+
+const StatsContainer = styled.SafeAreaView`
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 10%;
+    width: 100%;
+`;
+
+const StatContainer = styled.SafeAreaView`
+    align-items: center;
+`;
+
+const FollowContainer = styled.TouchableOpacity`
+    margin-top: 10%;
+    width: 75%
+    height: 10%;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c4068;
 `;

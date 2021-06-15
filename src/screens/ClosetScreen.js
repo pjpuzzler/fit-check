@@ -70,11 +70,11 @@ export default ClosetScreen = ({ navigation }) => {
             });
 
             if (!updated) {
-                setUser({ isLoggedIn: null });
+                setUser((state) => ({ ...state, isLoggedIn: null }));
                 return;
             }
         } else {
-            setUser({ isLoggedIn: null });
+            setUser((state) => ({ ...state, isLoggedIn: null }));
             return;
         }
 
