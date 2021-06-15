@@ -45,9 +45,10 @@ export default LoadingScreen = () => {
                             text: "YAY!",
                         },
                     ]);
-                }
+
+                    userInfo = { ...userInfo, coins, lastCheckIn, uid };
+                } else userInfo = { ...userInfo, uid };
                 isLoggedIn = true;
-                userInfo = { ...userInfo, uid };
             }
         }
 
