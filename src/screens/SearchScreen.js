@@ -20,6 +20,21 @@ export default SearchScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get("window").width;
     const windowHeight = Dimensions.get("window").height;
 
+    const searchBarRef = useRef(null);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () =>
+            setTimeout(() => searchBarRef.current.focus(), 200)
+        );
+
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        if (search) getSearchResults();
+        else setSearchResults([]);
+    }, [search]);
+
     const getSearchResults = async () => {
         setLoading(true);
 
@@ -34,7 +49,45 @@ export default SearchScreen = ({ navigation }) => {
     };
 
     const renderSearchResult = ({ item }) => {
-        return <Text center>{item.username}</Text>;
+        return (
+            <SearchResultContainer
+                style={{
+                    paddingTop: windowWidth / 20,
+                    paddingBottom: windowWidth / 20,
+                    paddingLeft: windowWidth / 20,
+                    paddingRight: windowWidth / 20,
+                }}
+            >
+                <ProfilePhotoBorder
+                    style={{
+                        borderRadius: windowWidth * 0.2,
+                        width: windowWidth * 0.2,
+                        height: windowWidth * 0.2,
+                        backgroundColor: item.premium ? "#ffd700" : "#1c4068",
+                    }}
+                >
+                    <ProfilePhotoContainer
+                        style={{
+                            borderRadius: windowWidth * 0.2 * 0.9,
+                            width: windowWidth * 0.2 * 0.9,
+                            height: windowWidth * 0.2 * 0.9,
+                        }}
+                    >
+                        <ProfilePhoto
+                            source={
+                                item.profilePhotoUrl === "default"
+                                    ? require("../../assets/defaultProfilePhoto.jpg")
+                                    : { uri: item.profilePhotoUrl }
+                            }
+                        />
+                    </ProfilePhotoContainer>
+                </ProfilePhotoBorder>
+
+                <Text large bold margin="0 0 0 5%">
+                    {item.username}
+                </Text>
+            </SearchResultContainer>
+        );
     };
 
     return (
@@ -62,11 +115,11 @@ export default SearchScreen = ({ navigation }) => {
                         autoFocus={true}
                         fontSize={windowWidth / 16}
                         maxLength={15}
-                        onChangeText={(search) => {
-                            setSearch(search.trim());
-                            if (search) getSearchResults();
-                        }}
+                        onChangeText={(newSearch) =>
+                            setSearch(newSearch.trim())
+                        }
                         placeholder="username"
+                        ref={searchBarRef}
                         style={{
                             color: "#1c4068",
                             borderBottomWidth: windowHeight / 700,
@@ -104,6 +157,7 @@ export default SearchScreen = ({ navigation }) => {
                     ) : (
                         <SearchResults
                             data={searchResults}
+                            keyboardShouldPersistTaps="handled"
                             keyExtractor={(item) => item.uid}
                             renderItem={renderSearchResult}
                         />
@@ -113,6 +167,28 @@ export default SearchScreen = ({ navigation }) => {
         </TWF>
     );
 };
+
+const SearchResultContainer = styled.TouchableOpacity`
+    flex-direction: row;
+    align-items: center;
+    background-color: #66666640;
+`;
+
+const ProfilePhotoBorder = styled.TouchableOpacity`
+    justify-content: center;
+    align-items: center;
+`;
+
+const ProfilePhotoContainer = styled.SafeAreaView`
+    justify-content: center;
+    overflow: hidden;
+    align-items: center;
+`;
+
+const ProfilePhoto = styled.Image`
+    width: 100%;
+    height: 100%;
+`;
 
 const TWF = styled.TouchableWithoutFeedback``;
 

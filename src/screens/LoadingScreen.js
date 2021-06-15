@@ -36,9 +36,10 @@ export default LoadingScreen = () => {
                         (1000 * 3600 * 24) >=
                     1
                 ) {
-                    const coins = userInfo.coins + 5;
-
-                    await firebase.updateData(uid, { coins, lastCheckIn });
+                    await firebase.updateData(uid, {
+                        coins: userInfo.coins + 5,
+                        lastCheckIn,
+                    });
 
                     Alert.alert("Daily Check-In", "+5 Coins!", [
                         {

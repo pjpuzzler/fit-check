@@ -188,8 +188,6 @@ const Firebase = {
             const currentUser = Firebase.getCurrentUser();
 
             if (currentUser) {
-                await currentUser.delete();
-
                 const docRef = db.collection("users").doc(currentUser.uid);
                 const doc = await docRef.get();
 
@@ -200,6 +198,8 @@ const Firebase = {
 
                     await docRef.delete();
                 }
+
+                await currentUser.delete();
             }
         } catch (error) {
             console.log("Error @deleteAccount:", error.message);
@@ -227,9 +227,9 @@ const Firebase = {
                 .where("username", "<=", search + "~")
                 .where("username", "!=", username)
                 .orderBy("username")
-                .limit(10)
+                .limit(5)
                 .get();
-            res = res.docs.map((doc) => doc.data());
+            res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {

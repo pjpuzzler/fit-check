@@ -99,13 +99,34 @@ export default SettingsScreen = ({ navigation }) => {
     };
 
     const authenticate = async () => {
-        setInvalidAuthenticationMessage("iefwa;fewa");
+        setAuthenticationLoading(true);
+
+        let newInvalidAuthenticationMessage;
+
+        if (!authenticationEmail || !authenticationPassword)
+            newInvalidAuthenticationMessage = "One or more fields are empty";
+        else {
+            const [success, error] = await firebase.reauthenticate(
+                authenticationEmail,
+                authenticationPassword
+            );
+
+            if (success) {
+                await startDelete();
+                return;
+            } else if (error) newInvalidAuthenticationMessage = error.message;
+            else newInvalidAuthenticationMessage = "An unknown error occurred";
+        }
+
+        setInvalidAuthenticationMessage(newInvalidAuthenticationMessage);
+        setAuthenticationLoading(false);
     };
 
     const startDelete = async () => {
         const res = await deleteAlert();
 
         if (res) await deleteAccount();
+        else setAuthenticationLoading(false);
     };
 
     const deleteAlert = () => {
@@ -334,7 +355,8 @@ export default SettingsScreen = ({ navigation }) => {
                                     autoCapitalize="none"
                                     autoCompleteType="email"
                                     autoCorrect={false}
-                                    fontSize={windowWidth / 16}
+                                    editable={!authenticationLoading}
+                                    fontSize={windowWidth / 20}
                                     keyboardType="email-address"
                                     onChangeText={(email) =>
                                         setAuthenticationEmail(email.trim())
@@ -354,7 +376,8 @@ export default SettingsScreen = ({ navigation }) => {
                                     autoCapitalize="none"
                                     autoCompleteType="password"
                                     autoCorrect={false}
-                                    fontSize={windowWidth / 16}
+                                    editable={!authenticationLoading}
+                                    fontSize={windowWidth / 20}
                                     onChangeText={(password) =>
                                         setAuthenticationPassword(
                                             password.trim()
@@ -376,7 +399,12 @@ export default SettingsScreen = ({ navigation }) => {
                             <BottomContainer>
                                 {invalidAuthenticationMessage ? (
                                     <InvalidAuthenticationMessageContainer>
-                                        <Text tiny light center color="#ff0000">
+                                        <Text
+                                            micro
+                                            light
+                                            center
+                                            color="#ff0000"
+                                        >
                                             {invalidAuthenticationMessage}
                                         </Text>
                                     </InvalidAuthenticationMessageContainer>
@@ -499,7 +527,6 @@ const InvalidAuthenticationMessageContainer = styled.SafeAreaView`
     bottom: 100%;
     width: 95%;
     height: 66%;
-    background-color: green;
 `;
 
 const AuthenticateContainer = styled.TouchableOpacity`

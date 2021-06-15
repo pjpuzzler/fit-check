@@ -12,7 +12,7 @@ const Text = styled.Text`
     color: ${(props) => props.color ?? "#1c4068"};
     margin: ${(props) => props.margin ?? 0};
 
-    ${({ title, large, medium, small, tiny }) => {
+    ${({ title, large, medium, small, tiny, micro }) => {
         switch (true) {
             case title:
                 return "font-size: " + (windowWidth / 8).toString() + "px;";
@@ -28,6 +28,9 @@ const Text = styled.Text`
 
             case tiny:
                 return "font-size: " + (windowWidth / 26).toString() + "px;";
+
+            case micro:
+                return "font-size: " + (windowWidth / 30).toString() + "px;";
 
             default:
                 return "font-size: " + (windowWidth / 16).toString() + "px;";
