@@ -17,14 +17,19 @@ export default LoadingScreen = () => {
 
     const load = async () => {
         let isLoggedIn = false,
-            userInfo = {};
+            userInfo = null;
 
         const currentUser = await firebase.getCurrentUser();
 
         if (currentUser) {
-            userInfo = await firebase.getUserInfo(currentUser.uid);
+            const uid = currentUser.uid;
 
-            if (userInfo) isLoggedIn = true;
+            userInfo = await firebase.getUserInfo(uid);
+
+            if (userInfo) {
+                isLoggedIn = true;
+                userInfo = { ...userInfo, uid };
+            }
         }
 
         setUser({ isLoggedIn, ...userInfo });

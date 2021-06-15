@@ -1,3 +1,1 @@
-obj = {};
-obj.foo = ["bar"];
-console.log(obj.foo);
+console.log({ ...null });

@@ -1,7 +1,16 @@
-import React, { useContext } from "react";
-import { Platform, StatusBar, Dimensions, Linking, Alert } from "react-native";
+import React, { useContext, useState, useEffect } from "react";
+import {
+    Platform,
+    StatusBar,
+    Dimensions,
+    Linking,
+    Alert,
+    Keyboard,
+    BackHandler,
+} from "react-native";
 import styled from "styled-components";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import LottieView from "lottie-react-native";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -12,7 +21,46 @@ export default SettingsScreen = ({ navigation }) => {
     const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
+    const [authenticationOverlay, setAuthenticationOverlay] = useState(false);
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const [authenticationEmail, setAuthenticationEmail] = useState("");
+    const [authenticationPassword, setAuthenticationPassword] = useState("");
+    const [invalidAuthenticationMessage, setInvalidAuthenticationMessage] =
+        useState("");
+    const [authenticationLoading, setAuthenticationLoading] = useState(false);
+
+    const windowHeight = Dimensions.get("window").height;
     const windowWidth = Dimensions.get("window").width;
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => {
+                if (authenticationOverlay) return true;
+            }
+        );
+
+        const keyboardDidShowListener = Keyboard.addListener(
+            "keyboardDidShow",
+            () => {
+                setKeyboardVisible(true);
+            }
+        );
+
+        const keyboardDidHideListener = Keyboard.addListener(
+            "keyboardDidHide",
+            () => {
+                setKeyboardVisible(false);
+            }
+        );
+
+        return () => {
+            backHandler.remove();
+
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    });
 
     const logOut = async () => {
         const res = await logOutAlert();
@@ -48,6 +96,10 @@ export default SettingsScreen = ({ navigation }) => {
         const updated = await firebase.updateData(user.uid, { sex });
 
         if (!updated) setUser({ isLoggedIn: null });
+    };
+
+    const authenticate = async () => {
+        setInvalidAuthenticationMessage("iefwa;fewa");
     };
 
     const startDelete = async () => {
@@ -224,18 +276,138 @@ export default SettingsScreen = ({ navigation }) => {
 
                 <SectionTitle>
                     <Text bold color="#18d299">
-                        Account
+                        Deactivation
                     </Text>
                 </SectionTitle>
 
                 <Container4>
-                    <TO onPress={startDelete}>
+                    <TO onPress={() => setAuthenticationOverlay(true)}>
                         <Text heavy color="#ff0000">
                             Delete Account
                         </Text>
                     </TO>
                 </Container4>
             </Container2>
+
+            {authenticationOverlay ? (
+                <AuthenticationOverlayBackground>
+                    <AuthenticationOverlay
+                        style={{ borderRadius: windowWidth / 20 }}
+                    >
+                        {!keyboardVisible ? (
+                            <TopBar>
+                                <TO
+                                    onPress={() =>
+                                        setAuthenticationOverlay(false)
+                                    }
+                                >
+                                    <MaterialCommunityIcons
+                                        name="close"
+                                        size={windowWidth / 8}
+                                        color="#1c4068"
+                                    />
+                                </TO>
+
+                                <Text color="#1c4068">Delete Account</Text>
+
+                                <MaterialCommunityIcons
+                                    name="close"
+                                    size={windowWidth / 8}
+                                    style={{ opacity: 0 }}
+                                />
+                            </TopBar>
+                        ) : null}
+
+                        <Auth
+                            style={{
+                                height: (windowHeight * 3) / 20,
+                                bottom:
+                                    keyboardVisible && !(Platform.OS === "ios")
+                                        ? "0%"
+                                        : "37%",
+                            }}
+                            behavior="position"
+                            enabled={Platform.OS === "ios"}
+                        >
+                            <AuthContainer>
+                                <AuthField
+                                    autoCapitalize="none"
+                                    autoCompleteType="email"
+                                    autoCorrect={false}
+                                    fontSize={windowWidth / 16}
+                                    keyboardType="email-address"
+                                    onChangeText={(email) =>
+                                        setAuthenticationEmail(email.trim())
+                                    }
+                                    onSubmitEditing={authenticate}
+                                    placeholder="email"
+                                    style={{
+                                        color: "#1c4068",
+                                        borderBottomWidth: windowHeight / 700,
+                                        borderBottomColor: "#1c4068",
+                                    }}
+                                    value={authenticationEmail}
+                                />
+                            </AuthContainer>
+                            <AuthContainer>
+                                <AuthField
+                                    autoCapitalize="none"
+                                    autoCompleteType="password"
+                                    autoCorrect={false}
+                                    fontSize={windowWidth / 16}
+                                    onChangeText={(password) =>
+                                        setAuthenticationPassword(
+                                            password.trim()
+                                        )
+                                    }
+                                    onSubmitEditing={authenticate}
+                                    placeholder="password"
+                                    secureTextEntry={true}
+                                    style={{
+                                        color: "#1c4068",
+                                        borderBottomWidth: windowHeight / 700,
+                                        borderBottomColor: "#1c4068",
+                                    }}
+                                    value={authenticationPassword}
+                                />
+                            </AuthContainer>
+                        </Auth>
+                        {!keyboardVisible || Platform.OS === "ios" ? (
+                            <BottomContainer>
+                                {invalidAuthenticationMessage ? (
+                                    <InvalidAuthenticationMessageContainer>
+                                        <Text tiny light center color="#ff0000">
+                                            {invalidAuthenticationMessage}
+                                        </Text>
+                                    </InvalidAuthenticationMessageContainer>
+                                ) : null}
+                                <AuthenticateContainer
+                                    style={{
+                                        borderRadius: windowWidth / 20,
+                                        opacity: authenticationLoading
+                                            ? 0.5
+                                            : null,
+                                    }}
+                                    onPress={authenticate}
+                                    disabled={authenticationLoading}
+                                >
+                                    {authenticationLoading ? (
+                                        <LottieView
+                                            source={require("../../assets/loadingAnimation2White.json")}
+                                            autoPlay
+                                            loop
+                                        />
+                                    ) : (
+                                        <Text bold center color="#ffffff">
+                                            Delete
+                                        </Text>
+                                    )}
+                                </AuthenticateContainer>
+                            </BottomContainer>
+                        ) : null}
+                    </AuthenticationOverlay>
+                </AuthenticationOverlayBackground>
+            ) : null}
         </Container>
     );
 };
@@ -281,4 +453,61 @@ const Container4 = styled.SafeAreaView`
     align-items: center;
     width: 100%;
     margin: 2% 0;
+`;
+
+const AuthenticationOverlayBackground = styled.SafeAreaView`
+    position: absolute;
+    background-color: #00000040;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+`;
+
+const AuthenticationOverlay = styled.SafeAreaView`
+    background-color: #ffffff;
+    width: 75%;
+    height: 33.33%;
+    align-items: center;
+`;
+
+const Auth = styled.KeyboardAvoidingView`
+    justify-content: center;
+    width: 70%;
+    position: absolute;
+`;
+
+const AuthContainer = styled.SafeAreaView`
+    justify-content: center;
+    height: 50%;
+`;
+
+const AuthField = styled.TextInput``;
+
+const BottomContainer = styled.SafeAreaView`
+    width: 100%;
+    height: 25%;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+`;
+
+const InvalidAuthenticationMessageContainer = styled.SafeAreaView`
+    justify-content: center;
+    opacity: 0.75;
+    position: absolute;
+    bottom: 100%;
+    width: 95%;
+    height: 66%;
+    background-color: green;
+`;
+
+const AuthenticateContainer = styled.TouchableOpacity`
+    width: 75%
+    height: 60%;
+    align-items: center;
+    justify-content: center;
+    background-color: #ff0000;
+    position: absolute;
+    bottom: 40%;
 `;

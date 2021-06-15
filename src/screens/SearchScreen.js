@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Platform, StatusBar, Dimensions, Keyboard } from "react-native";
 import styled from "styled-components";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import LottieView from "lottie-react-native";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -19,13 +20,17 @@ export default SearchScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get("window").width;
     const windowHeight = Dimensions.get("window").height;
 
-    const submitSearch = async () => {
+    const getSearchResults = async () => {
+        setLoading(true);
+
         let res;
 
         res = await firebase.searchUsers(search, user.username);
 
-        if (res) setSearchResults(res);
-        else setUser({ isLoggedIn: null });
+        if (res) {
+            setSearchResults(res);
+            setLoading(false);
+        } else setUser({ isLoggedIn: null });
     };
 
     const renderSearchResult = ({ item }) => {
@@ -43,13 +48,9 @@ export default SearchScreen = ({ navigation }) => {
                                 : 0,
                     }}
                 >
-                    <TO
-                        onPress={
-                            search ? () => setSearch("") : navigation.goBack
-                        }
-                    >
+                    <TO onPress={navigation.goBack}>
                         <MaterialCommunityIcons
-                            name={search ? "close" : "arrow-left"}
+                            name="arrow-left"
                             size={windowWidth / 8}
                             color="#1c4068"
                         />
@@ -63,8 +64,8 @@ export default SearchScreen = ({ navigation }) => {
                         maxLength={15}
                         onChangeText={(search) => {
                             setSearch(search.trim());
+                            if (search) getSearchResults();
                         }}
-                        onSubmitEditing={submitSearch}
                         placeholder="search user"
                         style={{
                             color: "#1c4068",
@@ -75,23 +76,29 @@ export default SearchScreen = ({ navigation }) => {
                         value={search}
                     />
 
-                    <TO onPress={submitSearch} disabled={!search}>
+                    <TO disabled={!search} onPress={() => setSearch("")}>
                         <MaterialCommunityIcons
-                            name="check"
+                            name="close"
                             size={windowWidth / 8}
                             color="#1c4068"
-                            style={{
-                                opacity: !search ? 0 : null,
-                            }}
+                            style={{ opacity: !search ? 0 : null }}
                         />
                     </TO>
                 </TopBar>
 
-                <SearchResults
-                    data={searchResults}
-                    keyExtractor={(item) => item.uid}
-                    renderItem={renderSearchResult}
-                ></SearchResults>
+                {loading ? (
+                    <LottieView
+                        source={require("../../assets/loadingAnimation2Primary.json")}
+                        autoPlay
+                        loop
+                    />
+                ) : (
+                    <SearchResults
+                        data={searchResults}
+                        keyExtractor={(item) => item.uid}
+                        renderItem={renderSearchResult}
+                    />
+                )}
             </Container>
         </TWF>
     );

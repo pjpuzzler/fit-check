@@ -24,16 +24,12 @@ export default SignInScreen = ({ navigation }) => {
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
             "keyboardDidShow",
-            () => {
-                setKeyboardVisible(true);
-            }
+            () => setKeyboardVisible(true)
         );
 
         const keyboardDidHideListener = Keyboard.addListener(
             "keyboardDidHide",
-            () => {
-                setKeyboardVisible(false);
-            }
+            () => setKeyboardVisible(false)
         );
 
         return () => {
@@ -87,10 +83,11 @@ export default SignInScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="email"
                             autoCorrect={false}
+                            editable={!loading}
                             fontSize={windowWidth / 16}
                             keyboardType="email-address"
                             onChangeText={(email) => setEmail(email.trim())}
-                            onSubmitEditing={() => signIn()}
+                            onSubmitEditing={signIn}
                             placeholder="email"
                             style={{
                                 color: "#1c4068",
@@ -105,11 +102,12 @@ export default SignInScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="password"
                             autoCorrect={false}
+                            editable={!loading}
                             fontSize={windowWidth / 16}
                             onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
-                            onSubmitEditing={() => signIn()}
+                            onSubmitEditing={signIn}
                             placeholder="password"
                             secureTextEntry={true}
                             style={{
@@ -150,7 +148,10 @@ export default SignInScreen = ({ navigation }) => {
                                 </Text>
                             )}
                         </SignInContainer>
-                        <SignUp onPress={() => navigation.navigate("SignUp")}>
+                        <SignUp
+                            disabled={loading}
+                            onPress={() => navigation.navigate("SignUp")}
+                        >
                             <Text color="#1c4068">need an account?</Text>
                         </SignUp>
                     </BottomContainer>

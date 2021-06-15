@@ -72,7 +72,7 @@ export default SelectProfilePhotoScreen = () => {
             profilePhotoUrl = await firebase.uploadProfilePhoto(uri);
 
             if (!profilePhotoUrl) {
-                setLoading(false);
+                setUser({ isLoggedIn: null });
                 return;
             }
         } else profilePhotoUrl = "default";
@@ -83,7 +83,10 @@ export default SelectProfilePhotoScreen = () => {
             profilePhotoUrl,
         });
 
-        if (!updated) setUser({ isLoggedIn: null });
+        if (!updated) {
+            setUser({ isLoggedIn: null });
+            firebase.deleteProfilePhoto(profilePhotoUrl);
+        }
     };
 
     const noProfilePhotoAlert = () => {
@@ -117,6 +120,7 @@ export default SelectProfilePhotoScreen = () => {
                 </Text>
             </TitleContainer>
             <ProfilePhotoContainer
+                disabled={loading}
                 onPress={addImage}
                 onLongPress={removeImage}
                 style={{

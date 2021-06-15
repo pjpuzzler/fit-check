@@ -100,7 +100,7 @@ export default PremiumScreen = ({ navigation }) => {
                     />
                 ) : (
                     <Text bold center color="#ffffff">
-                        $1.99
+                        $2.99
                     </Text>
                 )}
             </BuyButton>

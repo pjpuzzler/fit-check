@@ -65,7 +65,7 @@ const Firebase = {
                 downloads: 0,
                 followers: 0,
                 following: [],
-                lastCheckIn: Date.now(),
+                lastCheckIn: firebase.firestore.Timestamp.now(),
                 outfits: [],
                 premium: false,
                 profilePhotoUrl: "",
@@ -182,6 +182,8 @@ const Firebase = {
             const currentUser = Firebase.getCurrentUser();
 
             if (currentUser) {
+                await currentUser.delete();
+
                 const docRef = db.collection("users").doc(currentUser.uid);
                 const doc = await docRef.get();
 
@@ -192,8 +194,6 @@ const Firebase = {
 
                     await docRef.delete();
                 }
-
-                await currentUser.delete();
             }
         } catch (error) {
             console.log("Error @deleteAccount:", error.message);
@@ -228,6 +228,28 @@ const Firebase = {
             console.log("Error @searchUsers:", error.message);
         } finally {
             return res;
+        }
+    },
+
+    reauthenticate: async (email, password) => {
+        let success = false,
+            err = null;
+
+        try {
+            const currentUser = Firebase.getCurrentUser();
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                email,
+                password
+            );
+
+            await currentUser.reauthenticateWithCredential(credential);
+
+            success = true;
+        } catch (error) {
+            console.log("Error @reauthenticate:", error.message);
+            err = error;
+        } finally {
+            return [success, err];
         }
     },
 };

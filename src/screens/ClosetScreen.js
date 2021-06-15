@@ -172,192 +172,179 @@ export default ClosetScreen = ({ navigation }) => {
             </TopBar>
 
             {profileOverlay ? (
-                <TWF onPress={cancel}>
-                    <ProfileOverlayBackground>
-                        <ProfileOverlay
-                            style={{ borderRadius: windowWidth / 20 }}
-                        >
-                            <TopBar>
-                                <TO
-                                    onPress={
+                <Container
+                    style={{ position: "absolute", justifyContent: "center" }}
+                >
+                    <TWF onPress={cancel}>
+                        <ProfileOverlayBackground />
+                    </TWF>
+
+                    <ProfileOverlay style={{ borderRadius: windowWidth / 20 }}>
+                        <TopBar>
+                            <TO
+                                onPress={
+                                    uri === user.profilePhotoUrl ||
+                                    (uri === "" &&
+                                        user.profilePhotoUrl === "default")
+                                        ? cancel
+                                        : confirm
+                                }
+                            >
+                                <MaterialCommunityIcons
+                                    name={
                                         uri === user.profilePhotoUrl ||
                                         (uri === "" &&
                                             user.profilePhotoUrl === "default")
-                                            ? cancel
-                                            : confirm
+                                            ? "close"
+                                            : "check"
                                     }
-                                >
-                                    <MaterialCommunityIcons
-                                        name={
-                                            uri === user.profilePhotoUrl ||
-                                            (uri === "" &&
-                                                user.profilePhotoUrl ===
-                                                    "default")
-                                                ? "close"
-                                                : "check"
-                                        }
-                                        size={windowWidth / 8}
-                                        color="#1c4068"
-                                    />
-                                </TO>
+                                    size={windowWidth / 8}
+                                    color="#1c4068"
+                                />
+                            </TO>
 
-                                <Text
-                                    large
-                                    color={user.premium ? "#ffd700" : "#18d299"}
+                            <Text
+                                color={user.premium ? "#ffd700" : "#18d299"}
+                                style={{
+                                    fontWeight: user.premium ? "700" : "500",
+                                    fontSize:
+                                        windowWidth /
+                                        (11 + user.username.length),
+                                }}
+                            >
+                                {user.username}
+                            </Text>
+
+                            <TO
+                                onPress={
+                                    uri === user.profilePhotoUrl ||
+                                    (uri === "" &&
+                                        user.profilePhotoUrl === "default")
+                                        ? () => navigation.navigate("Premium")
+                                        : cancel
+                                }
+                                disabled={
+                                    (uri === user.profilePhotoUrl ||
+                                        (uri === "" &&
+                                            user.profilePhotoUrl ===
+                                                "default")) &&
+                                    user.premium
+                                }
+                            >
+                                <MaterialCommunityIcons
+                                    name={
+                                        uri === user.profilePhotoUrl ||
+                                        (uri === "" &&
+                                            user.profilePhotoUrl === "default")
+                                            ? "crown"
+                                            : "close"
+                                    }
+                                    size={windowWidth / 8}
+                                    color="#1c4068"
                                     style={{
-                                        fontWeight: user.premium
-                                            ? "700"
-                                            : "500",
+                                        opacity:
+                                            (uri === user.profilePhotoUrl ||
+                                                (uri === "" &&
+                                                    user.profilePhotoUrl ===
+                                                        "default")) &&
+                                            user.premium
+                                                ? 0
+                                                : null,
+                                    }}
+                                />
+                            </TO>
+                        </TopBar>
+
+                        {loading ? (
+                            <LottieView
+                                source={require("../../assets/loadingAnimation2Primary.json")}
+                                autoPlay
+                                loop
+                            />
+                        ) : (
+                            <ProfileOverlayContent>
+                                <ProfilePhotoBorder
+                                    onPress={addImage}
+                                    onLongPress={removeImage}
+                                    style={{
+                                        borderRadius: windowWidth * 0.6 * 0.75,
+                                        width: windowWidth * 0.6 * 0.75,
+                                        height: windowWidth * 0.6 * 0.75,
+                                        marginTop: "10%",
+                                        backgroundColor: user.premium
+                                            ? "#ffd700"
+                                            : "#18d299",
                                     }}
                                 >
-                                    {user.username}
-                                </Text>
-
-                                <TO
-                                    onPress={
-                                        uri === user.profilePhotoUrl ||
-                                        (uri === "" &&
-                                            user.profilePhotoUrl === "default")
-                                            ? () =>
-                                                  navigation.navigate("Premium")
-                                            : cancel
-                                    }
-                                    disabled={
-                                        (uri === user.profilePhotoUrl ||
-                                            (uri === "" &&
-                                                user.profilePhotoUrl ===
-                                                    "default")) &&
-                                        user.premium
-                                    }
-                                >
-                                    <MaterialCommunityIcons
-                                        name={
-                                            uri === user.profilePhotoUrl ||
-                                            (uri === "" &&
-                                                user.profilePhotoUrl ===
-                                                    "default")
-                                                ? "crown"
-                                                : "close"
-                                        }
-                                        size={windowWidth / 8}
-                                        color="#1c4068"
-                                        style={{
-                                            opacity:
-                                                (uri === user.profilePhotoUrl ||
-                                                    (uri === "" &&
-                                                        user.profilePhotoUrl ===
-                                                            "default")) &&
-                                                user.premium
-                                                    ? 0
-                                                    : null,
-                                        }}
-                                    />
-                                </TO>
-                            </TopBar>
-
-                            {loading ? (
-                                <LottieView
-                                    source={require("../../assets/loadingAnimation2Primary.json")}
-                                    autoPlay
-                                    loop
-                                />
-                            ) : (
-                                <ProfileOverlayContent>
-                                    <ProfilePhotoBorder
-                                        onPress={addImage}
-                                        onLongPress={removeImage}
+                                    <ProfilePhotoContainer
                                         style={{
                                             borderRadius:
-                                                windowWidth * 0.6 * 0.75,
-                                            width: windowWidth * 0.6 * 0.75,
-                                            height: windowWidth * 0.6 * 0.75,
-                                            marginTop: "10%",
-                                            backgroundColor: user.premium
-                                                ? "#ffd700"
-                                                : "#18d299",
+                                                windowWidth * 0.6 * 0.75 * 0.9,
+                                            width:
+                                                windowWidth * 0.6 * 0.75 * 0.9,
+                                            height:
+                                                windowWidth * 0.6 * 0.75 * 0.9,
+                                            backgroundColor: !uri
+                                                ? "#666666"
+                                                : null,
                                         }}
                                     >
-                                        <ProfilePhotoContainer
-                                            style={{
-                                                borderRadius:
-                                                    windowWidth *
-                                                    0.6 *
-                                                    0.75 *
-                                                    0.9,
-                                                width:
-                                                    windowWidth *
-                                                    0.6 *
-                                                    0.75 *
-                                                    0.9,
-                                                height:
-                                                    windowWidth *
-                                                    0.6 *
-                                                    0.75 *
-                                                    0.9,
-                                                backgroundColor: !uri
-                                                    ? "#666666"
-                                                    : null,
-                                            }}
+                                        {uri ? (
+                                            <ProfilePhoto
+                                                source={
+                                                    uri === "default"
+                                                        ? require("../../assets/defaultProfilePhoto.jpg")
+                                                        : { uri }
+                                                }
+                                            />
+                                        ) : (
+                                            <MaterialCommunityIcons
+                                                size={(windowWidth * 3) / 48}
+                                                name="image-plus"
+                                                color="#ffffff"
+                                            />
+                                        )}
+                                    </ProfilePhotoContainer>
+                                </ProfilePhotoBorder>
+
+                                <StatsContainer>
+                                    <StatContainer>
+                                        <Text>Followers</Text>
+                                        <Text
+                                            large
+                                            color={
+                                                user.premium
+                                                    ? "#ffd700"
+                                                    : "#18d299"
+                                            }
                                         >
-                                            {uri ? (
-                                                <ProfilePhoto
-                                                    source={
-                                                        uri === "default"
-                                                            ? require("../../assets/defaultProfilePhoto.jpg")
-                                                            : { uri }
-                                                    }
-                                                />
-                                            ) : (
-                                                <MaterialCommunityIcons
-                                                    size={
-                                                        (windowWidth * 3) / 48
-                                                    }
-                                                    name="image-plus"
-                                                    color="#ffffff"
-                                                />
-                                            )}
-                                        </ProfilePhotoContainer>
-                                    </ProfilePhotoBorder>
-
-                                    <StatsContainer>
-                                        <StatContainer>
-                                            <Text>Followers</Text>
-                                            <Text
-                                                large
-                                                color={
-                                                    user.premium
-                                                        ? "#ffd700"
-                                                        : "#18d299"
-                                                }
-                                            >
-                                                {user.followers}
-                                            </Text>
-                                        </StatContainer>
-                                        <StatContainer>
-                                            <Text>Downloads</Text>
-                                            <Text
-                                                large
-                                                color={
-                                                    user.premium
-                                                        ? "#ffd700"
-                                                        : "#18d299"
-                                                }
-                                            >
-                                                {user.downloads}
-                                            </Text>
-                                        </StatContainer>
-                                    </StatsContainer>
-
-                                    <TO>
-                                        <Text heavy margin="10% 0 0">
-                                            Following
+                                            {user.followers}
                                         </Text>
-                                    </TO>
-                                </ProfileOverlayContent>
-                            )}
-                        </ProfileOverlay>
-                    </ProfileOverlayBackground>
-                </TWF>
+                                    </StatContainer>
+                                    <StatContainer>
+                                        <Text>Downloads</Text>
+                                        <Text
+                                            large
+                                            color={
+                                                user.premium
+                                                    ? "#ffd700"
+                                                    : "#18d299"
+                                            }
+                                        >
+                                            {user.downloads}
+                                        </Text>
+                                    </StatContainer>
+                                </StatsContainer>
+
+                                <TO>
+                                    <Text heavy margin="10% 0 0">
+                                        Following
+                                    </Text>
+                                </TO>
+                            </ProfileOverlayContent>
+                        )}
+                    </ProfileOverlay>
+                </Container>
             ) : null}
         </Container>
     );

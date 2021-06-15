@@ -25,16 +25,12 @@ export default SignUpScreen = ({ navigation }) => {
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
             "keyboardDidShow",
-            () => {
-                setKeyboardVisible(true);
-            }
+            () => setKeyboardVisible(true)
         );
 
         const keyboardDidHideListener = Keyboard.addListener(
             "keyboardDidHide",
-            () => {
-                setKeyboardVisible(false);
-            }
+            () => setKeyboardVisible(false)
         );
 
         return () => {
@@ -109,11 +105,12 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="username"
                             autoCorrect={false}
+                            editable={!loading}
                             fontSize={windowWidth / 16}
                             onChangeText={(username) => {
                                 setUsername(username.trim());
                             }}
-                            onSubmitEditing={() => signUp()}
+                            onSubmitEditing={signUp}
                             placeholder="username"
                             style={{
                                 color: "#1c4068",
@@ -129,10 +126,11 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="email"
                             autoCorrect={false}
+                            editable={!loading}
                             fontSize={windowWidth / 16}
                             keyboardType="email-address"
                             onChangeText={(email) => setEmail(email.trim())}
-                            onSubmitEditing={() => signUp()}
+                            onSubmitEditing={signUp}
                             placeholder="email"
                             style={{
                                 color: "#1c4068",
@@ -148,11 +146,12 @@ export default SignUpScreen = ({ navigation }) => {
                             autoCapitalize="none"
                             autoCompleteType="password"
                             autoCorrect={false}
+                            editable={!loading}
                             fontSize={windowWidth / 16}
                             onChangeText={(password) =>
                                 setPassword(password.trim())
                             }
-                            onSubmitEditing={() => signUp()}
+                            onSubmitEditing={signUp}
                             placeholder="password"
                             secureTextEntry={true}
                             style={{
@@ -196,7 +195,10 @@ export default SignUpScreen = ({ navigation }) => {
                             )}
                         </SignUpContainer>
 
-                        <SignIn onPress={() => navigation.navigate("SignIn")}>
+                        <SignIn
+                            disabled={loading}
+                            onPress={() => navigation.navigate("SignIn")}
+                        >
                             <Text color="#1c4068">have an account?</Text>
                         </SignIn>
                     </BottomContainer>
