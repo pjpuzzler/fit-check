@@ -178,8 +178,6 @@ const Firebase = {
     },
 
     deleteAccount: async () => {
-        let success = false;
-        
         try {
             const currentUser = Firebase.getCurrentUser();
 
@@ -190,11 +188,9 @@ const Firebase = {
                 if (doc.exists) {
                     const profilePhotoUrl = doc.data().profilePhotoUrl;
                     if (profilePhotoUrl !== "default") {
-                        success = await Firebase.deleteProfilePhoto(profilePhotoUrl);
+                        const success = await Firebase.deleteProfilePhoto(profilePhotoUrl);
                         
-                        if (!success) return success;
-                        
-                        success = true;
+                        if (!success) return;
                     }
 
                     await docRef.delete();
@@ -204,8 +200,6 @@ const Firebase = {
             }
         } catch (error) {
             console.log("Error @deleteAccount:", error.message);
-        } finally {
-            return success;
         }
     },
 
