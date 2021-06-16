@@ -7,9 +7,7 @@ import config from "../config/firebase";
 
 const FirebaseContext = createContext();
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-}
+if (!firebase.apps.length) firebase.initializeApp(config);
 
 const db = firebase.firestore();
 
@@ -77,7 +75,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @createUser:", error.message);
-            Firebase.deleteAccount();
+            await Firebase.deleteAccount();
         } finally {
             return [success, null];
         }
@@ -141,11 +139,7 @@ const Firebase = {
         let userInfo = null;
 
         try {
-            const userRef = db.collection("users").doc(uid);
-
-            const userDoc = await db.runTransaction(async (t) => {
-                return await t.get(userRef);
-            });
+            const userDoc = await db.collection("users").doc(uid).get(userRef);
 
             if (userDoc.exists) userInfo = userDoc.data();
         } catch (error) {
@@ -184,6 +178,8 @@ const Firebase = {
     },
 
     deleteAccount: async () => {
+        let success = false;
+        
         try {
             const currentUser = Firebase.getCurrentUser();
 
@@ -193,8 +189,13 @@ const Firebase = {
 
                 if (doc.exists) {
                     const profilePhotoUrl = doc.data().profilePhotoUrl;
-                    if (profilePhotoUrl !== "default")
-                        await Firebase.deleteProfilePhoto(profilePhotoUrl);
+                    if (profilePhotoUrl !== "default") {
+                        success = await Firebase.deleteProfilePhoto(profilePhotoUrl);
+                        
+                        if (!success) return success;
+                        
+                        success = true;
+                    }
 
                     await docRef.delete();
                 }
@@ -203,16 +204,24 @@ const Firebase = {
             }
         } catch (error) {
             console.log("Error @deleteAccount:", error.message);
+        } finally {
+            return success;
         }
     },
 
     deleteProfilePhoto: async (url) => {
+        let success = false;
+        
         try {
             const ref = firebase.storage().refFromURL(url);
 
             await ref.delete();
+            
+            success = true;
         } catch (error) {
             console.log("Error @deleteProfilePhoto:", error.message);
+        } finally {
+            return success;
         }
     },
 
