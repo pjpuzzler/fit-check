@@ -53,8 +53,14 @@ export default ClosetScreen = ({ navigation }) => {
     const confirm = async () => {
         setLoading(true);
 
-        if (user.profilePhotoUrl !== "default")
-            await firebase.deleteProfilePhoto(user.profilePhotoUrl);
+        if (user.profilePhotoUrl !== "default") {
+            const success = await firebase.deleteProfilePhoto(user.profilePhotoUrl);
+            
+            if (!success) {
+                setUser((state) => ({ ...state, isLoggedIn: null }));
+                return;
+            }
+        }
 
         let profilePhotoUrl;
 
