@@ -7,6 +7,8 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
+import Clothing from "../../assets/clothes/t-shirt_u-neck.svg";
+
 export default MainScreen = () => {
     return (
         <Container>
@@ -16,6 +18,8 @@ export default MainScreen = () => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             ></TopBar>
+
+            <Clothing width={120} height={40} />
         </Container>
     );
 };

@@ -150,7 +150,8 @@ export default SearchScreen = ({ navigation }) => {
                         text: "YES",
                         onPress: () => resolve(true),
                     },
-                ]
+                ],
+                { cancelable: true }
             );
         });
     };

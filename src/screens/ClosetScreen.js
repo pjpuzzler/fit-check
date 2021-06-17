@@ -54,8 +54,10 @@ export default ClosetScreen = ({ navigation }) => {
         setLoading(true);
 
         if (user.profilePhotoUrl !== "default") {
-            const success = await firebase.deleteProfilePhoto(user.profilePhotoUrl);
-            
+            const success = await firebase.deleteProfilePhoto(
+                user.profilePhotoUrl
+            );
+
             if (!success) {
                 setUser((state) => ({ ...state, isLoggedIn: null }));
                 return;
@@ -121,7 +123,8 @@ export default ClosetScreen = ({ navigation }) => {
                         text: "YES",
                         onPress: () => resolve(true),
                     },
-                ]
+                ],
+                { cancelable: true }
             );
         });
     };

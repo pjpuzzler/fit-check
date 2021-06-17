@@ -74,17 +74,22 @@ export default SettingsScreen = ({ navigation }) => {
 
     const logOutAlert = () => {
         return new Promise((resolve, _) => {
-            Alert.alert("Log Out", "Are you sure you want to log out?", [
-                {
-                    text: "NO",
-                    onPress: () => resolve(false),
-                    style: "cancel",
-                },
-                {
-                    text: "YES",
-                    onPress: () => resolve(true),
-                },
-            ]);
+            Alert.alert(
+                "Log Out",
+                "Are you sure you want to log out?",
+                [
+                    {
+                        text: "NO",
+                        onPress: () => resolve(false),
+                        style: "cancel",
+                    },
+                    {
+                        text: "YES",
+                        onPress: () => resolve(true),
+                    },
+                ],
+                { cancelable: true }
+            );
         });
     };
 
@@ -311,7 +316,12 @@ export default SettingsScreen = ({ navigation }) => {
             </Container2>
 
             {authenticationOverlay ? (
-                <AuthenticationOverlayBackground>
+                <Container
+                    style={{ position: "absolute", justifyContent: "center" }}
+                >
+                    <TWF onPress={Keyboard.dismiss}>
+                        <AuthenticationOverlayBackground />
+                    </TWF>
                     <AuthenticationOverlay
                         style={{ borderRadius: windowWidth / 20 }}
                     >
@@ -434,7 +444,7 @@ export default SettingsScreen = ({ navigation }) => {
                             </BottomContainer>
                         ) : null}
                     </AuthenticationOverlay>
-                </AuthenticationOverlayBackground>
+                </Container>
             ) : null}
         </Container>
     );
@@ -482,6 +492,8 @@ const Container4 = styled.SafeAreaView`
     width: 100%;
     margin: 2% 0;
 `;
+
+const TWF = styled.TouchableWithoutFeedback``;
 
 const AuthenticationOverlayBackground = styled.SafeAreaView`
     position: absolute;

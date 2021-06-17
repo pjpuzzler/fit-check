@@ -52,7 +52,8 @@ export default SelectProfilePhotoScreen = () => {
                         text: "YES",
                         onPress: () => resolve(true),
                     },
-                ]
+                ],
+                { cancelable: true }
             );
         });
     };
@@ -104,7 +105,8 @@ export default SelectProfilePhotoScreen = () => {
                         text: "YES",
                         onPress: () => resolve(true),
                     },
-                ]
+                ],
+                { cancelable: true }
             );
         });
     };

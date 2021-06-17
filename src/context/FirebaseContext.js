@@ -139,7 +139,7 @@ const Firebase = {
         let userInfo = null;
 
         try {
-            const userDoc = await db.collection("users").doc(uid).get(userRef);
+            const userDoc = await db.collection("users").doc(uid).get();
 
             if (userDoc.exists) userInfo = userDoc.data();
         } catch (error) {
@@ -188,8 +188,10 @@ const Firebase = {
                 if (doc.exists) {
                     const profilePhotoUrl = doc.data().profilePhotoUrl;
                     if (profilePhotoUrl !== "default") {
-                        const success = await Firebase.deleteProfilePhoto(profilePhotoUrl);
-                        
+                        const success = await Firebase.deleteProfilePhoto(
+                            profilePhotoUrl
+                        );
+
                         if (!success) return;
                     }
 
@@ -205,12 +207,12 @@ const Firebase = {
 
     deleteProfilePhoto: async (url) => {
         let success = false;
-        
+
         try {
             const ref = firebase.storage().refFromURL(url);
 
             await ref.delete();
-            
+
             success = true;
         } catch (error) {
             console.log("Error @deleteProfilePhoto:", error.message);
