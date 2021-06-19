@@ -1,1 +1,3 @@
-if ([]) console.log("ye");
+const props = { shirt: "t-shirt" };
+
+console.log(`../../assets/clothes/${props.shirt}.svg`);

@@ -79,6 +79,7 @@ const Container = styled.SafeAreaView`
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: #ffffff;
 `;
 
 const TopBar = styled.SafeAreaView`

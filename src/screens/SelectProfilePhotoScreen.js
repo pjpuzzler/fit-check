@@ -171,6 +171,7 @@ const Container = styled.SafeAreaView`
     justify-content: center;
     width: 100%;
     height: 100%;
+    background-color: #ffffff;
 `;
 
 const TitleContainer = styled.SafeAreaView`

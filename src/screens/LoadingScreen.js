@@ -54,7 +54,47 @@ export default LoadingScreen = () => {
                         { cancelable: true }
                     );
 
-                    userInfo = { ...userInfo, coins, lastDailyCheckIn, uid };
+                    userInfo = {
+                        ...userInfo,
+                        coins,
+                        lastDailyCheckIn,
+
+                        selectedBottom: "",
+                        selectedBottomColor: "",
+                        selectedBottomPattern: "",
+
+                        selectedFootwear: "",
+                        selectedFootwearColor: "",
+                        selectedFootwearPattern: "",
+
+                        selectedGlasses: "",
+                        selectedGlassesColor: "",
+                        selectedGlassesPattern: "",
+
+                        selectedHeadwear: "",
+                        selectedHeadwearColor: "",
+                        selectedHeadwearPattern: "",
+
+                        selectedOverwear: "",
+                        selectedOverwearColor: "",
+                        selectedOverwearPattern: "",
+
+                        selectedSocks: "",
+                        selectedSocksColor: "",
+                        selectedSocksPattern: "",
+
+                        selectedTop: "",
+                        selectedTopColor: "",
+                        selectedTopPattern: "",
+
+                        selectedWristwearLeft: "",
+                        selectedWristwearLeftColor: "",
+
+                        selectedWristwearRight: "",
+                        selectedWristwearRightColor: "",
+
+                        uid,
+                    };
                 } else userInfo = { ...userInfo, uid };
                 isLoggedIn = true;
             }
@@ -83,4 +123,5 @@ const Container = styled.SafeAreaView`
     height: 100%;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
 `;

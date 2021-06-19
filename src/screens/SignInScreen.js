@@ -167,6 +167,7 @@ const Container = styled.SafeAreaView`
     width: 100%;
     height: 100%;
     align-items: center;
+    background-color: #ffffff;
 `;
 
 const Main = styled.SafeAreaView`

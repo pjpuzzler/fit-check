@@ -7,9 +7,11 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
-import Clothing from "../../assets/clothes/t-shirt_u-neck.svg";
+import Top from "../../assets/clothes/Top";
 
 export default MainScreen = () => {
+    const [user, setUser] = useContext(UserContext);
+
     return (
         <Container>
             <TopBar
@@ -18,8 +20,6 @@ export default MainScreen = () => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             ></TopBar>
-
-            <Clothing width={120} height={40} />
         </Container>
     );
 };
@@ -28,6 +28,7 @@ const Container = styled.SafeAreaView`
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: #ffffff;
 `;
 
 const TopBar = styled.SafeAreaView`
