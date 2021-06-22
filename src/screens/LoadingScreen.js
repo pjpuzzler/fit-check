@@ -28,6 +28,46 @@ export default LoadingScreen = () => {
             userInfo = await firebase.getUserInfo(uid);
 
             if (userInfo) {
+                userInfo = {
+                    ...userInfo,
+
+                    selectedBottom: "",
+                    selectedBottomColor: "",
+                    selectedBottomPattern: "",
+
+                    selectedFootwear: "",
+                    selectedFootwearColor: "",
+                    selectedFootwearPattern: "",
+
+                    selectedGlasses: "",
+                    selectedGlassesColor: "",
+                    selectedGlassesPattern: "",
+
+                    selectedHeadwear: "",
+                    selectedHeadwearColor: "",
+                    selectedHeadwearPattern: "",
+
+                    selectedNeckwear: "",
+                    selectedNeckwearColor: "",
+
+                    selectedOverwear: "",
+                    selectedOverwearColor: "",
+                    selectedOverwearPattern: "",
+
+                    selectedSocks: "",
+                    selectedSocksColor: "",
+                    selectedSocksPattern: "",
+
+                    selectedTop: "",
+                    selectedTopColor: "",
+                    selectedTopPattern: "",
+
+                    selectedWristwear: "",
+                    selectedWristwearColor: "",
+
+                    uid,
+                };
+
                 const lastDailyCheckIn = firebase.getTimestamp();
 
                 if (
@@ -36,10 +76,8 @@ export default LoadingScreen = () => {
                         (1000 * 3600 * 24) >=
                     1
                 ) {
-                    const coins = userInfo.coins + 5;
-
                     await firebase.updateData(uid, {
-                        coins,
+                        coins: userInfo.coins + 5,
                         lastDailyCheckIn,
                     });
 
@@ -54,48 +92,10 @@ export default LoadingScreen = () => {
                         { cancelable: true }
                     );
 
-                    userInfo = {
-                        ...userInfo,
-                        coins,
-                        lastDailyCheckIn,
+                    userInfo.coins += 5;
+                    userInfo.lastDailyCheckIn = lastDailyCheckIn;
+                }
 
-                        selectedBottom: "",
-                        selectedBottomColor: "",
-                        selectedBottomPattern: "",
-
-                        selectedFootwear: "",
-                        selectedFootwearColor: "",
-                        selectedFootwearPattern: "",
-
-                        selectedGlasses: "",
-                        selectedGlassesColor: "",
-                        selectedGlassesPattern: "",
-
-                        selectedHeadwear: "",
-                        selectedHeadwearColor: "",
-                        selectedHeadwearPattern: "",
-
-                        selectedOverwear: "",
-                        selectedOverwearColor: "",
-                        selectedOverwearPattern: "",
-
-                        selectedSocks: "",
-                        selectedSocksColor: "",
-                        selectedSocksPattern: "",
-
-                        selectedTop: "",
-                        selectedTopColor: "",
-                        selectedTopPattern: "",
-
-                        selectedWristwearLeft: "",
-                        selectedWristwearLeftColor: "",
-
-                        selectedWristwearRight: "",
-                        selectedWristwearRightColor: "",
-
-                        uid,
-                    };
-                } else userInfo = { ...userInfo, uid };
                 isLoggedIn = true;
             }
         }
