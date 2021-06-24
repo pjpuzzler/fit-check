@@ -58,8 +58,8 @@ const Firebase = {
 
         try {
             await db.collection("users").doc(uid).set({
+                clothing: [],
                 coins: 0,
-                downloaded: [],
                 downloads: 0,
                 followers: 0,
                 following: [],
@@ -69,7 +69,6 @@ const Firebase = {
                 profilePhotoUrl: "",
                 sex: "",
                 username,
-                wardrobe: [],
             });
 
             success = true;

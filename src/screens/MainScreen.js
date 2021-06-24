@@ -14,6 +14,7 @@ export default MainScreen = ({ navigation }) => {
     const [user, setUser] = useContext(UserContext);
 
     const [selectedClothing, setSelectedClothing] = useState("");
+    
 
     const windowWidth = Dimensions.get("window").width;
 
@@ -115,6 +116,34 @@ export default MainScreen = ({ navigation }) => {
             >
                 <MaterialCommunityIcons
                     name="watch"
+                    size={windowWidth / 10}
+                    color="#666666"
+                />
+            </TO>
+
+            <Line
+                style={{
+                    width: "5%",
+                    bottom: "9%",
+                    left: "48%",
+                    transform: [{ rotateZ: "90deg" }],
+                }}
+            />
+            <TO
+                onPress={
+                    user.selectedFootwear === ""
+                        ? () => navigation.navigate("Clothing", "footwear")
+                        : () => setSelectedClothing("footwear")
+                }
+                style={{
+                    position: "absolute",
+                    bottom: "2%",
+                    opacity: 0.5,
+                    left: "45%",
+                }}
+            >
+                <MaterialCommunityIcons
+                    name="shoe-formal"
                     size={windowWidth / 10}
                     color="#666666"
                 />
