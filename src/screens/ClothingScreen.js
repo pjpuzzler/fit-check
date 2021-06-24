@@ -12,7 +12,8 @@ export default ClothingScreen = ({ route, navigation }) => {
 
     const [wardrobeClothing, setWardrobeClothing] = useState(true);
 
-    const clothingType = route.params;
+    const clothingType = route.params.clothingType;
+    const isCloset = route.params.isCloset;
     const windowWidth = Dimensions.get("window").width;
 
     return (
