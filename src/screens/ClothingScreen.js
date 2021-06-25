@@ -14,6 +14,7 @@ export default ClothingScreen = ({ route, navigation }) => {
     const clothingType = route.params.clothingType;
     const isCloset = route.params.isCloset;
     
+    const clothingTypeCap = clothingType.charAt(0).toUpperCase() + clothingType.slice(1);
     const clothingData = clothes.filter(clothing => clothing.type === clothingType);
 
     const [wardrobeClothing, setWardrobeClothing] = useState(true);
@@ -28,6 +29,20 @@ export default ClothingScreen = ({ route, navigation }) => {
         else
             setData(clothingData);
     }, [filter]);
+    
+    const selectClothing = (name) => {
+        setUser((state) => ({...state, "selected" + clothingTypeCap: name}));
+        
+        navigation.goBack();
+    };
+    
+    const renderClothing = ({item}) => {
+        return (
+            <ClothingContainer onPress={() => selectClothing(item.name)})>
+
+            </ClothingContainer>
+        );
+    };
 
     return (
         <Container>
@@ -46,8 +61,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                 </TO>
 
                 <Text large bold>
-                    {clothingType.charAt(0).toUpperCase() +
-                        clothingType.slice(1)}
+                    {clothingTypeCap}
                 </Text>
 
                 <TO onPress={() => setWardrobeClothing(!wardrobeClothing)}>
@@ -85,7 +99,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                 </TO>
             </FiltersContainer>
 
-            <ClothingList data={data} renderItem={} initialNumToRender={9} keyExtractor={() => } numColumns={3} />
+            <ClothingList data={data} renderItem={renderClothing} initialNumToRender={9} keyExtractor={(item) => item.name} numColumns={3} />
         </Container>
     );
 };
@@ -116,4 +130,11 @@ const FiltersContainer = styled.SafeAreaView`
 const ClothingList = styled.FlatList`
     width: 100%;
     height: 100%;
+`;
+
+const ClothingContainer = styled.TouchableOpacity`
+    width: 100%;
+    height: 33.3%;
+    justify-content: center;
+    align-items: center;
 `;
