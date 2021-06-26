@@ -96,7 +96,7 @@ export default MainScreen = ({ navigation }) => {
                         style={{ width: "5%", bottom: "66.5%", left: "81.8%" }}
                     />
                     <TO
-                        onPress={() =>
+                        onPress={
                             !user.selectedNeckwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
@@ -174,7 +174,7 @@ export default MainScreen = ({ navigation }) => {
                         }}
                     />
                     <Line
-                        style={{ width: "5%", bottom: "20.55%", left: "40.6%" }}
+                        style={{ width: "5%", bottom: "20.55%", left: "80.6%" }}
                     />
                     <TO
                         onPress={

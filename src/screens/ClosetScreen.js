@@ -7,7 +7,10 @@ import {
     Alert,
 } from "react-native";
 import styled from "styled-components";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import {
+    MaterialCommunityIcons,
+    FontAwesome5,
+} from "react-native-vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import LottieView from "lottie-react-native";
 
@@ -190,23 +193,9 @@ export default ClosetScreen = ({ navigation }) => {
 
                     <ProfileOverlay style={{ borderRadius: windowWidth / 20 }}>
                         <TopBar>
-                            <TO
-                                onPress={
-                                    uri === user.profilePhotoUrl ||
-                                    (uri === "" &&
-                                        user.profilePhotoUrl === "default")
-                                        ? cancel
-                                        : confirm
-                                }
-                            >
+                            <TO onPress={cancel}>
                                 <MaterialCommunityIcons
-                                    name={
-                                        uri === user.profilePhotoUrl ||
-                                        (uri === "" &&
-                                            user.profilePhotoUrl === "default")
-                                            ? "close"
-                                            : "check"
-                                    }
+                                    name="close"
                                     size={windowWidth / 8}
                                     color="#1c4068"
                                 />
@@ -230,7 +219,7 @@ export default ClosetScreen = ({ navigation }) => {
                                     (uri === "" &&
                                         user.profilePhotoUrl === "default")
                                         ? () => navigation.navigate("Premium")
-                                        : cancel
+                                        : confirm
                                 }
                                 disabled={
                                     (uri === user.profilePhotoUrl ||
@@ -246,10 +235,16 @@ export default ClosetScreen = ({ navigation }) => {
                                         (uri === "" &&
                                             user.profilePhotoUrl === "default")
                                             ? "crown"
-                                            : "close"
+                                            : "check"
                                     }
                                     size={windowWidth / 8}
-                                    color="#1c4068"
+                                    color={
+                                        uri === user.profilePhotoUrl ||
+                                        (uri === "" &&
+                                            user.profilePhotoUrl === "default")
+                                            ? "#ffd700"
+                                            : "#1c4068"
+                                    }
                                     style={{
                                         opacity:
                                             (uri === user.profilePhotoUrl ||
@@ -346,8 +341,14 @@ export default ClosetScreen = ({ navigation }) => {
                                 </StatsContainer>
 
                                 <TO>
-                                    <Text heavy margin="10% 0 0">
+                                    <Text heavy margin="8% 0 0">
                                         Following
+                                    </Text>
+                                </TO>
+
+                                <TO>
+                                    <Text heavy margin="8% 0 0" color="#ffd700">
+                                        {user.coins} coins
                                     </Text>
                                 </TO>
                             </ProfileOverlayContent>

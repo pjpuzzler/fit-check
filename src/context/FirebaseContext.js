@@ -68,6 +68,7 @@ const Firebase = {
                 premium: false,
                 profilePhotoUrl: "",
                 sex: "",
+                sharedOutfits: [],
                 username,
             });
 

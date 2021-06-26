@@ -51,7 +51,7 @@ export default MarketplaceScreen = ({ navigation }) => {
                                 : "gender-female"
                         }
                         size={windowWidth / 8}
-                        color="#1c4068"
+                        color="#1c4068bf"
                     />
                 </TO>
 

@@ -81,7 +81,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                     <MaterialCommunityIcons
                         name={wardrobeClothing ? "wardrobe" : "all-inclusive"}
                         size={windowWidth / 8}
-                        color="#1c4068"
+                        color="#1c4068bf"
                     />
                 </TO>
             </TopBar>
@@ -91,7 +91,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                     <MaterialCommunityIcons
                         name="all-inclusive"
                         size={windowWidth / 12}
-                        color={filter === "all" ? "#1c4068" : "#666666"}
+                        color={filter === "all" ? "#1c4068" : "#666666bf"}
                         style={{ opacity: filter !== "all" ? 0.5 : null }}
                     />
                 </TO>
@@ -100,7 +100,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                     <MaterialCommunityIcons
                         name="white-balance-sunny"
                         size={windowWidth / 12}
-                        color={filter === "casual" ? "#1c4068" : "#666666"}
+                        color={filter === "casual" ? "#1c4068" : "#666666bf"}
                         style={{ opacity: filter !== "casual" ? 0.5 : null }}
                     />
                 </TO>
@@ -109,7 +109,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                     <MaterialCommunityIcons
                         name="account-tie"
                         size={windowWidth / 12}
-                        color={filter === "formal" ? "#1c4068" : "#666666"}
+                        color={filter === "formal" ? "#1c4068" : "#666666bf"}
                         style={{ opacity: filter !== "formal" ? 0.5 : null }}
                     />
                 </TO>

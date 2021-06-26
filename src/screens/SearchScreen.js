@@ -102,6 +102,7 @@ export default SearchScreen = ({ navigation }) => {
                     >
                         <ProfilePhoto
                             source={
+                                !item.profilePhotoUrl ||
                                 item.profilePhotoUrl === "default"
                                     ? require("../../assets/defaultProfilePhoto.jpg")
                                     : { uri: item.profilePhotoUrl }
@@ -329,6 +330,9 @@ export default SearchScreen = ({ navigation }) => {
                                 >
                                     <ProfilePhoto
                                         source={
+                                            !searchResults[
+                                                searchResultOverlayIndex
+                                            ].profilePhotoUrl ||
                                             searchResults[
                                                 searchResultOverlayIndex
                                             ].profilePhotoUrl === "default"
