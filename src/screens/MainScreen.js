@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Platform, StatusBar, Dimensions } from "react-native";
+import { Platform, StatusBar, Dimensions, Alert } from "react-native";
 import styled from "styled-components";
 import {
     MaterialCommunityIcons,
@@ -20,6 +20,44 @@ export default MainScreen = ({ navigation }) => {
     const [fullscreen, setFullscreen] = useState(false);
 
     const windowWidth = Dimensions.get("window").width;
+
+    const removeClothing = async (clothing) => {
+        const clothingCap =
+            "selected" + clothing.charAt(0).toUpperCase() + clothing.slice(1);
+
+        if (!user[clothingCap]) return;
+
+        const res = await removeClothingAlert();
+
+        if (!res) return;
+
+        if (clothing === selectedClothing) setSelectedClothing("");
+
+        setUser((state) => ({
+            ...state,
+            [clothingCap]: null,
+        }));
+    };
+
+    const removeClothingAlert = () => {
+        return new Promise((resolve, _) => {
+            Alert.alert(
+                "Remove Clothing",
+                "Are you sure you want to remove this clothing?",
+                [
+                    {
+                        text: "NO",
+                        onPress: () => resolve(false),
+                        style: "cancel",
+                    },
+                    {
+                        text: "YES",
+                        onPress: () => resolve(true),
+                    },
+                ]
+            );
+        });
+    };
 
     return (
         <Container>
@@ -58,26 +96,34 @@ export default MainScreen = ({ navigation }) => {
                         style={{ width: "5%", bottom: "66.5%", left: "81.8%" }}
                     />
                     <TO
-                        onPress={
-                            user.selectedNeckwear === ""
+                        onPress={() =>
+                            !user.selectedNeckwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "neckwear",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "neckwear"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("neckwear")
                         }
+                        onLongPress={() => removeClothing("neckwear")}
                         style={{
                             position: "absolute",
                             bottom: "64%",
-                            opacity: 0.5,
                             left: "88%",
                         }}
                     >
                         <MaterialCommunityIcons
                             name="necklace"
                             size={windowWidth / 10}
-                            color="#666666"
+                            color={
+                                !user.selectedNeckwear
+                                    ? "#66666640"
+                                    : selectedClothing === "neckwear"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
 
@@ -86,25 +132,36 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedTop === ""
+                            !user.selectedTop
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "top",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "top"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("top")
                         }
+                        onLongPress={() => removeClothing("top")}
+                        containerStyle={{
+                            opactiy: !user.selectedTop ? 0.5 : null,
+                        }}
                         style={{
                             position: "absolute",
                             bottom: "47.75%",
-                            opacity: 0.5,
                             left: "87%",
                         }}
                     >
                         <MaterialCommunityIcons
                             name="tshirt-crew"
                             size={windowWidth / 10}
-                            color="#666666"
+                            color={
+                                !user.selectedTop
+                                    ? "#66666640"
+                                    : selectedClothing === "top"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
 
@@ -117,22 +174,23 @@ export default MainScreen = ({ navigation }) => {
                         }}
                     />
                     <Line
-                        style={{ width: "5%", bottom: "20.55%", left: "80.6%" }}
+                        style={{ width: "5%", bottom: "20.55%", left: "40.6%" }}
                     />
                     <TO
                         onPress={
-                            user.selectedNeckwear === ""
+                            !user.selectedBottom
                                 ? () =>
                                       navigation.navigate("Clothing", {
-                                          clothingType: "neckwear",
+                                          clothingType: "bottom",
                                           isCloset: false,
                                       })
-                                : () => setSelectedClothing("neckwear")
+                                : selectedClothing === "bottom"
+                                ? () => setSelectedClothing("")
+                                : () => setSelectedClothing("bottom")
                         }
                         style={{
                             position: "absolute",
                             bottom: "64%",
-                            opacity: 0.5,
                             left: "88%",
                         }}
                     ></TO>
@@ -142,25 +200,32 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedWristwear === ""
+                            !user.selectedWristwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "wristwear",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "wristwear"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("wristwear")
                         }
                         style={{
                             position: "absolute",
                             bottom: "37.75%",
-                            opacity: 0.5,
                             left: "3%",
                         }}
                     >
                         <MaterialCommunityIcons
                             name="watch"
                             size={windowWidth / 10}
-                            color="#666666"
+                            color={
+                                !user.selectedWristwear
+                                    ? "#66666640"
+                                    : selectedClothing === "wristwear"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
 
@@ -174,25 +239,32 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedFootwear === ""
+                            !user.selectedFootwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "footwear",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "footwear"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("footwear")
                         }
                         style={{
                             position: "absolute",
                             bottom: "2%",
-                            opacity: 0.5,
                             left: "45.5%",
                         }}
                     >
                         <MaterialCommunityIcons
                             name="shoe-formal"
                             size={windowWidth / 10}
-                            color="#666666"
+                            color={
+                                !user.selectedFootwear
+                                    ? "#66666640"
+                                    : selectedClothing === "footwear"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
 
@@ -206,25 +278,32 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedSocks === ""
+                            !user.selectedSocks
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "socks",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "socks"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("socks")
                         }
                         style={{
                             position: "absolute",
                             bottom: "7%",
-                            opacity: 0.5,
                             left: "10%",
                         }}
                     >
                         <FontAwesome5
                             name="socks"
                             size={windowWidth / 14}
-                            color="#666666"
+                            color={
+                                !user.selectedSocks
+                                    ? "#66666640"
+                                    : selectedClothing === "socks"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
 
@@ -241,18 +320,19 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedOverwear === ""
+                            !user.selectedOverwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "overwear",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "overwear"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("overwear")
                         }
                         style={{
                             position: "absolute",
                             bottom: "64%",
-                            opacity: 0.5,
                             left: "88%",
                         }}
                     ></TO>
@@ -267,25 +347,32 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            user.selectedHeadwear === ""
+                            !user.selectedHeadwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "headwear",
                                           isCloset: false,
                                       })
+                                : selectedClothing === "headwear"
+                                ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("headwear")
                         }
                         style={{
                             position: "absolute",
                             bottom: "68%",
-                            opacity: 0.5,
                             left: "45.5%",
                         }}
                     >
                         <MaterialCommunityIcons
                             name="hat-fedora"
                             size={windowWidth / 10}
-                            color="#666666"
+                            color={
+                                !user.selectedHeadwear
+                                    ? "#66666640"
+                                    : selectedClothing === "headwear"
+                                    ? "#18d299"
+                                    : "#1c4068"
+                            }
                         />
                     </TO>
                 </Container>
@@ -305,6 +392,7 @@ const ClothingEditorContainer = styled.SafeAreaView`
     width: 100%;
     height: 25%;
     align-items: center;
+    background-color: #6666661a;
 `;
 
 const TopBar = styled.SafeAreaView`
@@ -312,6 +400,8 @@ const TopBar = styled.SafeAreaView`
 `;
 
 const TO = styled.TouchableOpacity``;
+
+const TOView = styled.SafeAreaView``;
 
 const Line = styled.SafeAreaView`
     background-color: #666666;

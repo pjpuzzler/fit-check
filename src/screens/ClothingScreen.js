@@ -6,40 +6,53 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
-import clothes from "../../assets/clothingData"
+import clothes from "../../assets/clothingData";
 
 export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
-    
+
     const clothingType = route.params.clothingType;
     const isCloset = route.params.isCloset;
-    
-    const clothingTypeCap = clothingType.charAt(0).toUpperCase() + clothingType.slice(1);
-    const clothingData = clothes.filter(clothing => clothing.type === clothingType);
+
+    const clothingTypeCap =
+        clothingType.charAt(0).toUpperCase() + clothingType.slice(1);
+    const clothingData = clothes.filter(
+        (clothing) => clothing.type === clothingType
+    );
 
     const [wardrobeClothing, setWardrobeClothing] = useState(true);
     const [filter, setFilter] = useState("all");
     const [data, setData] = useState(clothingData);
 
     const windowWidth = Dimensions.get("window").width;
-    
+
     useEffect(() => {
         if (filter !== "all")
-            setData(clothingData.filter(clothing => clothing.setting === filter));
-        else
-            setData(clothingData);
+            setData(
+                clothingData.filter((clothing) =>
+                    clothing.settings.includes(filter)
+                )
+            );
+        else setData(clothingData);
     }, [filter]);
-    
-    const selectClothing = (name) => {
-        setUser((state) => ({...state, "selected" + clothingTypeCap: name}));
-        
+
+    const selectClothing = (item) => {
+        setUser((state) => ({
+            ...state,
+            ["selected" + clothingTypeCap]: item,
+        }));
+
         navigation.goBack();
     };
-    
-    const renderClothing = ({item}) => {
-        return (
-            <ClothingContainer onPress={() => selectClothing(item.name)})>
 
+    const renderClothing = ({ item }) => {
+        return (
+            <ClothingContainer onPress={() => selectClothing(item)}>
+                <MaterialCommunityIcons
+                    name="tshirt-crew"
+                    size={windowWidth / 6}
+                    color="#1c4068"
+                />
             </ClothingContainer>
         );
     };
@@ -79,6 +92,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                         name="all-inclusive"
                         size={windowWidth / 12}
                         color={filter === "all" ? "#1c4068" : "#666666"}
+                        style={{ opacity: filter !== "all" ? 0.5 : null }}
                     />
                 </TO>
 
@@ -87,6 +101,7 @@ export default ClothingScreen = ({ route, navigation }) => {
                         name="white-balance-sunny"
                         size={windowWidth / 12}
                         color={filter === "casual" ? "#1c4068" : "#666666"}
+                        style={{ opacity: filter !== "casual" ? 0.5 : null }}
                     />
                 </TO>
 
@@ -95,11 +110,18 @@ export default ClothingScreen = ({ route, navigation }) => {
                         name="account-tie"
                         size={windowWidth / 12}
                         color={filter === "formal" ? "#1c4068" : "#666666"}
+                        style={{ opacity: filter !== "formal" ? 0.5 : null }}
                     />
                 </TO>
             </FiltersContainer>
 
-            <ClothingList data={data} renderItem={renderClothing} initialNumToRender={9} keyExtractor={(item) => item.name} numColumns={3} />
+            <ClothingList
+                data={data}
+                renderItem={renderClothing}
+                initialNumToRender={9}
+                keyExtractor={(item) => item.name}
+                numColumns={2}
+            />
         </Container>
     );
 };
@@ -121,7 +143,8 @@ const TopBar = styled.SafeAreaView`
 const TO = styled.TouchableOpacity``;
 
 const FiltersContainer = styled.SafeAreaView`
-    width: 95%;
+    width: 85%;
+    margin-top: 5%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -130,11 +153,12 @@ const FiltersContainer = styled.SafeAreaView`
 const ClothingList = styled.FlatList`
     width: 100%;
     height: 100%;
+    margin-top: 5%;
 `;
 
 const ClothingContainer = styled.TouchableOpacity`
-    width: 100%;
-    height: 33.3%;
+    width: 47%;
     justify-content: center;
     align-items: center;
+    margin: 2% 0 0 2%;
 `;

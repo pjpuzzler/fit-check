@@ -31,39 +31,15 @@ export default LoadingScreen = () => {
                 userInfo = {
                     ...userInfo,
 
-                    selectedBottom: "",
-                    selectedBottomColor: "",
-                    selectedBottomPattern: "",
-
-                    selectedFootwear: "",
-                    selectedFootwearColor: "",
-                    selectedFootwearPattern: "",
-
-                    selectedGlasses: "",
-                    selectedGlassesColor: "",
-                    selectedGlassesPattern: "",
-
-                    selectedHeadwear: "",
-                    selectedHeadwearColor: "",
-                    selectedHeadwearPattern: "",
-
-                    selectedNeckwear: "",
-                    selectedNeckwearColor: "",
-
-                    selectedOverwear: "",
-                    selectedOverwearColor: "",
-                    selectedOverwearPattern: "",
-
-                    selectedSocks: "",
-                    selectedSocksColor: "",
-                    selectedSocksPattern: "",
-
-                    selectedTop: "",
-                    selectedTopColor: "",
-                    selectedTopPattern: "",
-
-                    selectedWristwear: "",
-                    selectedWristwearColor: "",
+                    selectedBottom: null,
+                    selectedFootwear: null,
+                    selectedGlasses: null,
+                    selectedHeadwear: null,
+                    selectedNeckwear: null,
+                    selectedOverwear: null,
+                    selectedSocks: null,
+                    selectedTop: null,
+                    selectedWristwear: null,
 
                     uid,
                 };
