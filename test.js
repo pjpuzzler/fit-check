@@ -1,3 +1,1 @@
-const props = { shirt: "t-shirt" };
-
-console.log(`../../assets/clothes/${props.shirt}.svg`);
+console.log("rjcolyer" >= "a" && "rjcolyer" <= "a~");

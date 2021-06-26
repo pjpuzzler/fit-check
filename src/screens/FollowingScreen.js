@@ -40,7 +40,7 @@ export default SearchScreen = ({ navigation }) => {
                 if (searchResultOverlayIndex !== null) {
                     setSearchResultOverlayIndex(null);
                     return true;
-                }
+                } else navigation.goBack();
             }
         );
 
@@ -54,9 +54,7 @@ export default SearchScreen = ({ navigation }) => {
     const getSearchResults = async () => {
         setLoading(true);
 
-        let res = user.following.length
-            ? await firebase.searchFollowing(search, user.following)
-            : [];
+        let res = await firebase.searchFollowing(search, user.following);
 
         if (res) {
             setSearchResults(res);

@@ -241,31 +241,27 @@ const Firebase = {
         }
     },
 
-    searchFollowing: async (search, following) => {
+    searchFollowing: async (search, following, shown = []) => {
         let res = null;
 
         try {
-            res = db
-                .collection("users")
-                .where(
-                    firebase.firestore.FieldPath.documentId(),
-                    "in",
-                    following
-                );
+            res = [];
 
-            if (search)
-                res = res
-                    .where("username", ">=", search)
-                    .where("username", "<=", search + "~")
-                    .orderBy("username");
-            else
-                res = res
-                    .orderBy("premium", "desc")
-                    .orderBy("downloads", "desc")
-                    .orderBy("followers", "desc");
+            for (let i = 0; i < following.length && res.length < 10; i++) {
+                const uid = following[i];
 
-            res = await res.limit(15).get();
-            res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+                if (shown.includes(uid)) continue;
+
+                const data = (
+                    await db.collection("users").doc(uid).get()
+                ).data();
+
+                if (data.username >= search && data.username <= search + "~")
+                    res.push({
+                        ...data,
+                        uid,
+                    });
+            }
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {
