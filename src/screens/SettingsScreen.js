@@ -317,7 +317,11 @@ export default SettingsScreen = ({ navigation }) => {
 
             {authenticationOverlay ? (
                 <Container
-                    style={{ position: "absolute", justifyContent: "center" }}
+                    style={{
+                        position: "absolute",
+                        justifyContent: "center",
+                        backgroundColor: null,
+                    }}
                 >
                     <TWF onPress={Keyboard.dismiss}>
                         <AuthenticationOverlayBackground />

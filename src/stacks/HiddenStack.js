@@ -6,6 +6,7 @@ import SearchScreen from "../screens/SearchScreen";
 import ClothingScreen from "../screens/ClothingScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import PremiumScreen from "../screens/PremiumScreen";
+import FollowingScreen from "../screens/FollowingScreen";
 
 export default HiddenStack = () => {
     const Stack = createStackNavigator();
@@ -17,6 +18,7 @@ export default HiddenStack = () => {
             <Stack.Screen name="Clothing" component={ClothingScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Premium" component={PremiumScreen} />
+            <Stack.Screen name="Following" component={FollowingScreen} />
         </Stack.Navigator>
     );
 };

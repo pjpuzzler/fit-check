@@ -225,15 +225,46 @@ const Firebase = {
         let res = null;
 
         try {
-            let docs = db.collection("users");
-
-            res = await docs
+            res = await db
+                .collection("users")
                 .where("username", ">=", search)
                 .where("username", "<=", search + "~")
                 .where("username", "!=", username)
                 .orderBy("username")
                 .limit(5)
                 .get();
+            res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+        } catch (error) {
+            console.log("Error @searchUsers:", error.message);
+        } finally {
+            return res;
+        }
+    },
+
+    searchFollowing: async (search, following) => {
+        let res = null;
+
+        try {
+            res = db
+                .collection("users")
+                .where(
+                    firebase.firestore.FieldPath.documentId(),
+                    "in",
+                    following
+                );
+
+            if (search)
+                res = res
+                    .where("username", ">=", search)
+                    .where("username", "<=", search + "~")
+                    .orderBy("username");
+            else
+                res = res
+                    .orderBy("premium", "desc")
+                    .orderBy("downloads", "desc")
+                    .orderBy("followers", "desc");
+
+            res = await res.limit(15).get();
             res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
         } catch (error) {
             console.log("Error @searchUsers:", error.message);

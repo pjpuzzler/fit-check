@@ -67,11 +67,9 @@ export default ClosetScreen = ({ navigation }) => {
             }
         }
 
-        let profilePhotoUrl;
-
-        if (uri) {
-            profilePhotoUrl = await firebase.uploadProfilePhoto(uri);
-        } else profilePhotoUrl = "default";
+        let profilePhotoUrl = uri
+            ? await firebase.uploadProfilePhoto(uri)
+            : "default";
 
         if (profilePhotoUrl) {
             setUser((state) => ({ ...state, profilePhotoUrl }));
@@ -185,7 +183,11 @@ export default ClosetScreen = ({ navigation }) => {
 
             {profileOverlay ? (
                 <Container
-                    style={{ position: "absolute", justifyContent: "center" }}
+                    style={{
+                        position: "absolute",
+                        justifyContent: "center",
+                        backgroundColor: null,
+                    }}
                 >
                     <TWF onPress={cancel}>
                         <ProfileOverlayBackground />
@@ -340,9 +342,13 @@ export default ClosetScreen = ({ navigation }) => {
                                     </StatContainer>
                                 </StatsContainer>
 
-                                <TO>
-                                    <Text heavy margin="8% 0 0">
-                                        Following
+                                <TO
+                                    onPress={() =>
+                                        navigation.navigate("Following")
+                                    }
+                                >
+                                    <Text heavy margin="8% 0 0" color="#18d299">
+                                        Following ({user.following.length})
                                     </Text>
                                 </TO>
 

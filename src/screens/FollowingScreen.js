@@ -48,22 +48,15 @@ export default SearchScreen = ({ navigation }) => {
     });
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () =>
-            setTimeout(() => searchBarRef.current.focus(), 200)
-        );
-
-        return unsubscribe;
-    }, [navigation]);
-
-    useEffect(() => {
-        if (search) getSearchResults();
-        else setSearchResults([]);
+        getSearchResults();
     }, [search, user.following]);
 
     const getSearchResults = async () => {
         setLoading(true);
 
-        const res = await firebase.searchUsers(search, user.username);
+        let res = user.following.length
+            ? await firebase.searchFollowing(search, user.following)
+            : [];
 
         if (res) {
             setSearchResults(res);
@@ -133,6 +126,7 @@ export default SearchScreen = ({ navigation }) => {
         if (following) {
             setUser((state) => ({ ...state, following }));
             setSearchResultOverlayLoading(false);
+            setSearchResultOverlayIndex(null);
         } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
@@ -155,20 +149,6 @@ export default SearchScreen = ({ navigation }) => {
                 { cancelable: true }
             );
         });
-    };
-
-    const follow = async () => {
-        setSearchResultOverlayLoading(true);
-
-        const following = await firebase.follow(
-            user.uid,
-            searchResults[searchResultOverlayIndex].uid
-        );
-
-        if (following) {
-            setUser((state) => ({ ...state, following }));
-            setSearchResultOverlayLoading(false);
-        } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     return (
@@ -228,10 +208,6 @@ export default SearchScreen = ({ navigation }) => {
                                 autoPlay
                                 loop
                             />
-                        ) : !search ? (
-                            <Text large bold>
-                                Enter Search
-                            </Text>
                         ) : searchResults.length === 0 ? (
                             <Text large bold>
                                 No Results
@@ -405,14 +381,7 @@ export default SearchScreen = ({ navigation }) => {
                                         ? 0.5
                                         : null,
                                 }}
-                                onPress={
-                                    user.following.includes(
-                                        searchResults[searchResultOverlayIndex]
-                                            .uid
-                                    )
-                                        ? unfollow
-                                        : follow
-                                }
+                                onPress={unfollow}
                                 disabled={searchResultOverlayLoading}
                             >
                                 {searchResultOverlayLoading ? (

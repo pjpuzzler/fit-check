@@ -27,13 +27,13 @@ export default ClothingScreen = ({ route, navigation }) => {
     const windowWidth = Dimensions.get("window").width;
 
     useEffect(() => {
-        if (filter !== "all")
-            setData(
-                clothingData.filter((clothing) =>
-                    clothing.settings.includes(filter)
-                )
-            );
-        else setData(clothingData);
+        setData(
+            filter !== "all"
+                ? clothingData.filter((clothing) =>
+                      clothing.settings.includes(filter)
+                  )
+                : clothingData
+        );
     }, [filter]);
 
     const selectClothing = (item) => {
