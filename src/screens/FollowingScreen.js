@@ -21,6 +21,7 @@ export default SearchScreen = ({ navigation }) => {
     const firebase = useContext(FirebaseContext);
 
     const [search, setSearch] = useState("");
+    const [refreshing, setRefreshing] = useState(false);
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [searchResultOverlayIndex, setSearchResultOverlayIndex] =
@@ -48,17 +49,33 @@ export default SearchScreen = ({ navigation }) => {
     });
 
     useEffect(() => {
+        setLoading(true);
+
         getSearchResults();
     }, [search, user.following]);
 
     const getSearchResults = async () => {
-        setLoading(true);
-
         let res = await firebase.searchFollowing(search, user.following);
 
         if (res) {
             setSearchResults(res);
+
             setLoading(false);
+            setRefreshing(false);
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
+    const getMoreSearchResults = async () => {
+        let res = await firebase.searchFollowing(
+            search,
+            user.following,
+            searchResults
+        );
+
+        if (res) {
+            setSearchResults(res);
+
+            setRefreshing(false);
         } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
@@ -206,15 +223,30 @@ export default SearchScreen = ({ navigation }) => {
                                 autoPlay
                                 loop
                             />
-                        ) : searchResults.length === 0 ? (
-                            <Text large bold>
-                                No Results
-                            </Text>
                         ) : (
                             <SearchResults
                                 data={searchResults}
+                                onRefresh={() => {
+                                    setRefreshing(true);
+
+                                    getSearchResults();
+                                }}
+                                initialNumToRender={5}
+                                onEndReached={({ distanceFromEnd }) => {
+                                    if (distanceFromEnd < 0) return;
+
+                                    setRefreshing(true);
+
+                                    getMoreSearchResults();
+                                }}
                                 keyboardShouldPersistTaps="handled"
                                 keyExtractor={(item) => item.uid}
+                                ListEmptyComponent={
+                                    <Text large bold center margin="5% 0 0">
+                                        No Results
+                                    </Text>
+                                }
+                                refreshing={refreshing}
                                 renderItem={renderSearchResult}
                             />
                         )}
