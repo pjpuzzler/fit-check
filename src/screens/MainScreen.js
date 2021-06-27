@@ -22,7 +22,7 @@ export default MainScreen = ({ navigation }) => {
     const windowWidth = Dimensions.get("window").width;
 
     const removeClothing = async (clothingType) => {
-        if (!(clothingType in user.currentObject)) return;
+        if (!(clothingType in user.currentOutfit)) return;
 
         const res = await alert(
             "Remove Clothing",
