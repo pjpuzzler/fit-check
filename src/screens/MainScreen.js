@@ -21,69 +21,60 @@ export default MainScreen = ({ navigation }) => {
 
     const windowWidth = Dimensions.get("window").width;
 
-    const removeClothing = async (clothing) => {
-        const clothingCap =
-            "selected" + clothing.charAt(0).toUpperCase() + clothing.slice(1);
+    const removeClothing = async (clothingType) => {
+        if (!(clothingType in user.currentObject)) return;
 
-        if (!user[clothingCap]) return;
-
-        const res = await removeClothingAlert();
+        const res = await alert(
+            "Remove Clothing",
+            "Are you sure you want to remove this clothing?"
+        );
 
         if (!res) return;
 
-        if (clothing === selectedClothing) setSelectedClothing("");
+        if (clothingType === selectedClothing) setSelectedClothing("");
+
+        const { [clothingType]: _, ...currentOutfit } = user.currentOutfit;
 
         setUser((state) => ({
             ...state,
-            [clothingCap]: null,
+            currentOutfit,
         }));
     };
 
-    const removeClothingAlert = () => {
+    const alert = (title, msg) => {
         return new Promise((resolve, _) => {
-            Alert.alert(
-                "Remove Clothing",
-                "Are you sure you want to remove this clothing?",
-                [
-                    {
-                        text: "NO",
-                        onPress: () => resolve(false),
-                        style: "cancel",
-                    },
-                    {
-                        text: "YES",
-                        onPress: () => resolve(true),
-                    },
-                ]
-            );
+            Alert.alert(title, msg, [
+                {
+                    text: "NO",
+                    onPress: () => resolve(false),
+                    style: "cancel",
+                },
+                {
+                    text: "YES",
+                    onPress: () => resolve(true),
+                },
+            ]);
         });
+    };
+
+    const clear = async () => {
+        const res = await alert(
+            "Clear Outfit",
+            "Are you sure you want to clear this outfit?"
+        );
+
+        if (!res) return;
+
+        setUser((state) => ({
+            ...state,
+            currentOutfit: {},
+        }));
     };
 
     return (
         <Container>
-            {selectedClothing && !fullscreen ? (
-                <ClothingEditorContainer>
-                    <TopBar
-                        style={{
-                            paddingTop:
-                                Platform.OS === "android"
-                                    ? StatusBar.currentHeight
-                                    : 0,
-                        }}
-                    >
-                        <TO onPress={() => setSelectedClothing("")}>
-                            <MaterialCommunityIcons
-                                name="close"
-                                size={windowWidth / 8}
-                                color="#1c4068"
-                            />
-                        </TO>
-                    </TopBar>
-                </ClothingEditorContainer>
-            ) : null}
-
             {!fullscreen ? (
-                <Container>
+                <Container style={{ position: "absolute" }}>
                     <Line
                         style={{
                             width: "15%",
@@ -97,7 +88,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedNeckwear
+                            !("neckwear" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "neckwear",
@@ -118,7 +109,7 @@ export default MainScreen = ({ navigation }) => {
                             name="necklace"
                             size={windowWidth / 10}
                             color={
-                                !user.selectedNeckwear
+                                !("neckwear" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "neckwear"
                                     ? "#18d299"
@@ -132,7 +123,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedTop
+                            !("top" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "top",
@@ -143,9 +134,6 @@ export default MainScreen = ({ navigation }) => {
                                 : () => setSelectedClothing("top")
                         }
                         onLongPress={() => removeClothing("top")}
-                        containerStyle={{
-                            opactiy: !user.selectedTop ? 0.5 : null,
-                        }}
                         style={{
                             position: "absolute",
                             bottom: "47.75%",
@@ -156,7 +144,7 @@ export default MainScreen = ({ navigation }) => {
                             name="tshirt-crew"
                             size={windowWidth / 10}
                             color={
-                                !user.selectedTop
+                                !("top" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "top"
                                     ? "#18d299"
@@ -178,7 +166,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedBottom
+                            !("bottom" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "bottom",
@@ -200,7 +188,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedWristwear
+                            !("wristwear" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "wristwear",
@@ -220,7 +208,7 @@ export default MainScreen = ({ navigation }) => {
                             name="watch"
                             size={windowWidth / 10}
                             color={
-                                !user.selectedWristwear
+                                !("wristwear" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "wristwear"
                                     ? "#18d299"
@@ -239,7 +227,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedFootwear
+                            !("footwear" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "footwear",
@@ -259,7 +247,7 @@ export default MainScreen = ({ navigation }) => {
                             name="shoe-formal"
                             size={windowWidth / 10}
                             color={
-                                !user.selectedFootwear
+                                !("footwear" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "footwear"
                                     ? "#18d299"
@@ -278,7 +266,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedSocks
+                            !("socks" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "socks",
@@ -298,7 +286,7 @@ export default MainScreen = ({ navigation }) => {
                             name="socks"
                             size={windowWidth / 14}
                             color={
-                                !user.selectedSocks
+                                !("socks" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "socks"
                                     ? "#18d299"
@@ -320,7 +308,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedOverwear
+                            !("overwear" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "overwear",
@@ -347,7 +335,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !user.selectedHeadwear
+                            !("headwear" in user.currentOutfit)
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "headwear",
@@ -367,7 +355,7 @@ export default MainScreen = ({ navigation }) => {
                             name="hat-fedora"
                             size={windowWidth / 10}
                             color={
-                                !user.selectedHeadwear
+                                !("headwear" in user.currentOutfit)
                                     ? "#66666640"
                                     : selectedClothing === "headwear"
                                     ? "#18d299"
@@ -376,6 +364,53 @@ export default MainScreen = ({ navigation }) => {
                         />
                     </TO>
                 </Container>
+            ) : null}
+
+            {selectedClothing && !fullscreen ? (
+                <ClothingEditorContainer>
+                    <TopBar
+                        style={{
+                            paddingTop:
+                                Platform.OS === "android"
+                                    ? StatusBar.currentHeight
+                                    : 0,
+                        }}
+                    >
+                        <TO onPress={() => setSelectedClothing("")}>
+                            <MaterialCommunityIcons
+                                name="close"
+                                size={windowWidth / 8}
+                                color="#1c4068"
+                            />
+                        </TO>
+                    </TopBar>
+                </ClothingEditorContainer>
+            ) : !fullscreen ? (
+                <TopBar
+                    style={{
+                        paddingTop:
+                            Platform.OS === "android"
+                                ? StatusBar.currentHeight
+                                : 0,
+                    }}
+                >
+                    <ButtonsContainer>
+                        <TO
+                            onPress={clear}
+                            disabled={!Object.keys(user.currentOutfit).length}
+                        >
+                            <MaterialCommunityIcons
+                                name="delete"
+                                size={windowWidth / 8}
+                                color={
+                                    Object.keys(user.currentOutfit).length
+                                        ? "#ff0000"
+                                        : "#ff000040"
+                                }
+                            />
+                        </TO>
+                    </ButtonsContainer>
+                </TopBar>
             ) : null}
         </Container>
     );
@@ -399,9 +434,12 @@ const TopBar = styled.SafeAreaView`
     width: 95%;
 `;
 
-const TO = styled.TouchableOpacity``;
+const ButtonsContainer = styled.SafeAreaView`
+    height: 25%;
+    width: 30%;
+`;
 
-const TOView = styled.SafeAreaView``;
+const TO = styled.TouchableOpacity``;
 
 const Line = styled.SafeAreaView`
     background-color: #666666;

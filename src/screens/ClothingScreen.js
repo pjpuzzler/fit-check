@@ -13,9 +13,6 @@ export default ClothingScreen = ({ route, navigation }) => {
 
     const clothingType = route.params.clothingType;
     const isCloset = route.params.isCloset;
-
-    const clothingTypeCap =
-        clothingType.charAt(0).toUpperCase() + clothingType.slice(1);
     const clothingData = clothes.filter(
         (clothing) => clothing.type === clothingType
     );
@@ -39,7 +36,10 @@ export default ClothingScreen = ({ route, navigation }) => {
     const selectClothing = (item) => {
         setUser((state) => ({
             ...state,
-            ["selected" + clothingTypeCap]: item,
+            currentOutfit: {
+                ...user.currentOutfit,
+                [clothingType]: item,
+            },
         }));
 
         navigation.goBack();
@@ -74,7 +74,8 @@ export default ClothingScreen = ({ route, navigation }) => {
                 </TO>
 
                 <Text large bold>
-                    {clothingTypeCap}
+                    {clothingType.charAt(0).toUpperCase() +
+                        clothingType.slice(1)}
                 </Text>
 
                 <TO onPress={() => setWardrobeClothing(!wardrobeClothing)}>

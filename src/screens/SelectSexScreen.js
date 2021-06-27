@@ -21,9 +21,12 @@ export default SelectSexScreen = () => {
     const continue_ = async () => {
         setLoading(true);
 
-        setUser((state) => ({ ...state, sex }));
+        setUser((state) => ({ ...state, generatedSex: sex, sex }));
 
-        const updated = await firebase.updateData(user.uid, { sex });
+        const updated = await firebase.updateData(user.uid, {
+            generatedSex: sex,
+            sex,
+        });
 
         if (!updated) setUser((state) => ({ ...state, isLoggedIn: null }));
     };

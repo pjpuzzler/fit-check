@@ -30,17 +30,7 @@ export default LoadingScreen = () => {
             if (userInfo) {
                 userInfo = {
                     ...userInfo,
-
-                    selectedBottom: null,
-                    selectedFootwear: null,
-                    selectedGlasses: null,
-                    selectedHeadwear: null,
-                    selectedNeckwear: null,
-                    selectedOverwear: null,
-                    selectedSocks: null,
-                    selectedTop: null,
-                    selectedWristwear: null,
-
+                    currentOutfit: {},
                     uid,
                 };
 
