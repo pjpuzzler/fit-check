@@ -11,7 +11,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
 
-import Tshirt from "../../assets/clothes/t shirt.svg";
+import Tshirt from "../../assets/clothes/tshirt.svg";
 
 export default MainScreen = ({ navigation }) => {
     const [user, setUser] = useContext(UserContext);
@@ -176,6 +176,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("bottom")
                         }
+                        onLongPress={() => removeClothing("bottom")}
                         style={{
                             position: "absolute",
                             bottom: "64%",
@@ -198,6 +199,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("wristwear")
                         }
+                        onLongPress={() => removeClothing("wristwear")}
                         style={{
                             position: "absolute",
                             bottom: "37.75%",
@@ -237,6 +239,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("footwear")
                         }
+                        onLongPress={() => removeClothing("footwear")}
                         style={{
                             position: "absolute",
                             bottom: "2%",
@@ -276,6 +279,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("socks")
                         }
+                        onLongPress={() => removeClothing("socks")}
                         style={{
                             position: "absolute",
                             bottom: "7%",
@@ -318,6 +322,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("overwear")
                         }
+                        onLongPress={() => removeClothing("overwear")}
                         style={{
                             position: "absolute",
                             bottom: "64%",
@@ -345,6 +350,7 @@ export default MainScreen = ({ navigation }) => {
                                 ? () => setSelectedClothing("")
                                 : () => setSelectedClothing("headwear")
                         }
+                        onLongPress={() => removeClothing("headwear")}
                         style={{
                             position: "absolute",
                             bottom: "68%",
@@ -365,6 +371,25 @@ export default MainScreen = ({ navigation }) => {
                     </TO>
                 </Container>
             ) : null}
+
+            <OutfitContainer>
+                <TO
+                    onPress={
+                        selectedClothing === "top"
+                            ? () => setSelectedClothing("")
+                            : () => setSelectedClothing("top")
+                    }
+                    style={{ position: "absolute", bottom: "40%" }}
+                >
+                    {"top" in user.currentOutfit &&
+                    user.currentOutfit.top.name === "tshirt" ? (
+                        <Tshirt
+                            width={windowWidth * 0.65}
+                            height={windowWidth * 0.65}
+                        />
+                    ) : null}
+                </TO>
+            </OutfitContainer>
 
             {selectedClothing && !fullscreen ? (
                 <ClothingEditorContainer>
@@ -421,6 +446,21 @@ const Container = styled.SafeAreaView`
     width: 100%;
     height: 100%;
     background-color: #ffffff;
+`;
+
+const OutfitContainer = styled.SafeAreaView`
+    height: 90%;
+    width: 65%;
+    position: absolute;
+`;
+
+const OverlayColor = styled.SafeAreaView`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff000040;
 `;
 
 const ClothingEditorContainer = styled.SafeAreaView`

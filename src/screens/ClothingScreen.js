@@ -1,12 +1,17 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Platform, StatusBar, Dimensions } from "react-native";
 import styled from "styled-components";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import {
+    MaterialCommunityIcons,
+    FontAwesome5,
+} from "react-native-vector-icons";
 
 import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
+
 import clothes from "../../assets/clothingData";
+import Tshirt from "../../assets/clothes/tshirt.svg";
 
 export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
@@ -47,12 +52,22 @@ export default ClothingScreen = ({ route, navigation }) => {
 
     const renderClothing = ({ item }) => {
         return (
-            <ClothingContainer onPress={() => selectClothing(item)}>
-                <MaterialCommunityIcons
-                    name="tshirt-crew"
-                    size={windowWidth / 6}
-                    color="#1c4068"
-                />
+            <ClothingContainer
+                onPress={() => selectClothing(item)}
+                style={{ borderRadius: windowWidth / 20 }}
+            >
+                {item.name === "tshirt" ? (
+                    <Tshirt
+                        width={windowWidth * 0.48}
+                        height={windowWidth * 0.48}
+                    />
+                ) : (
+                    <FontAwesome5
+                        name="question"
+                        size={windowWidth / 6}
+                        color="#1c4068"
+                    />
+                )}
             </ClothingContainer>
         );
     };
@@ -162,4 +177,5 @@ const ClothingContainer = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     margin: 2% 0 0 2%;
+    background-color: #66666640;
 `;
