@@ -246,3 +246,25 @@ const getColors = (n, prevColors = []) => {
   
   return getColors(n - 1, [...prevColors, newColor]);
 };
+
+const getScore = (fitColors) => {
+    let score = 100;
+    
+    for (let i = 0; i < fitColors.length; ++i) {
+        for (let j = 0; j < fitColors.length; ++j) {
+            const color = fitColors[i], color2 = fitColors[j];
+            
+            if (j === i || colors[color2].idx === colors[color].idx)
+                continue;
+            
+            if (!palette[colors[color].idx].includes(colors[color2].idx)) {
+                const delta = -Math.round(1 / (((i + 1) / 3) * (j + 2)) * 30);
+                
+                console.log(color, color2, delta);
+                score += delta;
+            }
+        }
+    }
+    
+    return Math.max(score, 0);
+};
