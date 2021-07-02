@@ -220,6 +220,9 @@ const palette = [
 ];
 
 const getColors = (n, prevColors = []) => {
+  if (!n)
+    return prevColors;
+  
   let bestColor = [[], 0];
   
   for (const color in colors) {
@@ -241,8 +244,5 @@ const getColors = (n, prevColors = []) => {
   
   const prevColors = [...prevColors, bestColor[0][bestColor[0].length * Math.random() | 0]];
   
-  if (n > 1)
-    return getColors(n - 1, prevColors);
-  
-  return prevColors;
+  return getColors(n - 1, prevColors);
 };
