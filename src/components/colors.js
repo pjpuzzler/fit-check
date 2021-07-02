@@ -122,7 +122,7 @@ const colors = {
 
   blue: {
     hex: "#0000ff",
-    shadow "#0000d7",
+    shadow: "#0000d7",
     idx: 6
 },
   dark_blue: {
@@ -228,7 +228,7 @@ const getColors = (n, prevColors = []) => {
   for (const color in colors) {
     let matches = 0;
     
-    for (const prevColor in prevColors) {
+    for (const prevColor of prevColors) {
       if (prevColor === color)
         continue;
       
@@ -242,7 +242,7 @@ const getColors = (n, prevColors = []) => {
       bestColor[0].push(color);
   }
   
-  const prevColors = [...prevColors, bestColor[0][bestColor[0].length * Math.random() | 0]];
+  const newColor = bestColor[0][bestColor[0].length * Math.random() | 0];
   
-  return getColors(n - 1, prevColors);
+  return getColors(n - 1, [...prevColors, newColor]);
 };
