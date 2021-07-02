@@ -38,22 +38,14 @@ export default ClothingScreen = ({ route, navigation }) => {
         );
     }, [filter]);
 
-    const selectClothing = (item) => {
-        setUser((state) => ({
-            ...state,
-            currentOutfit: {
-                ...user.currentOutfit,
-                [clothingType]: item,
-            },
-        }));
-
-        navigation.goBack();
-    };
-
     const renderClothing = ({ item }) => {
         return (
             <ClothingContainer
-                onPress={() => selectClothing(item)}
+                onPress={() =>
+                    navigation.navigate("Main", {
+                        outfit: { [clothingType]: item },
+                    })
+                }
                 style={{ borderRadius: windowWidth / 20 }}
             >
                 {item.name === "tshirt" ? (
