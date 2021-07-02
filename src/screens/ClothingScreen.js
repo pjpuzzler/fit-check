@@ -43,7 +43,8 @@ export default ClothingScreen = ({ route, navigation }) => {
             <ClothingContainer
                 onPress={() =>
                     navigation.navigate("Main", {
-                        outfit: { [clothingType]: item },
+                        screen: "Main",
+                        params: { outfit: { [clothingType]: item } },
                     })
                 }
                 style={{ borderRadius: windowWidth / 20 }}

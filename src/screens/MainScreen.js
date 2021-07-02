@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Platform, StatusBar, Dimensions, Alert } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import styled from "styled-components";
 import {
     MaterialCommunityIcons,
@@ -13,7 +14,7 @@ import Text from "../components/Text";
 
 import Tshirt from "../../assets/clothes/tshirt.svg";
 
-export default MainScreen = ({ navigation }) => {
+export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
 
     const [currentOutfit, setCurrentOutfit] = useState({});
@@ -22,13 +23,13 @@ export default MainScreen = ({ navigation }) => {
 
     const windowWidth = Dimensions.get("window").width;
 
-    useState(() => {
-        if (navigation.props.outfit)
-            setCurrentOutfit({ ...currentOutfit, ...navigation.props.outfit });
-    }, [navigation.props.outfit]);
+    useEffect(() => {
+        if (route.params && route.params.outfit)
+            setCurrentOutfit({ ...currentOutfit, ...route.params.outfit });
+    }, [route.params]);
 
     const removeClothing = async (clothingType) => {
-        if (!(clothingType in currentOutfit)) return;
+        if (!currentOutfit.clothingType) return;
 
         const res = await alert(
             "Remove Clothing",
@@ -91,7 +92,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("neckwear" in currentOutfit)
+                            !currentOutfit.neckwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "neckwear",
@@ -112,7 +113,7 @@ export default MainScreen = ({ navigation }) => {
                             name="necklace"
                             size={windowWidth / 10}
                             color={
-                                !("neckwear" in currentOutfit)
+                                !currentOutfit.neckwear
                                     ? "#66666640"
                                     : selectedClothing === "neckwear"
                                     ? "#18d299"
@@ -126,7 +127,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("top" in currentOutfit)
+                            !currentOutfit.top
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "top",
@@ -147,7 +148,7 @@ export default MainScreen = ({ navigation }) => {
                             name="tshirt-crew"
                             size={windowWidth / 10}
                             color={
-                                !("top" in currentOutfit)
+                                !currentOutfit.top
                                     ? "#66666640"
                                     : selectedClothing === "top"
                                     ? "#18d299"
@@ -169,7 +170,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("bottom" in currentOutfit)
+                            !currentOutfit.bottom
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "bottom",
@@ -192,7 +193,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("wristwear" in currentOutfit)
+                            !currentOutfit.wristwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "wristwear",
@@ -213,7 +214,7 @@ export default MainScreen = ({ navigation }) => {
                             name="watch"
                             size={windowWidth / 10}
                             color={
-                                !("wristwear" in currentOutfit)
+                                !currentOutfit.wristwear
                                     ? "#66666640"
                                     : selectedClothing === "wristwear"
                                     ? "#18d299"
@@ -232,7 +233,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("footwear" in currentOutfit)
+                            !currentOutfit.footwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "footwear",
@@ -253,7 +254,7 @@ export default MainScreen = ({ navigation }) => {
                             name="shoe-formal"
                             size={windowWidth / 10}
                             color={
-                                !("footwear" in currentOutfit)
+                                !currentOutfit.footwear
                                     ? "#66666640"
                                     : selectedClothing === "footwear"
                                     ? "#18d299"
@@ -272,7 +273,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("socks" in currentOutfit)
+                            !currentOutfit.socks
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "socks",
@@ -293,7 +294,7 @@ export default MainScreen = ({ navigation }) => {
                             name="socks"
                             size={windowWidth / 14}
                             color={
-                                !("socks" in currentOutfit)
+                                !currentOutfit.socks
                                     ? "#66666640"
                                     : selectedClothing === "socks"
                                     ? "#18d299"
@@ -315,7 +316,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("overwear" in currentOutfit)
+                            !currentOutfit.overwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "overwear",
@@ -343,7 +344,7 @@ export default MainScreen = ({ navigation }) => {
                     />
                     <TO
                         onPress={
-                            !("headwear" in currentOutfit)
+                            !currentOutfit.headwear
                                 ? () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "headwear",
@@ -364,7 +365,7 @@ export default MainScreen = ({ navigation }) => {
                             name="hat-fedora"
                             size={windowWidth / 10}
                             color={
-                                !("headwear" in currentOutfit)
+                                !currentOutfit.headwear
                                     ? "#66666640"
                                     : selectedClothing === "headwear"
                                     ? "#18d299"
@@ -384,11 +385,12 @@ export default MainScreen = ({ navigation }) => {
                     }
                     style={{ position: "absolute", bottom: "40%" }}
                 >
-                    {"top" in currentOutfit &&
+                    {currentOutfit.top &&
                     currentOutfit.top.name === "tshirt" ? (
                         <Tshirt
                             width={windowWidth * 0.65}
                             height={windowWidth * 0.65}
+                            opacity={currentOutfit.top.color ? 1 : 0.75}
                         />
                     ) : null}
                 </TO>

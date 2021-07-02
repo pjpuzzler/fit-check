@@ -78,7 +78,7 @@ export default LoadingScreen = () => {
             />
 
             <Text tiny center style={{ position: "absolute", bottom: "2%" }}>
-                {"© 2021 Fit Check - Team Fit Check\nMade in Centre Hall, PA"}
+                {"© 2021 Fit Check - Team Fit Check\nMade in Pennsylvania"}
             </Text>
         </Container>
     );
