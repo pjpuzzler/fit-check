@@ -13,7 +13,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 import { getMatchScore } from "../components/colors";
 
-import Tshirt from "../../assets/clothes/tshirt.svg";
+import { svgDict } from "../../assets/clothingData";
 
 export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
@@ -22,6 +22,8 @@ export default MainScreen = ({ route, navigation }) => {
     const [selectedClothing, setSelectedClothing] = useState("");
     const [fullscreen, setFullscreen] = useState(false);
     const [matchScore, setMatchScore] = useState(null);
+
+    const [Top, setTop] = useState(null);
 
     const windowWidth = Dimensions.get("window").width;
 
@@ -44,6 +46,13 @@ export default MainScreen = ({ route, navigation }) => {
         ];
 
         if (colors.length) setMatchScore(getMatchScore(colors));
+
+        if (currentOutfit.top)
+            setTop(
+                svgDict[
+                    currentOutfit.top + (currentOutfit.overwear ? "_under" : "")
+                ]
+            );
     }, [currentOutfit]);
 
     const removeClothing = async (clothingType) => {
@@ -376,9 +385,8 @@ export default MainScreen = ({ route, navigation }) => {
                     onLongPress={() => removeClothing("top")}
                     style={{ position: "absolute", bottom: "33%" }}
                 >
-                    {currentOutfit.top &&
-                    currentOutfit.top.name === "tshirt" ? (
-                        <Tshirt
+                    {Top ? (
+                        <Top
                             width={windowWidth * 0.6}
                             height={windowWidth * 0.6}
                             color1={

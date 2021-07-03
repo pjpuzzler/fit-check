@@ -10,8 +10,7 @@ import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
 
-import clothes from "../../assets/clothingData";
-import Tshirt from "../../assets/clothes/tshirt.svg";
+import { clothes, svgDict } from "../../assets/clothingData";
 
 export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
@@ -39,6 +38,8 @@ export default ClothingScreen = ({ route, navigation }) => {
     }, [sexFilter]);
 
     const renderClothing = ({ item }) => {
+        const Clothing = svgDict[item.name];
+
         return (
             <ClothingContainer
                 onPress={() =>
@@ -49,8 +50,8 @@ export default ClothingScreen = ({ route, navigation }) => {
                 }
                 style={{ borderRadius: windowWidth / 20 }}
             >
-                {item.name === "tshirt" ? (
-                    <Tshirt
+                {Clothing ? (
+                    <Clothing
                         width={windowWidth * 0.48}
                         height={windowWidth * 0.48}
                     />
