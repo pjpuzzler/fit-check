@@ -23,20 +23,20 @@ export default ClothingScreen = ({ route, navigation }) => {
     );
 
     const [wardrobeClothing, setWardrobeClothing] = useState(true);
-    const [filter, setFilter] = useState("all");
+    const [sexFilter, setSexFilter] = useState(user.sex);
     const [data, setData] = useState(clothingData);
 
     const windowWidth = Dimensions.get("window").width;
 
     useEffect(() => {
         setData(
-            filter !== "all"
-                ? clothingData.filter((clothing) =>
-                      clothing.settings.includes(filter)
+            sexFilter === "inter"
+                ? clothingData
+                : clothingData.filter((clothing) =>
+                      clothing.sex.includes(sexFilter)
                   )
-                : clothingData
         );
-    }, [filter]);
+    }, [sexFilter]);
 
     const renderClothing = ({ item }) => {
         return (
@@ -96,30 +96,43 @@ export default ClothingScreen = ({ route, navigation }) => {
             </TopBar>
 
             <FiltersContainer>
-                <TO onPress={() => setFilter("all")}>
+                <TO
+                    onPress={() =>
+                        setSexFilter(sexFilter === "inter" ? "female" : "inter")
+                    }
+                    disabled={sexFilter === "male"}
+                >
                     <MaterialCommunityIcons
-                        name="all-inclusive"
+                        name="gender-male"
                         size={windowWidth / 12}
-                        color={filter === "all" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "all" ? 0.5 : null }}
+                        color={
+                            sexFilter === "inter" || sexFilter === "male"
+                                ? "#1c4068"
+                                : "#666666"
+                        }
+                        style={{
+                            opacity: sexFilter === "male" ? 0.5 : null,
+                        }}
                     />
                 </TO>
 
-                <TO onPress={() => setFilter("casual")}>
+                <TO
+                    onPress={() =>
+                        setSexFilter(sexFilter === "inter" ? "male" : "inter")
+                    }
+                    disabled={sexFilter === "female"}
+                >
                     <MaterialCommunityIcons
-                        name="white-balance-sunny"
+                        name="gender-female"
                         size={windowWidth / 12}
-                        color={filter === "casual" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "casual" ? 0.5 : null }}
-                    />
-                </TO>
-
-                <TO onPress={() => setFilter("formal")}>
-                    <MaterialCommunityIcons
-                        name="account-tie"
-                        size={windowWidth / 12}
-                        color={filter === "formal" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "formal" ? 0.5 : null }}
+                        color={
+                            sexFilter === "inter" || sexFilter === "female"
+                                ? "#1c4068"
+                                : "#666666"
+                        }
+                        style={{
+                            opacity: sexFilter === "female" ? 0.5 : null,
+                        }}
                     />
                 </TO>
             </FiltersContainer>

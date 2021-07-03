@@ -31,9 +31,17 @@ export default MainScreen = ({ route, navigation }) => {
     }, [route.params]);
 
     useEffect(() => {
-        const colors = Object.values(currentOutfit)
-            .filter((c) => c.color)
-            .map((c) => c.color);
+        const colors = [
+            ...Object.values(currentOutfit)
+                .filter((c) => c.color1)
+                .map((c) => c.color1),
+            ...Object.values(currentOutfit)
+                .filter((c) => c.color2)
+                .map((c) => c.color2),
+            ...Object.values(currentOutfit)
+                .filter((c) => c.color3)
+                .map((c) => c.color3),
+        ];
 
         if (colors.length) setMatchScore(getMatchScore(colors));
     }, [currentOutfit]);
@@ -373,7 +381,36 @@ export default MainScreen = ({ route, navigation }) => {
                         <Tshirt
                             width={windowWidth * 0.6}
                             height={windowWidth * 0.6}
-                            opacity={currentOutfit.top.color ? 1 : 0.5}
+                            color1={
+                                currentOutfit.top.color1
+                                    ? currentOutfit.top.color1.hex
+                                    : null
+                            }
+                            shadow1={
+                                currentOutfit.top.color1
+                                    ? currentOutfit.top.color1.shadow
+                                    : null
+                            }
+                            color2={
+                                currentOutfit.top.color2
+                                    ? currentOutfit.top.color2.hex
+                                    : null
+                            }
+                            shadow2={
+                                currentOutfit.top.color2
+                                    ? currentOutfit.top.color2.shadow
+                                    : null
+                            }
+                            color3={
+                                currentOutfit.top.color3
+                                    ? currentOutfit.top.color3.hex
+                                    : null
+                            }
+                            shadow3={
+                                currentOutfit.top.color3
+                                    ? currentOutfit.top.color3.shadow
+                                    : null
+                            }
                         />
                     ) : null}
                 </TO>
