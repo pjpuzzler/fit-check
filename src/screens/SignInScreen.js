@@ -144,7 +144,7 @@ export default SignInScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    Sign In
+                                    Sign in
                                 </Text>
                             )}
                         </SignInContainer>

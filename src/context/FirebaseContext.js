@@ -13,14 +13,17 @@ const db = firebase.firestore();
 
 const Firebase = {
     getCurrentUser: () => {
-        let currentUser = null;
+        let success = false,
+            currentUser = null;
 
         try {
             currentUser = firebase.auth().currentUser;
+
+            success = true;
         } catch (error) {
             console.log("Error @getCurrentUser:", error.message);
         } finally {
-            return currentUser;
+            return [success, currentUser];
         }
     },
 

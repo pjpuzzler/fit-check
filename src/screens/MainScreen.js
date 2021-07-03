@@ -123,9 +123,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="necklace"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.neckwear
-                                    ? "#66666640"
-                                    : "#1c4068"
+                                !currentOutfit.neckwear ? "#666666" : "#1c4068"
                             }
                         />
                     </TO>
@@ -155,7 +153,7 @@ export default MainScreen = ({ route, navigation }) => {
                         <MaterialCommunityIcons
                             name="tshirt-crew"
                             size={windowWidth / 10}
-                            color={!currentOutfit.top ? "#66666640" : "#1c4068"}
+                            color={!currentOutfit.top ? "#666666" : "#1c4068"}
                         />
                     </TO>
 
@@ -216,9 +214,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="watch"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.wristwear
-                                    ? "#66666640"
-                                    : "#1c4068"
+                                !currentOutfit.wristwear ? "#666666" : "#1c4068"
                             }
                         />
                     </TO>
@@ -254,9 +250,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="shoe-formal"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.footwear
-                                    ? "#66666640"
-                                    : "#1c4068"
+                                !currentOutfit.footwear ? "#666666" : "#1c4068"
                             }
                         />
                     </TO>
@@ -291,9 +285,7 @@ export default MainScreen = ({ route, navigation }) => {
                         <FontAwesome5
                             name="socks"
                             size={windowWidth / 14}
-                            color={
-                                !currentOutfit.socks ? "#66666640" : "#1c4068"
-                            }
+                            color={!currentOutfit.socks ? "#666666" : "#1c4068"}
                         />
                     </TO>
 
@@ -331,7 +323,7 @@ export default MainScreen = ({ route, navigation }) => {
                     <Line
                         style={{
                             width: "5%",
-                            bottom: "66%",
+                            bottom: "74%",
                             left: "48%",
                             transform: [{ rotateZ: "90deg" }],
                         }}
@@ -351,7 +343,7 @@ export default MainScreen = ({ route, navigation }) => {
                         onLongPress={() => removeClothing("headwear")}
                         style={{
                             position: "absolute",
-                            bottom: "68%",
+                            bottom: "76%",
                             left: "45.5%",
                         }}
                     >
@@ -359,9 +351,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="hat-fedora"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.headwear
-                                    ? "#66666640"
-                                    : "#1c4068"
+                                !currentOutfit.headwear ? "#666666" : "#1c4068"
                             }
                         />
                     </TO>
@@ -376,14 +366,14 @@ export default MainScreen = ({ route, navigation }) => {
                             : () => setSelectedClothing("top")
                     }
                     onLongPress={() => removeClothing("top")}
-                    style={{ position: "absolute", bottom: "40%" }}
+                    style={{ position: "absolute", bottom: "33%" }}
                 >
                     {currentOutfit.top &&
                     currentOutfit.top.name === "tshirt" ? (
                         <Tshirt
-                            width={windowWidth * 0.65}
-                            height={windowWidth * 0.65}
-                            opacity={currentOutfit.top.color ? 1 : 0.75}
+                            width={windowWidth * 0.6}
+                            height={windowWidth * 0.6}
+                            opacity={currentOutfit.top.color ? 1 : 0.5}
                         />
                     ) : null}
                 </TO>
@@ -433,10 +423,23 @@ export default MainScreen = ({ route, navigation }) => {
                             />
                         </TO>
 
-                        <TO
-                            onPress={clear}
-                            disabled={!Object.keys(currentOutfit).length}
-                        >
+                        <TO>
+                            <Circle
+                                style={{
+                                    borderRadius: windowWidth,
+                                    width: windowWidth / 5,
+                                    height: windowWidth / 5,
+                                }}
+                            >
+                                <MaterialCommunityIcons
+                                    name="creation"
+                                    size={windowWidth / 8}
+                                    color="#ffffff"
+                                />
+                            </Circle>
+                        </TO>
+
+                        <TO disabled={!Object.keys(currentOutfit).length}>
                             <MaterialCommunityIcons
                                 name="information"
                                 size={windowWidth / 8}
@@ -463,7 +466,7 @@ const Container = styled.SafeAreaView`
 
 const OutfitContainer = styled.SafeAreaView`
     height: 90%;
-    width: 65%;
+    width: 60%;
     position: absolute;
 `;
 
@@ -491,4 +494,10 @@ const Line = styled.SafeAreaView`
     height: 0.25%;
     opacity: 0.5;
     position: absolute;
+`;
+
+const Circle = styled.SafeAreaView`
+    background-color: #18d299;
+    align-items: center;
+    justify-content: center;
 `;

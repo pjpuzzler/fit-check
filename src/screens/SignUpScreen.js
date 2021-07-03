@@ -190,7 +190,7 @@ export default SignUpScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    Sign Up
+                                    Sign up
                                 </Text>
                             )}
                         </SignUpContainer>
