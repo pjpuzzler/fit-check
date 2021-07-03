@@ -11,6 +11,7 @@ import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
+import { getMatchScore } from "../components/colors";
 
 import Tshirt from "../../assets/clothes/tshirt.svg";
 
@@ -20,6 +21,7 @@ export default MainScreen = ({ route, navigation }) => {
     const [currentOutfit, setCurrentOutfit] = useState({});
     const [selectedClothing, setSelectedClothing] = useState("");
     const [fullscreen, setFullscreen] = useState(false);
+    const [matchScore, setMatchScore] = useState(null);
 
     const windowWidth = Dimensions.get("window").width;
 
@@ -28,8 +30,16 @@ export default MainScreen = ({ route, navigation }) => {
             setCurrentOutfit({ ...currentOutfit, ...route.params.outfit });
     }, [route.params]);
 
+    useEffect(() => {
+        const colors = Object.values(currentOutfit)
+            .filter((c) => c.color)
+            .map((c) => c.color);
+
+        if (colors.length) setMatchScore(getMatchScore(colors));
+    }, [currentOutfit]);
+
     const removeClothing = async (clothingType) => {
-        if (!currentOutfit.clothingType) return;
+        if (!currentOutfit[clothingType]) return;
 
         const res = await alert(
             "Remove Clothing",
@@ -77,7 +87,7 @@ export default MainScreen = ({ route, navigation }) => {
 
     return (
         <Container>
-            {!fullscreen ? (
+            {!selectedClothing && !fullscreen ? (
                 <Container style={{ position: "absolute" }}>
                     <Line
                         style={{
@@ -115,8 +125,6 @@ export default MainScreen = ({ route, navigation }) => {
                             color={
                                 !currentOutfit.neckwear
                                     ? "#66666640"
-                                    : selectedClothing === "neckwear"
-                                    ? "#18d299"
                                     : "#1c4068"
                             }
                         />
@@ -147,13 +155,7 @@ export default MainScreen = ({ route, navigation }) => {
                         <MaterialCommunityIcons
                             name="tshirt-crew"
                             size={windowWidth / 10}
-                            color={
-                                !currentOutfit.top
-                                    ? "#66666640"
-                                    : selectedClothing === "top"
-                                    ? "#18d299"
-                                    : "#1c4068"
-                            }
+                            color={!currentOutfit.top ? "#66666640" : "#1c4068"}
                         />
                     </TO>
 
@@ -216,8 +218,6 @@ export default MainScreen = ({ route, navigation }) => {
                             color={
                                 !currentOutfit.wristwear
                                     ? "#66666640"
-                                    : selectedClothing === "wristwear"
-                                    ? "#18d299"
                                     : "#1c4068"
                             }
                         />
@@ -256,8 +256,6 @@ export default MainScreen = ({ route, navigation }) => {
                             color={
                                 !currentOutfit.footwear
                                     ? "#66666640"
-                                    : selectedClothing === "footwear"
-                                    ? "#18d299"
                                     : "#1c4068"
                             }
                         />
@@ -294,11 +292,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="socks"
                             size={windowWidth / 14}
                             color={
-                                !currentOutfit.socks
-                                    ? "#66666640"
-                                    : selectedClothing === "socks"
-                                    ? "#18d299"
-                                    : "#1c4068"
+                                !currentOutfit.socks ? "#66666640" : "#1c4068"
                             }
                         />
                     </TO>
@@ -367,8 +361,6 @@ export default MainScreen = ({ route, navigation }) => {
                             color={
                                 !currentOutfit.headwear
                                     ? "#66666640"
-                                    : selectedClothing === "headwear"
-                                    ? "#18d299"
                                     : "#1c4068"
                             }
                         />
@@ -383,6 +375,7 @@ export default MainScreen = ({ route, navigation }) => {
                             ? () => setSelectedClothing("")
                             : () => setSelectedClothing("top")
                     }
+                    onLongPress={() => removeClothing("top")}
                     style={{ position: "absolute", bottom: "40%" }}
                 >
                     {currentOutfit.top &&
@@ -439,6 +432,21 @@ export default MainScreen = ({ route, navigation }) => {
                                 }
                             />
                         </TO>
+
+                        <TO
+                            onPress={clear}
+                            disabled={!Object.keys(currentOutfit).length}
+                        >
+                            <MaterialCommunityIcons
+                                name="information"
+                                size={windowWidth / 8}
+                                color={
+                                    Object.keys(currentOutfit).length
+                                        ? "#1c4068"
+                                        : "#1c406840"
+                                }
+                            />
+                        </TO>
                     </ButtonsContainer>
                 </TopBar>
             ) : null}
@@ -459,15 +467,6 @@ const OutfitContainer = styled.SafeAreaView`
     position: absolute;
 `;
 
-const OverlayColor = styled.SafeAreaView`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ff000040;
-`;
-
 const ClothingEditorContainer = styled.SafeAreaView`
     width: 100%;
     height: 25%;
@@ -480,8 +479,9 @@ const TopBar = styled.SafeAreaView`
 `;
 
 const ButtonsContainer = styled.SafeAreaView`
-    height: 25%;
-    width: 30%;
+    height: 40%;
+    flex-direction: row;
+    justify-content: space-between;
 `;
 
 const TO = styled.TouchableOpacity``;

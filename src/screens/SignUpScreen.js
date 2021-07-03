@@ -85,7 +85,7 @@ export default SignUpScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        New User?
+                        New user?
                     </Text>
                 </Main>
 

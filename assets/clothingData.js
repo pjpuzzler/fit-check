@@ -1,1 +1,1 @@
-export default [{ name: "tshirt", type: "top", settings: ["casual"] }];
+export default [{ name: "tshirt", type: "top" }];

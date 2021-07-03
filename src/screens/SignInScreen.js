@@ -64,7 +64,7 @@ export default SignInScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        Returning User?
+                        Returning user?
                     </Text>
                 </Main>
                 <Auth

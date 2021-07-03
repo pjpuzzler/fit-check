@@ -236,7 +236,7 @@ const Firebase = {
         let res = null;
 
         try {
-            res = await db
+            let tempRes = await db
                 .collection("users")
                 .where("username", ">=", search)
                 .where("username", "<=", search + "~")
@@ -244,7 +244,9 @@ const Firebase = {
                 .orderBy("username")
                 .limit(5)
                 .get();
-            res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+            tempRes = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+
+            res = tempRes;
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {
@@ -256,9 +258,9 @@ const Firebase = {
         let res = null;
 
         try {
-            res = [];
+            const tempRes = [];
 
-            for (let i = 0; i < following.length && res.length < 10; i++) {
+            for (let i = 0; i < following.length && tempRes.length < 10; i++) {
                 const uid = following[i];
 
                 if (shown.includes(uid)) continue;
@@ -268,11 +270,13 @@ const Firebase = {
                 ).data();
 
                 if (data.username >= search && data.username <= search + "~")
-                    res.push({
+                    tempRes.push({
                         ...data,
                         uid,
                     });
             }
+
+            res = tempRes;
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {
