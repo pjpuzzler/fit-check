@@ -247,7 +247,10 @@ const Firebase = {
                 .orderBy("username")
                 .limit(5)
                 .get();
-            tempRes = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+            tempRes = tempRes.docs.map((doc) => ({
+                ...doc.data(),
+                uid: doc.id,
+            }));
 
             res = tempRes;
         } catch (error) {
