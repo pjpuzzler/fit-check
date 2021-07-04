@@ -23,9 +23,13 @@ export default MainScreen = ({ route, navigation }) => {
     const [fullscreen, setFullscreen] = useState(false);
     const [matchScore, setMatchScore] = useState(null);
 
-    const [Top, setTop] = useState(null);
-
     const windowWidth = Dimensions.get("window").width;
+
+    const Top = currentOutfit.top
+        ? svgDict[
+              currentOutfit.top.name + (currentOutfit.overwear ? "_under" : "")
+          ]
+        : null;
 
     useEffect(() => {
         if (route.params && route.params.outfit)
@@ -46,13 +50,6 @@ export default MainScreen = ({ route, navigation }) => {
         ];
 
         if (colors.length) setMatchScore(getMatchScore(colors));
-
-        if (currentOutfit.top)
-            setTop(
-                svgDict[
-                    currentOutfit.top + (currentOutfit.overwear ? "_under" : "")
-                ]
-            );
     }, [currentOutfit]);
 
     const removeClothing = async (clothingType) => {
@@ -96,10 +93,7 @@ export default MainScreen = ({ route, navigation }) => {
 
         if (!res) return;
 
-        setUser((state) => ({
-            ...state,
-            currentOutfit: {},
-        }));
+        setCurrentOutfit({});
     };
 
     return (
