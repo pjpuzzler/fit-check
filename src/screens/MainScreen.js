@@ -17,6 +17,7 @@ import { svgDict } from "../../assets/clothingData";
 
 export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
+    const firebase = useContext(FirebaseContext);
 
     const [currentOutfit, setCurrentOutfit] = useState({});
     const [selectedClothing, setSelectedClothing] = useState("");
@@ -100,6 +101,74 @@ export default MainScreen = ({ route, navigation }) => {
         if (!res) return;
 
         setCurrentOutfit({});
+    };
+
+    const save = async () => {
+        const oid = await firebase.saveOutfit(currentOutfit);
+
+        if (oid) {
+            const newOutfit = { ...currentOutfit, oid };
+
+            setCurrentOutfit(newOutfit);
+            setUser((state) => ({
+                ...state,
+                outfits: [...outfits, newOutfit],
+            }));
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
+    const update = async () => {
+        const success = await firebase.updateOutfit(currentOutfit);
+
+        if (success)
+            setUser((state) => ({
+                ...state,
+                outfits: [
+                    ...user.outfits.filter(
+                        (outfit) => outfit.oid !== currentOutfit.oid
+                    ),
+                    currentOutfit,
+                ],
+            }));
+        else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
+    const share = async () => {
+        const success = await firebase.shareOutfit(currentOutfit);
+
+        if (success) {
+            const newOutfit = { ...currentOutfit, shared: true };
+
+            setCurrentOutfit(newOutfit);
+            setUser((state) => ({
+                ...state,
+                outfits: [
+                    ...user.outfits.filter(
+                        (outfit) => outfit.oid !== newOutfit.oid
+                    ),
+                    newOutfit,
+                ],
+            }));
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
+    };
+
+    const unshare = async () => {
+        const success = await firebase.unshareOutfit(currentOutfit);
+
+        if (success) {
+            const { shared: _, ...newOutfit } = currentOutfit;
+
+            setCurrentOutfit(newOutfit);
+            setUser((state) => ({
+                ...state,
+                outfits: [
+                    ...user.outfits.filter(
+                        (outfit) => outfit.oid !== newOutfit.oid
+                    ),
+                    newOutfit,
+                ],
+            }));
+        } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
     return (

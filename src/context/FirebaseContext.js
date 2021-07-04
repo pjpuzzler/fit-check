@@ -53,6 +53,7 @@ const Firebase = {
                 .createUserWithEmailAndPassword(email, password);
         } catch (error) {
             console.log("Error @createUser:", error.message);
+
             return [false, error];
         }
 
@@ -78,6 +79,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @createUser:", error.message);
+
             await Firebase.deleteAccount();
         } finally {
             return [success, null];
@@ -96,6 +98,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @signIn:", error.message);
+
             err = error;
         } finally {
             return [success, err];
@@ -106,7 +109,21 @@ const Firebase = {
         let url = null;
 
         try {
-            const photo = await Firebase.getBlob(uri);
+            const photo = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+
+                xhr.onload = () => {
+                    resolve(xhr.response);
+                };
+
+                xhr.onerror = () => {
+                    reject(new TypeError("Network request failed"));
+                };
+
+                xhr.responseType = "blob";
+                xhr.open("GET", uri, true);
+                xhr.send(null);
+            });
             const uid = Firebase.getCurrentUser().uid;
             const imageRef = firebase.storage().ref("profilePhotos").child(uid);
 
@@ -118,24 +135,6 @@ const Firebase = {
         } finally {
             return url;
         }
-    },
-
-    getBlob: async (uri) => {
-        return await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-
-            xhr.onload = () => {
-                resolve(xhr.response);
-            };
-
-            xhr.onerror = () => {
-                reject(new TypeError("Network request failed"));
-            };
-
-            xhr.responseType = "blob";
-            xhr.open("GET", uri, true);
-            xhr.send(null);
-        });
     },
 
     getUserInfo: async (uid) => {
@@ -295,6 +294,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @reauthenticate:", error.message);
+
             err = error;
         } finally {
             return [success, err];
@@ -368,6 +368,80 @@ const Firebase = {
             console.log("Error @follow:", error.message);
         } finally {
             return following;
+        }
+    },
+
+    saveOutfit: async (outfit) => {
+        let oid = null;
+
+        try {
+            const outfitRef = await db.collection("marketplace").add({
+                belt: outfit.belt ?? "",
+                bottom: outfit.bottom ?? "",
+                downloaded: [],
+                footwear: outfit.footwear ?? "",
+                glasses: outfit.glasses ?? "",
+                headwear: outfit.headwear ?? "",
+                neckwear: outfit.neckwear ?? "",
+                overwear: outfit.overwear ?? "",
+                socks: outfit.socks ?? "",
+                tie: outfit.tie ?? "",
+                timeShared: Firebase.getTimestamp(),
+                top: outfit.top ?? "",
+                wristwear: outfit.wristwear ?? "",
+            });
+
+            oid = outfitRef.id;
+        } catch (error) {
+            console.log("Error @saveOutfit:", error.message);
+        } finally {
+            return oid;
+        }
+    },
+
+    shareOutfit: async (outfit) => {
+        let success = false;
+        const oid = outfit.oid;
+
+        try {
+            await db
+                .collection("marketplace")
+                .doc(oid)
+                .set({
+                    belt: outfit.belt ?? "",
+                    bottom: outfit.bottom ?? "",
+                    downloaded: [],
+                    footwear: outfit.footwear ?? "",
+                    glasses: outfit.glasses ?? "",
+                    headwear: outfit.headwear ?? "",
+                    neckwear: outfit.neckwear ?? "",
+                    overwear: outfit.overwear ?? "",
+                    socks: outfit.socks ?? "",
+                    tie: outfit.tie ?? "",
+                    timeShared: Firebase.getTimestamp(),
+                    top: outfit.top ?? "",
+                    wristwear: outfit.wristwear ?? "",
+                });
+
+            success = true;
+        } catch (error) {
+            console.log("Error @shareOutfit:", error.message);
+        } finally {
+            return success;
+        }
+    },
+
+    unshareOutfit: async (oid) => {
+        let success = false;
+
+        try {
+            await db.collection("marketplace").doc(oid).delete();
+
+            success = true;
+        } catch (error) {
+            console.log("Error @unshareOutfit:", error.message);
+        } finally {
+            return success;
         }
     },
 };
