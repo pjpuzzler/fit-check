@@ -21,21 +21,24 @@ export default ClothingScreen = ({ route, navigation }) => {
         (clothing) => clothing.type === clothingType
     );
 
-    const [wardrobeClothing, setWardrobeClothing] = useState(true);
+    const [wardrobeFilter, setWardrobeFilter] = useState(true);
     const [sexFilter, setSexFilter] = useState(user.sex);
-    const [data, setData] = useState(clothingData);
+    const [preData, setPreData] = useState(clothingData);
+    const [data, setData] = useState(preData);
 
     const windowWidth = Dimensions.get("window").width;
 
     useEffect(() => {
         setData(
             sexFilter === "inter"
-                ? clothingData
-                : clothingData.filter((clothing) =>
-                      clothing.sex.includes(sexFilter)
-                  )
+                ? preData
+                : preData.filter((clothing) => clothing.sex.includes(sexFilter))
         );
-    }, [sexFilter]);
+    }, [sexFilter, preData]);
+
+    useEffect(() => {
+        setPreData(wardrobeFilter ? user.clothing : clothingData);
+    }, [wardrobeFilter]);
 
     const renderClothing = ({ item }) => {
         const Clothing = svgDict[item.name];
@@ -87,9 +90,9 @@ export default ClothingScreen = ({ route, navigation }) => {
                         clothingType.slice(1)}
                 </Text>
 
-                <TO onPress={() => setWardrobeClothing(!wardrobeClothing)}>
+                <TO onPress={() => setWardrobeFilter(!wardrobeFilter)}>
                     <MaterialCommunityIcons
-                        name={wardrobeClothing ? "wardrobe" : "all-inclusive"}
+                        name={wardrobeFilter ? "wardrobe" : "all-inclusive"}
                         size={windowWidth / 8}
                         color="#1c4068bf"
                     />
