@@ -93,9 +93,9 @@ export default SignUpScreen = ({ navigation }) => {
                     style={{
                         height: windowHeight / 3.33,
                         bottom:
-                            keyboardVisible && !(Platform.OS === "ios")
-                                ? "0%"
-                                : "24%",
+                            !keyboardVisible || Platform.OS === "ios"
+                                ? "24%"
+                                : "0%",
                     }}
                     behavior="position"
                     enabled={Platform.OS === "ios"}

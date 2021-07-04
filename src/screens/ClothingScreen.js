@@ -16,10 +16,8 @@ export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
 
     const clothingType = route.params.clothingType;
-    const isCloset = route.params.isCloset;
-    const clothingData = clothes.filter(
-        (clothing) => clothing.type === clothingType
-    );
+    const isPicker = route.params.isPicker;
+    const clothingData = clothes[clothingType];
 
     const [wardrobeFilter, setWardrobeFilter] = useState(true);
     const [sexFilter, setSexFilter] = useState(user.sex);
@@ -30,9 +28,9 @@ export default ClothingScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         setData(
-            sexFilter === "inter"
-                ? preData
-                : preData.filter((clothing) => clothing.sex.includes(sexFilter))
+            sexFilter !== "inter"
+                ? preData.filter((clothing) => clothing.sex.includes(sexFilter))
+                : preData
         );
     }, [sexFilter, preData]);
 
@@ -45,11 +43,14 @@ export default ClothingScreen = ({ route, navigation }) => {
 
         return (
             <ClothingContainer
-                onPress={() =>
-                    navigation.navigate("Main", {
-                        screen: "Main",
-                        params: { outfit: { [clothingType]: item } },
-                    })
+                onPress={
+                    isPicker
+                        ? () =>
+                              navigation.navigate("Main", {
+                                  screen: "Main",
+                                  params: { outfit: { [clothingType]: item } },
+                              })
+                        : () => {}
                 }
                 style={{ borderRadius: windowWidth / 20 }}
             >

@@ -188,15 +188,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.neckwear
-                                ? () =>
+                            currentOutfit.neckwear
+                                ? () => setSelectedClothing("neckwear")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "neckwear",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "neckwear"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("neckwear")
                         }
                         onLongPress={() => removeClothing("neckwear")}
                         style={{
@@ -209,7 +207,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="necklace"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.neckwear ? "#666666" : "#1c4068"
+                                currentOutfit.neckwear ? "#1c4068" : "#666666"
                             }
                         />
                     </TO>
@@ -219,15 +217,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.top
-                                ? () =>
+                            currentOutfit.top
+                                ? () => setSelectedClothing("top")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "top",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "top"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("top")
                         }
                         onLongPress={() => removeClothing("top")}
                         style={{
@@ -239,7 +235,7 @@ export default MainScreen = ({ route, navigation }) => {
                         <MaterialCommunityIcons
                             name="tshirt-crew"
                             size={windowWidth / 10}
-                            color={!currentOutfit.top ? "#666666" : "#1c4068"}
+                            color={currentOutfit.top ? "#1c4068" : "#666666"}
                         />
                     </TO>
 
@@ -256,15 +252,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.bottom
-                                ? () =>
+                            currentOutfit.bottom
+                                ? () => setSelectedClothing("bottom")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "bottom",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
-                                : selectedClothing === "bottom"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("bottom")
                         }
                         onLongPress={() => removeClothing("bottom")}
                         style={{
@@ -279,15 +273,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.wristwear
-                                ? () =>
+                            currentOutfit.wristwear
+                                ? () => setSelectedClothing("wristwear")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "wristwear",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "wristwear"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("wristwear")
                         }
                         onLongPress={() => removeClothing("wristwear")}
                         style={{
@@ -300,7 +292,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="watch"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.wristwear ? "#666666" : "#1c4068"
+                                currentOutfit.wristwear ? "#1c4068" : "#666666"
                             }
                         />
                     </TO>
@@ -315,15 +307,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.footwear
-                                ? () =>
+                            currentOutfit.footwear
+                                ? () => setSelectedClothing("footwear")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "footwear",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "footwear"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("footwear")
                         }
                         onLongPress={() => removeClothing("footwear")}
                         style={{
@@ -336,7 +326,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="shoe-formal"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.footwear ? "#666666" : "#1c4068"
+                                currentOutfit.footwear ? "#1c4068" : "#666666"
                             }
                         />
                     </TO>
@@ -351,15 +341,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.socks
-                                ? () =>
+                            currentOutfit.socks
+                                ? () => setSelectedClothing("socks")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "socks",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "socks"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("socks")
                         }
                         onLongPress={() => removeClothing("socks")}
                         style={{
@@ -371,7 +359,7 @@ export default MainScreen = ({ route, navigation }) => {
                         <FontAwesome5
                             name="socks"
                             size={windowWidth / 14}
-                            color={!currentOutfit.socks ? "#666666" : "#1c4068"}
+                            color={currentOutfit.socks ? "#1c4068" : "#666666"}
                         />
                     </TO>
 
@@ -388,15 +376,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.overwear
-                                ? () =>
+                            currentOutfit.overwear
+                                ? () => setSelectedClothing("overwear")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "overwear",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "overwear"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("overwear")
                         }
                         onLongPress={() => removeClothing("overwear")}
                         style={{
@@ -416,15 +402,13 @@ export default MainScreen = ({ route, navigation }) => {
                     />
                     <TO
                         onPress={
-                            !currentOutfit.headwear
-                                ? () =>
+                            currentOutfit.headwear
+                                ? () => setSelectedClothing("headwear")
+                                : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "headwear",
                                           isCloset: false,
                                       })
-                                : selectedClothing === "headwear"
-                                ? () => setSelectedClothing("")
-                                : () => setSelectedClothing("headwear")
                         }
                         onLongPress={() => removeClothing("headwear")}
                         style={{
@@ -437,7 +421,7 @@ export default MainScreen = ({ route, navigation }) => {
                             name="hat-fedora"
                             size={windowWidth / 10}
                             color={
-                                !currentOutfit.headwear ? "#666666" : "#1c4068"
+                                currentOutfit.headwear ? "#1c4068" : "#666666"
                             }
                         />
                     </TO>
@@ -446,11 +430,7 @@ export default MainScreen = ({ route, navigation }) => {
 
             <OutfitContainer>
                 <TO
-                    onPress={
-                        selectedClothing === "top"
-                            ? () => setSelectedClothing("")
-                            : () => setSelectedClothing("top")
-                    }
+                    onPress={() => setSelectedClothing("top")}
                     onLongPress={() => removeClothing("top")}
                     style={{ position: "absolute", bottom: "33%" }}
                 >
@@ -529,11 +509,12 @@ export default MainScreen = ({ route, navigation }) => {
                             <MaterialCommunityIcons
                                 name="delete"
                                 size={windowWidth / 8}
-                                color={
-                                    Object.keys(currentOutfit).length
-                                        ? "#ff0000"
-                                        : "#ff000040"
-                                }
+                                color="#ff0000"
+                                style={{
+                                    opacity: !Object.keys(currentOutfit).length
+                                        ? 0.5
+                                        : null,
+                                }}
                             />
                         </TO>
 
@@ -557,11 +538,12 @@ export default MainScreen = ({ route, navigation }) => {
                             <MaterialCommunityIcons
                                 name="information"
                                 size={windowWidth / 8}
-                                color={
-                                    Object.keys(currentOutfit).length
-                                        ? "#1c4068"
-                                        : "#1c406840"
-                                }
+                                color="#1c4068"
+                                style={{
+                                    opacity: !Object.keys(currentOutfit).length
+                                        ? 0.5
+                                        : null,
+                                }}
                             />
                         </TO>
                     </ButtonsContainer>
