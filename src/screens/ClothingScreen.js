@@ -97,43 +97,27 @@ export default ClothingScreen = ({ route, navigation }) => {
             </TopBar>
 
             <FiltersContainer>
-                <TO
-                    onPress={() =>
-                        setSexFilter(sexFilter === "inter" ? "female" : "inter")
-                    }
-                    disabled={sexFilter === "male"}
-                >
+                <TO onPress={() => setSexFilter("male")}>
                     <MaterialCommunityIcons
                         name="gender-male"
                         size={windowWidth / 12}
-                        color={
-                            sexFilter === "inter" || sexFilter === "male"
-                                ? "#1c4068"
-                                : "#666666"
-                        }
-                        style={{
-                            opacity: sexFilter === "male" ? 0.5 : null,
-                        }}
+                        color={sexFilter === "male" ? "#1c4068" : "#666666"}
                     />
                 </TO>
 
-                <TO
-                    onPress={() =>
-                        setSexFilter(sexFilter === "inter" ? "male" : "inter")
-                    }
-                    disabled={sexFilter === "female"}
-                >
+                <TO onPress={() => setSexFilter("inter")}>
+                    <MaterialCommunityIcons
+                        name="gender-male-female"
+                        size={windowWidth / 12}
+                        color={sexFilter === "inter" ? "#1c4068" : "#666666"}
+                    />
+                </TO>
+
+                <TO onPress={() => setSexFilter("female")}>
                     <MaterialCommunityIcons
                         name="gender-female"
                         size={windowWidth / 12}
-                        color={
-                            sexFilter === "inter" || sexFilter === "female"
-                                ? "#1c4068"
-                                : "#666666"
-                        }
-                        style={{
-                            opacity: sexFilter === "female" ? 0.5 : null,
-                        }}
+                        color={sexFilter === "female" ? "#1c4068" : "#666666"}
                     />
                 </TO>
             </FiltersContainer>

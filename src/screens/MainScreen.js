@@ -38,15 +38,21 @@ export default MainScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         const colors = [
-            ...Object.values(currentOutfit)
-                .filter((c) => c.color1)
-                .map((c) => c.color1),
-            ...Object.values(currentOutfit)
-                .filter((c) => c.color2)
-                .map((c) => c.color2),
-            ...Object.values(currentOutfit)
-                .filter((c) => c.color3)
-                .map((c) => c.color3),
+            ...Object.values(currentOutfit).reduce((colors, clothing) => {
+                if (clothing.color1) colors.push(clothing.color1);
+
+                return colors;
+            }, []),
+            ...Object.values(currentOutfit).reduce((colors, clothing) => {
+                if (clothing.color2) colors.push(clothing.color2);
+
+                return colors;
+            }, []),
+            ...Object.values(currentOutfit).reduce((colors, clothing) => {
+                if (clothing.color3) colors.push(clothing.color3);
+
+                return colors;
+            }, []),
         ];
 
         if (colors.length) setMatchScore(getMatchScore(colors));
