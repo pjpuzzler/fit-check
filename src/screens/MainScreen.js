@@ -13,7 +13,7 @@ import { FirebaseContext } from "../context/FirebaseContext";
 import Text from "../components/Text";
 import { getMatchScore } from "../components/colors";
 
-import { svgDict } from "../../assets/clothingData";
+import { svgDict } from "../../assets/clothes/clothingData";
 
 export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);

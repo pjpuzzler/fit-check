@@ -10,7 +10,7 @@ import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
 
-import { clothes, svgDict } from "../../assets/clothingData";
+import { clothes, svgDict } from "../../assets/clothes/clothingData";
 
 export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);

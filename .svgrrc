@@ -1,10 +1,10 @@
 {
   "replaceAttrValues": {
-    "#88888840": "{props.color1}",
-    "#99999940": "{props.shadow1}",
-    "#66666640": "{props.color2}",
-    "#77777740": "{props.shadow2}",
-    "#44444440": "{props.color3}",
-    "#55555540": "{props.shadow3}"
+    "#999": "{props.color1}",
+    "#888": "{props.shadow1}",
+    "#777": "{props.color2}",
+    "#666": "{props.shadow2}",
+    "#555": "{props.color3}",
+    "#444": "{props.shadow3}"
   }
 }
