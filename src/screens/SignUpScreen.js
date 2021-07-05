@@ -85,7 +85,7 @@ export default SignUpScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        New User?
+                        New user?
                     </Text>
                 </Main>
 
@@ -93,9 +93,9 @@ export default SignUpScreen = ({ navigation }) => {
                     style={{
                         height: windowHeight / 3.33,
                         bottom:
-                            keyboardVisible && !(Platform.OS === "ios")
-                                ? "0%"
-                                : "24%",
+                            !keyboardVisible || Platform.OS === "ios"
+                                ? "24%"
+                                : "0%",
                     }}
                     behavior="position"
                     enabled={Platform.OS === "ios"}
@@ -190,7 +190,7 @@ export default SignUpScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    Sign Up
+                                    Sign up
                                 </Text>
                             )}
                         </SignUpContainer>

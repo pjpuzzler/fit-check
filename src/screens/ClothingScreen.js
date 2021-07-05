@@ -10,54 +10,52 @@ import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
 
-import clothes from "../../assets/clothingData";
-import Tshirt from "../../assets/clothes/tshirt.svg";
+import { clothes, svgDict } from "../../assets/clothingData";
 
 export default ClothingScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
 
     const clothingType = route.params.clothingType;
-    const isCloset = route.params.isCloset;
-    const clothingData = clothes.filter(
-        (clothing) => clothing.type === clothingType
-    );
+    const isPicker = route.params.isPicker;
+    const clothingData = clothes[clothingType];
 
-    const [wardrobeClothing, setWardrobeClothing] = useState(true);
-    const [filter, setFilter] = useState("all");
-    const [data, setData] = useState(clothingData);
+    const [wardrobeFilter, setWardrobeFilter] = useState(true);
+    const [sexFilter, setSexFilter] = useState(user.sex);
+    const [preData, setPreData] = useState(clothingData);
+    const [data, setData] = useState(preData);
 
     const windowWidth = Dimensions.get("window").width;
 
     useEffect(() => {
         setData(
-            filter !== "all"
-                ? clothingData.filter((clothing) =>
-                      clothing.settings.includes(filter)
-                  )
-                : clothingData
+            sexFilter !== "inter"
+                ? preData.filter((clothing) => clothing.sex.includes(sexFilter))
+                : preData
         );
-    }, [filter]);
+    }, [sexFilter, preData]);
 
-    const selectClothing = (item) => {
-        setUser((state) => ({
-            ...state,
-            currentOutfit: {
-                ...user.currentOutfit,
-                [clothingType]: item,
-            },
-        }));
-
-        navigation.goBack();
-    };
+    useEffect(() => {
+        setPreData(wardrobeFilter ? user.clothing : clothingData);
+    }, [wardrobeFilter]);
 
     const renderClothing = ({ item }) => {
+        const Clothing = svgDict[item.name];
+
         return (
             <ClothingContainer
-                onPress={() => selectClothing(item)}
+                onPress={
+                    isPicker
+                        ? () =>
+                              navigation.navigate("Main", {
+                                  screen: "Main",
+                                  params: { outfit: { [clothingType]: item } },
+                              })
+                        : () => {}
+                }
                 style={{ borderRadius: windowWidth / 20 }}
             >
-                {item.name === "tshirt" ? (
-                    <Tshirt
+                {Clothing ? (
+                    <Clothing
                         width={windowWidth * 0.48}
                         height={windowWidth * 0.48}
                     />
@@ -93,9 +91,9 @@ export default ClothingScreen = ({ route, navigation }) => {
                         clothingType.slice(1)}
                 </Text>
 
-                <TO onPress={() => setWardrobeClothing(!wardrobeClothing)}>
+                <TO onPress={() => setWardrobeFilter(!wardrobeFilter)}>
                     <MaterialCommunityIcons
-                        name={wardrobeClothing ? "wardrobe" : "all-inclusive"}
+                        name={wardrobeFilter ? "wardrobe" : "all-inclusive"}
                         size={windowWidth / 8}
                         color="#1c4068bf"
                     />
@@ -103,30 +101,27 @@ export default ClothingScreen = ({ route, navigation }) => {
             </TopBar>
 
             <FiltersContainer>
-                <TO onPress={() => setFilter("all")}>
+                <TO onPress={() => setSexFilter("male")}>
                     <MaterialCommunityIcons
-                        name="all-inclusive"
+                        name="gender-male"
                         size={windowWidth / 12}
-                        color={filter === "all" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "all" ? 0.5 : null }}
+                        color={sexFilter === "male" ? "#1c4068" : "#666666"}
                     />
                 </TO>
 
-                <TO onPress={() => setFilter("casual")}>
+                <TO onPress={() => setSexFilter("inter")}>
                     <MaterialCommunityIcons
-                        name="white-balance-sunny"
+                        name="gender-male-female"
                         size={windowWidth / 12}
-                        color={filter === "casual" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "casual" ? 0.5 : null }}
+                        color={sexFilter === "inter" ? "#1c4068" : "#666666"}
                     />
                 </TO>
 
-                <TO onPress={() => setFilter("formal")}>
+                <TO onPress={() => setSexFilter("female")}>
                     <MaterialCommunityIcons
-                        name="account-tie"
+                        name="gender-female"
                         size={windowWidth / 12}
-                        color={filter === "formal" ? "#1c4068" : "#666666bf"}
-                        style={{ opacity: filter !== "formal" ? 0.5 : null }}
+                        color={sexFilter === "female" ? "#1c4068" : "#666666"}
                     />
                 </TO>
             </FiltersContainer>

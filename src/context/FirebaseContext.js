@@ -13,14 +13,17 @@ const db = firebase.firestore();
 
 const Firebase = {
     getCurrentUser: () => {
-        let currentUser = null;
+        let success = false,
+            currentUser = null;
 
         try {
             currentUser = firebase.auth().currentUser;
+
+            success = true;
         } catch (error) {
             console.log("Error @getCurrentUser:", error.message);
         } finally {
-            return currentUser;
+            return [success, currentUser];
         }
     },
 
@@ -50,6 +53,7 @@ const Firebase = {
                 .createUserWithEmailAndPassword(email, password);
         } catch (error) {
             console.log("Error @createUser:", error.message);
+
             return [false, error];
         }
 
@@ -63,17 +67,6 @@ const Firebase = {
                 downloads: 0,
                 followers: 0,
                 following: [],
-                generateBottom: "m",
-                generateFootwear: "m",
-                generateGlasses: "m",
-                generateHeadwear: "m",
-                generateNeckwear: "m",
-                generateOverwear: "m",
-                generateSocks: "m",
-                generateTop: "m",
-                generateWristwear: "m",
-                generatedSetting: "casual",
-                generatedSex: "",
                 lastDailyCheckIn: Firebase.getTimestamp(),
                 outfits: [],
                 premium: false,
@@ -86,6 +79,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @createUser:", error.message);
+
             await Firebase.deleteAccount();
         } finally {
             return [success, null];
@@ -104,6 +98,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @signIn:", error.message);
+
             err = error;
         } finally {
             return [success, err];
@@ -114,7 +109,21 @@ const Firebase = {
         let url = null;
 
         try {
-            const photo = await Firebase.getBlob(uri);
+            const photo = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+
+                xhr.onload = () => {
+                    resolve(xhr.response);
+                };
+
+                xhr.onerror = () => {
+                    reject(new TypeError("Network request failed"));
+                };
+
+                xhr.responseType = "blob";
+                xhr.open("GET", uri, true);
+                xhr.send(null);
+            });
             const uid = Firebase.getCurrentUser().uid;
             const imageRef = firebase.storage().ref("profilePhotos").child(uid);
 
@@ -126,24 +135,6 @@ const Firebase = {
         } finally {
             return url;
         }
-    },
-
-    getBlob: async (uri) => {
-        return await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-
-            xhr.onload = () => {
-                resolve(xhr.response);
-            };
-
-            xhr.onerror = () => {
-                reject(new TypeError("Network request failed"));
-            };
-
-            xhr.responseType = "blob";
-            xhr.open("GET", uri, true);
-            xhr.send(null);
-        });
     },
 
     getUserInfo: async (uid) => {
@@ -236,7 +227,7 @@ const Firebase = {
         let res = null;
 
         try {
-            res = await db
+            let tempRes = await db
                 .collection("users")
                 .where("username", ">=", search)
                 .where("username", "<=", search + "~")
@@ -244,7 +235,12 @@ const Firebase = {
                 .orderBy("username")
                 .limit(5)
                 .get();
-            res = res.docs.map((doc) => ({ ...doc.data(), uid: doc.id }));
+            tempRes = tempRes.docs.map((doc) => ({
+                ...doc.data(),
+                uid: doc.id,
+            }));
+
+            res = tempRes;
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {
@@ -256,9 +252,9 @@ const Firebase = {
         let res = null;
 
         try {
-            res = [];
+            const tempRes = [];
 
-            for (let i = 0; i < following.length && res.length < 10; i++) {
+            for (let i = 0; i < following.length && tempRes.length < 10; i++) {
                 const uid = following[i];
 
                 if (shown.includes(uid)) continue;
@@ -268,11 +264,13 @@ const Firebase = {
                 ).data();
 
                 if (data.username >= search && data.username <= search + "~")
-                    res.push({
+                    tempRes.push({
                         ...data,
                         uid,
                     });
             }
+
+            res = tempRes;
         } catch (error) {
             console.log("Error @searchUsers:", error.message);
         } finally {
@@ -296,6 +294,7 @@ const Firebase = {
             success = true;
         } catch (error) {
             console.log("Error @reauthenticate:", error.message);
+
             err = error;
         } finally {
             return [success, err];
@@ -369,6 +368,80 @@ const Firebase = {
             console.log("Error @follow:", error.message);
         } finally {
             return following;
+        }
+    },
+
+    saveOutfit: async (outfit) => {
+        let oid = null;
+
+        try {
+            const outfitRef = await db.collection("marketplace").add({
+                belt: outfit.belt ?? "",
+                bottom: outfit.bottom ?? "",
+                downloaded: [],
+                footwear: outfit.footwear ?? "",
+                glasses: outfit.glasses ?? "",
+                headwear: outfit.headwear ?? "",
+                neckwear: outfit.neckwear ?? "",
+                overwear: outfit.overwear ?? "",
+                socks: outfit.socks ?? "",
+                tie: outfit.tie ?? "",
+                timeShared: Firebase.getTimestamp(),
+                top: outfit.top ?? "",
+                wristwear: outfit.wristwear ?? "",
+            });
+
+            oid = outfitRef.id;
+        } catch (error) {
+            console.log("Error @saveOutfit:", error.message);
+        } finally {
+            return oid;
+        }
+    },
+
+    shareOutfit: async (outfit) => {
+        let success = false;
+        const oid = outfit.oid;
+
+        try {
+            await db
+                .collection("marketplace")
+                .doc(oid)
+                .set({
+                    belt: outfit.belt ?? "",
+                    bottom: outfit.bottom ?? "",
+                    downloaded: [],
+                    footwear: outfit.footwear ?? "",
+                    glasses: outfit.glasses ?? "",
+                    headwear: outfit.headwear ?? "",
+                    neckwear: outfit.neckwear ?? "",
+                    overwear: outfit.overwear ?? "",
+                    socks: outfit.socks ?? "",
+                    tie: outfit.tie ?? "",
+                    timeShared: Firebase.getTimestamp(),
+                    top: outfit.top ?? "",
+                    wristwear: outfit.wristwear ?? "",
+                });
+
+            success = true;
+        } catch (error) {
+            console.log("Error @shareOutfit:", error.message);
+        } finally {
+            return success;
+        }
+    },
+
+    unshareOutfit: async (oid) => {
+        let success = false;
+
+        try {
+            await db.collection("marketplace").doc(oid).delete();
+
+            success = true;
+        } catch (error) {
+            console.log("Error @unshareOutfit:", error.message);
+        } finally {
+            return success;
         }
     },
 };

@@ -26,7 +26,7 @@ export default ClosetScreen = ({ navigation }) => {
     const [profileOverlay, setProfileOverlay] = useState(false);
     const [loading, setLoading] = useState(false);
     const [uri, setUri] = useState(
-        user.profilePhotoUrl === "default" ? "" : user.profilePhotoUrl
+        user.profilePhotoUrl !== "default" ? user.profilePhotoUrl : ""
     );
 
     const windowWidth = Dimensions.get("window").width;
@@ -48,7 +48,7 @@ export default ClosetScreen = ({ navigation }) => {
     const cancel = () => {
         if (uri !== user.profilePhotoUrl)
             setUri(
-                user.profilePhotoUrl === "default" ? "" : user.profilePhotoUrl
+                user.profilePhotoUrl !== "default" ? user.profilePhotoUrl : ""
             );
         setProfileOverlay(false);
     };
@@ -156,9 +156,9 @@ export default ClosetScreen = ({ navigation }) => {
                     >
                         <ProfilePhoto
                             source={
-                                user.profilePhotoUrl === "default"
-                                    ? require("../../assets/defaultProfilePhoto.jpg")
-                                    : { uri: user.profilePhotoUrl }
+                                user.profilePhotoUrl !== "default"
+                                    ? { uri: user.profilePhotoUrl }
+                                    : require("../../assets/defaultProfilePhoto.jpg")
                             }
                         />
                     </ProfilePhotoContainer>
@@ -217,11 +217,13 @@ export default ClosetScreen = ({ navigation }) => {
 
                             <TO
                                 onPress={
-                                    uri === user.profilePhotoUrl ||
-                                    (uri === "" &&
-                                        user.profilePhotoUrl === "default")
-                                        ? () => navigation.navigate("Premium")
-                                        : confirm
+                                    uri !== user.profilePhotoUrl &&
+                                    !(
+                                        !uri &&
+                                        user.profilePhotoUrl === "default"
+                                    )
+                                        ? confirm
+                                        : () => navigation.navigate("Premium")
                                 }
                                 disabled={
                                     (uri === user.profilePhotoUrl ||
@@ -233,19 +235,23 @@ export default ClosetScreen = ({ navigation }) => {
                             >
                                 <MaterialCommunityIcons
                                     name={
-                                        uri === user.profilePhotoUrl ||
-                                        (uri === "" &&
-                                            user.profilePhotoUrl === "default")
-                                            ? "crown"
-                                            : "check"
+                                        uri !== user.profilePhotoUrl &&
+                                        !(
+                                            !uri &&
+                                            user.profilePhotoUrl === "default"
+                                        )
+                                            ? "check"
+                                            : "crown"
                                     }
                                     size={windowWidth / 8}
                                     color={
-                                        uri === user.profilePhotoUrl ||
-                                        (uri === "" &&
-                                            user.profilePhotoUrl === "default")
-                                            ? "#ffd700"
-                                            : "#1c4068"
+                                        uri !== user.profilePhotoUrl &&
+                                        !(
+                                            !uri &&
+                                            user.profilePhotoUrl === "default"
+                                        )
+                                            ? "#1c4068"
+                                            : "#ffd700"
                                     }
                                     style={{
                                         opacity:
@@ -298,9 +304,9 @@ export default ClosetScreen = ({ navigation }) => {
                                         {uri ? (
                                             <ProfilePhoto
                                                 source={
-                                                    uri === "default"
-                                                        ? require("../../assets/defaultProfilePhoto.jpg")
-                                                        : { uri }
+                                                    uri !== "default"
+                                                        ? { uri }
+                                                        : require("../../assets/defaultProfilePhoto.jpg")
                                                 }
                                             />
                                         ) : (

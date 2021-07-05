@@ -64,16 +64,16 @@ export default SignInScreen = ({ navigation }) => {
             <Container>
                 <Main>
                     <Text title semi center>
-                        Returning User?
+                        Returning user?
                     </Text>
                 </Main>
                 <Auth
                     style={{
                         height: windowHeight / 5,
                         bottom:
-                            keyboardVisible && !(Platform.OS === "ios")
-                                ? "0%"
-                                : "24%",
+                            !keyboardVisible || Platform.OS === "ios"
+                                ? "24%"
+                                : "0%",
                     }}
                     behavior="position"
                     enabled={Platform.OS === "ios"}
@@ -144,7 +144,7 @@ export default SignInScreen = ({ navigation }) => {
                                 />
                             ) : (
                                 <Text bold large center color="#ffffff">
-                                    Sign In
+                                    Sign in
                                 </Text>
                             )}
                         </SignInContainer>

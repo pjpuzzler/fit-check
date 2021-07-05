@@ -357,9 +357,9 @@ export default SettingsScreen = ({ navigation }) => {
                             style={{
                                 height: (windowHeight * 3) / 20,
                                 bottom:
-                                    keyboardVisible && !(Platform.OS === "ios")
-                                        ? "0%"
-                                        : "37%",
+                                    !keyboardVisible || Platform.OS === "ios"
+                                        ? "37%"
+                                        : "0%",
                             }}
                             behavior="position"
                             enabled={Platform.OS === "ios"}

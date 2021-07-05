@@ -106,10 +106,10 @@ export default SearchScreen = ({ navigation }) => {
                     >
                         <ProfilePhoto
                             source={
-                                !item.profilePhotoUrl ||
-                                item.profilePhotoUrl === "default"
-                                    ? require("../../assets/defaultProfilePhoto.jpg")
-                                    : { uri: item.profilePhotoUrl }
+                                item.profilePhotoUrl &&
+                                item.profilePhotoUrl !== "default"
+                                    ? { uri: item.profilePhotoUrl }
+                                    : require("../../assets/defaultProfilePhoto.jpg")
                             }
                         />
                     </ProfilePhotoContainer>
@@ -244,13 +244,13 @@ export default SearchScreen = ({ navigation }) => {
                                 keyboardShouldPersistTaps="handled"
                                 keyExtractor={(item) => item.uid}
                                 ListEmptyComponent={
-                                    !search ? (
+                                    search ? (
                                         <Text large bold center margin="5% 0 0">
-                                            Enter Search
+                                            No Results
                                         </Text>
                                     ) : (
                                         <Text large bold center margin="5% 0 0">
-                                            No Results
+                                            Enter Search
                                         </Text>
                                     )
                                 }
@@ -348,18 +348,18 @@ export default SearchScreen = ({ navigation }) => {
                                 >
                                     <ProfilePhoto
                                         source={
-                                            !searchResults[
-                                                searchResultOverlayIndex
-                                            ].profilePhotoUrl ||
                                             searchResults[
                                                 searchResultOverlayIndex
-                                            ].profilePhotoUrl === "default"
-                                                ? require("../../assets/defaultProfilePhoto.jpg")
-                                                : {
+                                            ].profilePhotoUrl &&
+                                            searchResults[
+                                                searchResultOverlayIndex
+                                            ].profilePhotoUrl !== "default"
+                                                ? {
                                                       uri: searchResults[
                                                           searchResultOverlayIndex
                                                       ].profilePhotoUrl,
                                                   }
+                                                : require("../../assets/defaultProfilePhoto.jpg")
                                         }
                                     />
                                 </ProfilePhotoContainer>

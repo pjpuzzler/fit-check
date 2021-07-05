@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from "react";
-import { Alert } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Dimensions } from "react-native";
 import styled from "styled-components";
 import LottieView from "lottie-react-native";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -12,15 +13,24 @@ export default LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
+    const [loading, setLoading] = useState(true);
+
+    const windowWidth = Dimensions.get("window").width;
+
     useEffect(() => {
-        setTimeout(load, 1000);
-    });
+        if (loading) setTimeout(load, 1000);
+    }, [loading]);
 
     const load = async () => {
         let isLoggedIn = false,
             userInfo = null;
 
-        const currentUser = await firebase.getCurrentUser();
+        const [success, currentUser] = await firebase.getCurrentUser();
+
+        if (!success) {
+            setLoading(false);
+            return;
+        }
 
         if (currentUser) {
             const uid = currentUser.uid;
@@ -71,14 +81,28 @@ export default LoadingScreen = () => {
 
     return (
         <Container>
-            <LottieView
-                source={require("../../assets/loadingAnimation.json")}
-                autoPlay
-                loop
-            />
+            {loading ? (
+                <LottieView
+                    source={require("../../assets/loadingAnimation.json")}
+                    autoPlay
+                    loop
+                />
+            ) : (
+                <RefreshContainer>
+                    <TO onPress={() => setLoading(true)}>
+                        <MaterialCommunityIcons
+                            name="refresh"
+                            size={windowWidth / 3}
+                            color="#1c4068"
+                        />
+                    </TO>
 
-            <Text tiny center style={{ position: "absolute", bottom: "2%" }}>
-                {"© 2021 Fit Check - Team Fit Check\nMade in Centre Hall, PA"}
+                    <Text large>Could not connect</Text>
+                </RefreshContainer>
+            )}
+
+            <Text tiny center style={{ position: "absolute", bottom: "3%" }}>
+                {"© 2021 Fit Check - Team Fit Check\nMade in Pennsylvania"}
             </Text>
         </Container>
     );
@@ -91,3 +115,9 @@ const Container = styled.SafeAreaView`
     justify-content: center;
     background-color: #ffffff;
 `;
+
+const RefreshContainer = styled.SafeAreaView`
+    align-items: center;
+`;
+
+const TO = styled.TouchableOpacity``;
