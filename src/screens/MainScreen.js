@@ -26,10 +26,46 @@ export default MainScreen = ({ route, navigation }) => {
 
     const windowWidth = Dimensions.get("window").width;
 
+    const Belt = currentOutfit.belt ? svgDict[currentOutfit.belt.name] : null;
+
+    const Bottom = currentOutfit.bottom
+        ? svgDict[currentOutfit.bottom.name]
+        : null;
+
+    const Footwear = currentOutfit.footwear
+        ? svgDict[currentOutfit.footwear.name]
+        : null;
+
+    const Glasses = currentOutfit.glasses
+        ? svgDict[currentOutfit.glasses.name]
+        : null;
+
+    const Headwear = currentOutfit.headwear
+        ? svgDict[currentOutfit.headwear.name]
+        : null;
+
+    const Neckwear = currentOutfit.neckwear
+        ? svgDict[currentOutfit.neckwear.name]
+        : null;
+
+    const Overwear = currentOutfit.overwear
+        ? svgDict[currentOutfit.overwear.name]
+        : null;
+
+    const Socks = currentOutfit.socks
+        ? svgDict[currentOutfit.socks.name]
+        : null;
+
+    const Tie = currentOutfit.tie ? svgDict[currentOutfit.tie.name] : null;
+
     const Top = currentOutfit.top
         ? svgDict[
               currentOutfit.top.name + (currentOutfit.overwear ? "_under" : "")
           ]
+        : null;
+
+    const Wristwear = currentOutfit.wristwear
+        ? svgDict[currentOutfit.wristwear.name]
         : null;
 
     useEffect(() => {
@@ -173,7 +209,7 @@ export default MainScreen = ({ route, navigation }) => {
 
     return (
         <Container>
-            {!selectedClothing && !fullscreen ? (
+            {!fullscreen ? (
                 <Container style={{ position: "absolute" }}>
                     <Line
                         style={{
@@ -193,7 +229,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "neckwear",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("neckwear")}
@@ -207,7 +243,11 @@ export default MainScreen = ({ route, navigation }) => {
                             name="necklace"
                             size={windowWidth / 10}
                             color={
-                                currentOutfit.neckwear ? "#1c4068" : "#666666"
+                                selectedClothing === "neckwear"
+                                    ? "#18d299"
+                                    : currentOutfit.neckwear
+                                    ? "#1c4068"
+                                    : "#666666bf"
                             }
                         />
                     </TO>
@@ -222,7 +262,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "top",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("top")}
@@ -235,7 +275,13 @@ export default MainScreen = ({ route, navigation }) => {
                         <MaterialCommunityIcons
                             name="tshirt-crew"
                             size={windowWidth / 10}
-                            color={currentOutfit.top ? "#1c4068" : "#666666"}
+                            color={
+                                selectedClothing === "top"
+                                    ? "#18d299"
+                                    : currentOutfit.top
+                                    ? "#1c4068"
+                                    : "#666666bf"
+                            }
                         />
                     </TO>
 
@@ -278,7 +324,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "wristwear",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("wristwear")}
@@ -292,7 +338,11 @@ export default MainScreen = ({ route, navigation }) => {
                             name="watch"
                             size={windowWidth / 10}
                             color={
-                                currentOutfit.wristwear ? "#1c4068" : "#666666"
+                                selectedClothing === "wristwear"
+                                    ? "#18d299"
+                                    : currentOutfit.wristwear
+                                    ? "#1c4068"
+                                    : "#666666bf"
                             }
                         />
                     </TO>
@@ -312,7 +362,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "footwear",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("footwear")}
@@ -326,7 +376,11 @@ export default MainScreen = ({ route, navigation }) => {
                             name="shoe-formal"
                             size={windowWidth / 10}
                             color={
-                                currentOutfit.footwear ? "#1c4068" : "#666666"
+                                selectedClothing === "footwear"
+                                    ? "#18d299"
+                                    : currentOutfit.footwear
+                                    ? "#1c4068"
+                                    : "#666666bf"
                             }
                         />
                     </TO>
@@ -346,7 +400,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "socks",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("socks")}
@@ -359,7 +413,13 @@ export default MainScreen = ({ route, navigation }) => {
                         <FontAwesome5
                             name="socks"
                             size={windowWidth / 14}
-                            color={currentOutfit.socks ? "#1c4068" : "#666666"}
+                            color={
+                                selectedClothing === "socks"
+                                    ? "#18d299"
+                                    : currentOutfit.socks
+                                    ? "#1c4068"
+                                    : "#666666bf"
+                            }
                         />
                     </TO>
 
@@ -381,7 +441,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "overwear",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("overwear")}
@@ -407,7 +467,7 @@ export default MainScreen = ({ route, navigation }) => {
                                 : () =>
                                       navigation.navigate("Clothing", {
                                           clothingType: "headwear",
-                                          isCloset: false,
+                                          isPicker: true,
                                       })
                         }
                         onLongPress={() => removeClothing("headwear")}
@@ -421,7 +481,11 @@ export default MainScreen = ({ route, navigation }) => {
                             name="hat-fedora"
                             size={windowWidth / 10}
                             color={
-                                currentOutfit.headwear ? "#1c4068" : "#666666"
+                                selectedClothing === "headwear"
+                                    ? "#18d299"
+                                    : currentOutfit.headwear
+                                    ? "#1c4068"
+                                    : "#666666bf"
                             }
                         />
                     </TO>
@@ -432,41 +496,41 @@ export default MainScreen = ({ route, navigation }) => {
                 <TO
                     onPress={() => setSelectedClothing("top")}
                     onLongPress={() => removeClothing("top")}
-                    style={{ position: "absolute", bottom: "33%" }}
+                    style={{ position: "absolute", bottom: "40%" }}
                 >
                     {Top ? (
                         <Top
-                            width={windowWidth * 0.6}
-                            height={windowWidth * 0.6}
+                            width={windowWidth * 0.65}
+                            height={windowWidth * 0.65}
                             color1={
                                 currentOutfit.top.color1
                                     ? currentOutfit.top.color1.hex
-                                    : null
+                                    : "#999999bf"
                             }
                             shadow1={
                                 currentOutfit.top.color1
                                     ? currentOutfit.top.color1.shadow
-                                    : null
+                                    : "#888888bf"
                             }
                             color2={
                                 currentOutfit.top.color2
                                     ? currentOutfit.top.color2.hex
-                                    : null
+                                    : "#777777bf"
                             }
                             shadow2={
                                 currentOutfit.top.color2
                                     ? currentOutfit.top.color2.shadow
-                                    : null
+                                    : "#666666bf"
                             }
                             color3={
                                 currentOutfit.top.color3
                                     ? currentOutfit.top.color3.hex
-                                    : null
+                                    : "#555555bf"
                             }
                             shadow3={
                                 currentOutfit.top.color3
                                     ? currentOutfit.top.color3.shadow
-                                    : null
+                                    : "#444444bf"
                             }
                         />
                     ) : null}
@@ -561,8 +625,9 @@ const Container = styled.SafeAreaView`
 `;
 
 const OutfitContainer = styled.SafeAreaView`
-    height: 90%;
-    width: 60%;
+    height: 76%;
+    width: 65%;
+    bottom: 7%;
     position: absolute;
 `;
 

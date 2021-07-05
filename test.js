@@ -1,4 +1,1 @@
-const clothingType = "top";
-const obj = { top: "t", bottom: "b" };
-const { [clothingType]: _, ...obj2 } = obj;
-console.log(obj2);
+console.log(Boolean(0));

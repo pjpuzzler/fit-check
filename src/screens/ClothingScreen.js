@@ -19,7 +19,9 @@ export default ClothingScreen = ({ route, navigation }) => {
     const isPicker = route.params.isPicker;
     const clothingData = clothes[clothingType];
 
-    const [wardrobeFilter, setWardrobeFilter] = useState(true);
+    const [wardrobeFilter, setWardrobeFilter] = useState(
+        Boolean(user.clothing.length)
+    );
     const [sexFilter, setSexFilter] = useState(user.sex);
     const [preData, setPreData] = useState(clothingData);
     const [data, setData] = useState(preData);
@@ -39,6 +41,7 @@ export default ClothingScreen = ({ route, navigation }) => {
     }, [wardrobeFilter]);
 
     const renderClothing = ({ item }) => {
+        console.log(item.name);
         const Clothing = svgDict[item.name];
 
         return (
@@ -58,6 +61,8 @@ export default ClothingScreen = ({ route, navigation }) => {
                     <Clothing
                         width={windowWidth * 0.48}
                         height={windowWidth * 0.48}
+                        color1="#999"
+                        shadow1="#888"
                     />
                 ) : (
                     <FontAwesome5
@@ -101,27 +106,60 @@ export default ClothingScreen = ({ route, navigation }) => {
             </TopBar>
 
             <FiltersContainer>
-                <TO onPress={() => setSexFilter("male")}>
+                <TO
+                    onPress={() => setSexFilter("male")}
+                    style={{ width: "33.3%", alignItems: "center" }}
+                >
                     <MaterialCommunityIcons
                         name="gender-male"
                         size={windowWidth / 12}
                         color={sexFilter === "male" ? "#1c4068" : "#666666"}
                     />
+
+                    <SexFilterBackground
+                        style={{
+                            backgroundColor:
+                                sexFilter === "male" ? "#1c4068" : "#666666",
+                            opacity: 0.15,
+                        }}
+                    />
                 </TO>
 
-                <TO onPress={() => setSexFilter("inter")}>
+                <TO
+                    onPress={() => setSexFilter("inter")}
+                    style={{ width: "33.3%", alignItems: "center" }}
+                >
                     <MaterialCommunityIcons
                         name="gender-male-female"
                         size={windowWidth / 12}
                         color={sexFilter === "inter" ? "#1c4068" : "#666666"}
                     />
+
+                    <SexFilterBackground
+                        style={{
+                            backgroundColor:
+                                sexFilter === "inter" ? "#1c4068" : "#666666",
+                            opacity: 0.15,
+                        }}
+                    />
                 </TO>
 
-                <TO onPress={() => setSexFilter("female")}>
+                <TO
+                    onPress={() => setSexFilter("female")}
+                    style={{ width: "33.3%", alignItems: "center" }}
+                >
                     <MaterialCommunityIcons
                         name="gender-female"
                         size={windowWidth / 12}
                         color={sexFilter === "female" ? "#1c4068" : "#666666"}
+                    />
+
+                    <SexFilterBackground
+                        style={{
+                            backgroundColor:
+                                sexFilter === "female" ? "#1c4068" : "#666666",
+                            opacity: 0.15,
+                        }}
                     />
                 </TO>
             </FiltersContainer>
@@ -154,17 +192,22 @@ const TopBar = styled.SafeAreaView`
 const TO = styled.TouchableOpacity``;
 
 const FiltersContainer = styled.SafeAreaView`
-    width: 85%;
-    margin-top: 5%;
+    width: 100%;
+    margin-top: 2%;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+`;
+
+const SexFilterBackground = styled.SafeAreaView`
+    position: absolute;
+    width: 100%;
+    height: 100%;
 `;
 
 const ClothingList = styled.FlatList`
     width: 100%;
     height: 100%;
-    margin-top: 5%;
+    margin-top: 2%;
 `;
 
 const ClothingContainer = styled.TouchableOpacity`
