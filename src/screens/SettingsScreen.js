@@ -60,7 +60,7 @@ export default SettingsScreen = ({ navigation }) => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
         };
-    });
+    }, []);
 
     const logOut = async () => {
         const res = await logOutAlert();

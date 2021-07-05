@@ -46,7 +46,7 @@ export default SearchScreen = ({ navigation }) => {
         );
 
         return backHandler.remove;
-    });
+    }, []);
 
     useEffect(() => {
         setLoading(true);

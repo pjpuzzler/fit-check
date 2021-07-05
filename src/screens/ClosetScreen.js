@@ -43,7 +43,7 @@ export default ClosetScreen = ({ navigation }) => {
         );
 
         return () => backHandler.remove();
-    });
+    }, []);
 
     const cancel = () => {
         if (uri !== user.profilePhotoUrl)

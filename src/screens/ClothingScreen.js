@@ -41,7 +41,6 @@ export default ClothingScreen = ({ route, navigation }) => {
     }, [wardrobeFilter]);
 
     const renderClothing = ({ item }) => {
-        console.log(item.name);
         const Clothing = svgDict[item.name];
 
         return (

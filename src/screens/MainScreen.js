@@ -74,6 +74,24 @@ export default MainScreen = ({ route, navigation }) => {
     }, [route.params]);
 
     useEffect(() => {
+        let newOutfit = currentOutfit;
+
+        if (
+            currentOutfit.belt &&
+            (!currentOutfit.bottom || !currentOutfit.bottom.allowsBelt)
+        )
+            delete newOutfit.belt;
+
+        if (
+            currentOutfit.tie &&
+            (!currentOutfit.top || !currentOutfit.top.allowsTie)
+        )
+            delete newOutfit.tie;
+
+        setCurrentOutfit(newOutfit);
+    }, [currentOutfit.bottom, currentOutfit.top]);
+
+    useEffect(() => {
         const colors = [
             ...Object.values(currentOutfit).reduce((colors, clothing) => {
                 if (clothing.color1) colors.push(clothing.color1);

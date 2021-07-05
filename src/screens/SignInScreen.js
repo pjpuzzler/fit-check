@@ -36,7 +36,7 @@ export default SignInScreen = ({ navigation }) => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
         };
-    });
+    }, []);
 
     const signIn = async () => {
         setLoading(true);

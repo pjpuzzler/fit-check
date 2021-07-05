@@ -37,7 +37,7 @@ export default SignUpScreen = ({ navigation }) => {
             keyboardDidHideListener.remove();
             keyboardDidShowListener.remove();
         };
-    });
+    }, []);
 
     const signUp = async () => {
         setInvalidSignUpMessage("");
