@@ -1,3 +1,5 @@
+import sweatpants from "./bottom/sweatpants.svg";
+
 import tshirt from "./top/tshirt.svg";
 import tshirt_under from "./top/tshirt_under.svg";
 import tshirt_vneck from "./top/tshirt_vneck.svg";
@@ -6,6 +8,7 @@ import flannel_shirt_long from "./top/flannel_shirt_long.svg";
 import flannel_shirt_long_under from "./top/flannel_shirt_long_under.svg";
 
 const clothes = {
+    bottom: [{ name: "sweatpants", sex: ["male", "female"], colors: 1 }],
     top: [
         { name: "tshirt", sex: ["male", "female"], colors: 1 },
         { name: "tshirt_vneck", sex: ["male", "female"], colors: 1 },
@@ -19,6 +22,7 @@ const clothes = {
 };
 
 const svgDict = {
+    sweatpants,
     tshirt,
     tshirt_under,
     tshirt_vneck,
