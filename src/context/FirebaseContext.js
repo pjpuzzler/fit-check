@@ -400,7 +400,7 @@ const Firebase = {
         let success = false;
 
         try {
-            await db.collection("marketplace").doc(pid).add({
+            await db.collection("marketplace").add({
                 downloaded: [],
                 palette,
                 timeShared: Firebase.getTimestamp(),
