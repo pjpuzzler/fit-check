@@ -40,7 +40,7 @@ export default LoadingScreen = () => {
             if (userInfo) {
                 userInfo = {
                     ...userInfo,
-                    currentOutfit: {},
+                    currentPalette: {},
                     uid,
                 };
 

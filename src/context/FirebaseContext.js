@@ -62,17 +62,17 @@ const Firebase = {
 
         try {
             await db.collection("users").doc(uid).set({
-                clothing: [],
                 coins: 0,
+                colors: [],
                 downloads: 0,
                 followers: 0,
                 following: [],
                 lastDailyCheckIn: Firebase.getTimestamp(),
-                outfits: [],
+                palettes: [],
                 premium: false,
                 profilePhotoUrl: "",
                 sex: "",
-                sharedOutfits: [],
+                sharedPalettes: [],
                 username,
             });
 
@@ -371,75 +371,59 @@ const Firebase = {
         }
     },
 
-    saveOutfit: async (outfit) => {
-        let oid = null;
+    savePalette: async (uid, palette) => {
+        let palettes = null;
 
         try {
-            const outfitRef = await db.collection("marketplace").add({
-                belt: outfit.belt ?? "",
-                bottom: outfit.bottom ?? "",
-                downloaded: [],
-                footwear: outfit.footwear ?? "",
-                glasses: outfit.glasses ?? "",
-                headwear: outfit.headwear ?? "",
-                neckwear: outfit.neckwear ?? "",
-                overwear: outfit.overwear ?? "",
-                socks: outfit.socks ?? "",
-                tie: outfit.tie ?? "",
-                timeShared: Firebase.getTimestamp(),
-                top: outfit.top ?? "",
-                wristwear: outfit.wristwear ?? "",
-            });
+            const userRef = db.collection("users").doc(uid);
 
-            oid = outfitRef.id;
+            palettes = await db.runTransaction(async (t) => {
+                const userDoc = await t.get(userRef);
+                const userData = userDoc.data();
+
+                palettes = [...userData.palettes, palette];
+
+                t.update(userRef, {
+                    palettes,
+                });
+
+                return palettes;
+            });
         } catch (error) {
-            console.log("Error @saveOutfit:", error.message);
+            console.log("Error @savePalette", error.message);
         } finally {
-            return oid;
+            return palettes;
         }
     },
 
-    shareOutfit: async (outfit) => {
+    sharePalette: async (uid, palette) => {
         let success = false;
-        const oid = outfit.oid;
 
         try {
-            await db
-                .collection("marketplace")
-                .doc(oid)
-                .set({
-                    belt: outfit.belt ?? "",
-                    bottom: outfit.bottom ?? "",
-                    downloaded: [],
-                    footwear: outfit.footwear ?? "",
-                    glasses: outfit.glasses ?? "",
-                    headwear: outfit.headwear ?? "",
-                    neckwear: outfit.neckwear ?? "",
-                    overwear: outfit.overwear ?? "",
-                    socks: outfit.socks ?? "",
-                    tie: outfit.tie ?? "",
-                    timeShared: Firebase.getTimestamp(),
-                    top: outfit.top ?? "",
-                    wristwear: outfit.wristwear ?? "",
-                });
+            await db.collection("marketplace").doc(pid).add({
+                downloaded: [],
+                palette,
+                timeShared: Firebase.getTimestamp(),
+                uid,
+            });
 
             success = true;
         } catch (error) {
-            console.log("Error @shareOutfit:", error.message);
+            console.log("Error @sharePalette:", error.message);
         } finally {
             return success;
         }
     },
 
-    unshareOutfit: async (oid) => {
+    unsharePalette: async (pid) => {
         let success = false;
 
         try {
-            await db.collection("marketplace").doc(oid).delete();
+            await db.collection("marketplace").doc(pid).delete();
 
             success = true;
         } catch (error) {
-            console.log("Error @unshareOutfit:", error.message);
+            console.log("Error @unsharePalette:", error.message);
         } finally {
             return success;
         }
