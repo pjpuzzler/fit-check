@@ -11,124 +11,12 @@ import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
 
 import Text from "../components/Text";
-import { getMatchScore } from "../components/colors";
-
-import { svgDict } from "../../assets/clothes/clothingData";
 
 export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
-    const [currentOutfit, setCurrentOutfit] = useState({});
-    const [selectedClothing, setSelectedClothing] = useState("");
-    const [fullscreen, setFullscreen] = useState(false);
-    const [matchScore, setMatchScore] = useState(null);
-
     const windowWidth = Dimensions.get("window").width;
-
-    const Belt = currentOutfit.belt ? svgDict[currentOutfit.belt.name] : null;
-
-    const Bottom = currentOutfit.bottom
-        ? svgDict[currentOutfit.bottom.name]
-        : null;
-
-    const Footwear = currentOutfit.footwear
-        ? svgDict[currentOutfit.footwear.name]
-        : null;
-
-    const Glasses = currentOutfit.glasses
-        ? svgDict[currentOutfit.glasses.name]
-        : null;
-
-    const Headwear = currentOutfit.headwear
-        ? svgDict[currentOutfit.headwear.name]
-        : null;
-
-    const Neckwear = currentOutfit.neckwear
-        ? svgDict[currentOutfit.neckwear.name]
-        : null;
-
-    const Overwear = currentOutfit.overwear
-        ? svgDict[currentOutfit.overwear.name]
-        : null;
-
-    const Socks = currentOutfit.socks
-        ? svgDict[currentOutfit.socks.name]
-        : null;
-
-    const Tie = currentOutfit.tie ? svgDict[currentOutfit.tie.name] : null;
-
-    const Top = currentOutfit.top
-        ? svgDict[
-              currentOutfit.top.name + (currentOutfit.overwear ? "_under" : "")
-          ]
-        : null;
-
-    const Wristwear = currentOutfit.wristwear
-        ? svgDict[currentOutfit.wristwear.name]
-        : null;
-
-    useEffect(() => {
-        if (route.params && route.params.outfit)
-            setCurrentOutfit({ ...currentOutfit, ...route.params.outfit });
-    }, [route.params]);
-
-    useEffect(() => {
-        let newOutfit = currentOutfit;
-
-        if (
-            currentOutfit.belt &&
-            (!currentOutfit.bottom || !currentOutfit.bottom.allowsBelt)
-        )
-            delete newOutfit.belt;
-
-        if (
-            currentOutfit.tie &&
-            (!currentOutfit.top || !currentOutfit.top.allowsTie)
-        )
-            delete newOutfit.tie;
-
-        setCurrentOutfit(newOutfit);
-    }, [currentOutfit.bottom, currentOutfit.top]);
-
-    useEffect(() => {
-        const colors = [
-            ...Object.values(currentOutfit).reduce((colors, clothing) => {
-                if (clothing.color1) colors.push(clothing.color1);
-
-                return colors;
-            }, []),
-            ...Object.values(currentOutfit).reduce((colors, clothing) => {
-                if (clothing.color2) colors.push(clothing.color2);
-
-                return colors;
-            }, []),
-            ...Object.values(currentOutfit).reduce((colors, clothing) => {
-                if (clothing.color3) colors.push(clothing.color3);
-
-                return colors;
-            }, []),
-        ];
-
-        if (colors.length) setMatchScore(getMatchScore(colors));
-    }, [currentOutfit]);
-
-    const removeClothing = async (clothingType) => {
-        if (!currentOutfit[clothingType]) return;
-
-        const res = await alert(
-            "Remove Clothing",
-            "Are you sure you want to remove this clothing?"
-        );
-
-        if (!res) return;
-
-        if (clothingType === selectedClothing) setSelectedClothing("");
-
-        const { [clothingType]: _, ...newOutfit } = currentOutfit;
-
-        setCurrentOutfit(newOutfit);
-    };
 
     const alert = (title, msg) => {
         return new Promise((resolve, _) => {
@@ -148,13 +36,13 @@ export default MainScreen = ({ route, navigation }) => {
 
     const clear = async () => {
         const res = await alert(
-            "Clear Outfit",
-            "Are you sure you want to clear this outfit?"
+            "Clear Palette",
+            "Are you sure you want to clear this palette?"
         );
 
         if (!res) return;
 
-        setCurrentOutfit({});
+        setCurrentPalette({});
     };
 
     const save = async () => {
