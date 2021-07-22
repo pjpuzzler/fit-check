@@ -2,10 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Platform, StatusBar, Dimensions, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import styled from "styled-components";
-import {
-    MaterialCommunityIcons,
-    FontAwesome5,
-} from "react-native-vector-icons";
+import { MaterialCommunityIcons, FontAwesome } from "react-native-vector-icons";
 
 import { UserContext } from "../context/UserContext";
 import { FirebaseContext } from "../context/FirebaseContext";
@@ -65,7 +62,49 @@ export default MainScreen = ({ route, navigation }) => {
         } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
-    return <Container></Container>;
+    return (
+        <Container>
+            <TopBar
+                style={{
+                    paddingTop:
+                        Platform.OS === "android" ? StatusBar.currentHeight : 0,
+                }}
+            >
+                <TO
+                    onPress={clear}
+                    disabled={!Object.keys(currentPalette).length}
+                >
+                    <MaterialCommunityIcons
+                        name="trash-can"
+                        size={windowWidth / 8}
+                        style={{
+                            opacity: !Object.keys(currentPalette).length
+                                ? 0.5
+                                : 1,
+                        }}
+                        color="#ff0000"
+                    />
+                </TO>
+
+                <Text large bold>
+                    Create Palette
+                </Text>
+
+                <TO disabled={!Object.keys(currentPalette).length}>
+                    <FontAwesome
+                        name="magic"
+                        size={windowWidth / 8}
+                        style={{
+                            opacity: !Object.keys(currentPalette).length
+                                ? 0.5
+                                : 1,
+                        }}
+                        color="#18d299"
+                    />
+                </TO>
+            </TopBar>
+        </Container>
+    );
 };
 
 const Container = styled.SafeAreaView`
@@ -74,3 +113,12 @@ const Container = styled.SafeAreaView`
     height: 100%;
     background-color: #ffffff;
 `;
+
+const TopBar = styled.SafeAreaView`
+    width: 95%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const TO = styled.TouchableOpacity``;
