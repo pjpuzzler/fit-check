@@ -13,7 +13,7 @@ export default MainScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
     const firebase = useContext(FirebaseContext);
 
-    const [currentPalette, setCurrentPalette] = useState({});
+    const [currentPalette, setCurrentPalette] = useState([]);
 
     const windowWidth = Dimensions.get("window").width;
 
@@ -41,7 +41,7 @@ export default MainScreen = ({ route, navigation }) => {
 
         if (!res) return;
 
-        setCurrentPalette({});
+        setCurrentPalette([]);
     };
 
     const save = async () => {
@@ -62,6 +62,10 @@ export default MainScreen = ({ route, navigation }) => {
         } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 
+    const renderPalette = ({ item }) => {
+        return null;
+    };
+
     return (
         <Container>
             <TopBar
@@ -70,17 +74,12 @@ export default MainScreen = ({ route, navigation }) => {
                         Platform.OS === "android" ? StatusBar.currentHeight : 0,
                 }}
             >
-                <TO
-                    onPress={clear}
-                    disabled={!Object.keys(currentPalette).length}
-                >
+                <TO onPress={clear} disabled={!currentPalette.length}>
                     <MaterialCommunityIcons
                         name="trash-can"
                         size={windowWidth / 8}
                         style={{
-                            opacity: !Object.keys(currentPalette).length
-                                ? 0.5
-                                : 1,
+                            opacity: !currentPalette.length ? 0.5 : 1,
                         }}
                         color="#ff0000"
                     />
@@ -90,19 +89,27 @@ export default MainScreen = ({ route, navigation }) => {
                     Create Palette
                 </Text>
 
-                <TO disabled={!Object.keys(currentPalette).length}>
+                <TO disabled={!currentPalette.length}>
                     <FontAwesome
                         name="magic"
                         size={windowWidth / 8}
                         style={{
-                            opacity: !Object.keys(currentPalette).length
-                                ? 0.5
-                                : 1,
+                            opacity: !currentPalette.length ? 0.5 : 1,
                         }}
                         color="#18d299"
                     />
                 </TO>
             </TopBar>
+
+            <Palette
+                data={
+                    currentPalette + currentPalette.length < 6
+                        ? [{ type: "add" }]
+                        : []
+                }
+                keyExtractor={(item) => item.type}
+                renderItem={renderPalette}
+            />
         </Container>
     );
 };
@@ -122,3 +129,8 @@ const TopBar = styled.SafeAreaView`
 `;
 
 const TO = styled.TouchableOpacity``;
+
+const Palette = styled.FlatList`
+    width: 100%;
+    height: 100%;
+`;
