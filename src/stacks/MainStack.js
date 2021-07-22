@@ -8,10 +8,10 @@ import MarketplaceScreen from "../screens/MarketplaceScreen";
 import MainScreen from "../screens/MainScreen";
 import ClosetScreen from "../screens/ClosetScreen";
 
-export default HiddenStack = () => {
+export default MainStack = () => {
     const windowWidth = Dimensions.get("window").width;
 
-    const Tab = createMaterialTopTabNavigator();
+    const TabBar = createMaterialTopTabNavigator();
 
     const tabBarOptions = {
         indicatorStyle: {
@@ -61,15 +61,15 @@ export default HiddenStack = () => {
     });
 
     return (
-        <Tab.Navigator
+        <TabBar.Navigator
             initialRouteName="Main"
             tabBarOptions={tabBarOptions}
             tabBarPosition="bottom"
             screenOptions={screenOptions}
         >
-            <Tab.Screen name="Marketplace" component={MarketplaceScreen} />
-            <Tab.Screen name="Main" component={MainScreen} />
-            <Tab.Screen name="Closet" component={ClosetScreen} />
-        </Tab.Navigator>
+            <TabBar.Screen name="Marketplace" component={MarketplaceScreen} />
+            <TabBar.Screen name="Main" component={MainScreen} />
+            <TabBar.Screen name="Closet" component={ClosetScreen} />
+        </TabBar.Navigator>
     );
 };
