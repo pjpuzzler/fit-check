@@ -59,6 +59,7 @@ export default MainScreen = ({ route, navigation }) => {
         const success = await firebase.sharePalette(user.uid, currentPalette);
 
         if (success) {
+            // TODO
         } else setUser((state) => ({ ...state, isLoggedIn: null }));
     };
 

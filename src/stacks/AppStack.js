@@ -5,7 +5,6 @@ import { UserContext } from "../context/UserContext";
 
 import LoadingScreen from "../screens/LoadingScreen";
 import SelectProfilePhotoScreen from "../screens/SelectProfilePhotoScreen";
-import SelectSexScreen from "../screens/SelectSexScreen";
 import HiddenStack from "./HiddenStack";
 import AuthStack from "./AuthStack";
 
@@ -23,11 +22,6 @@ export default AppStack = () => {
                     <AppStack.Screen
                         name="SelectProfilePhoto"
                         component={SelectProfilePhotoScreen}
-                    />
-                ) : !user.sex ? (
-                    <AppStack.Screen
-                        name="SelectSex"
-                        component={SelectSexScreen}
                     />
                 ) : (
                     <AppStack.Screen name="Hidden" component={HiddenStack} />

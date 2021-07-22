@@ -93,16 +93,6 @@ export default SettingsScreen = ({ navigation }) => {
         });
     };
 
-    const changeSex = async (sex) => {
-        if (sex === user.sex) return;
-
-        setUser((state) => ({ ...state, sex }));
-
-        const updated = await firebase.updateData(user.uid, { sex });
-
-        if (!updated) setUser((state) => ({ ...state, isLoggedIn: null }));
-    };
-
     const authenticate = async () => {
         setAuthenticationLoading(true);
 
@@ -191,50 +181,6 @@ export default SettingsScreen = ({ navigation }) => {
             </TopBar>
 
             <Container2 contentContainerStyle={{ alignItems: "center" }}>
-                <SectionTitle>
-                    <Text bold color="#18d299">
-                        Preferred Clothing Type
-                    </Text>
-                </SectionTitle>
-
-                <Container3>
-                    <TO
-                        onPress={() => {
-                            changeSex("male");
-                        }}
-                    >
-                        <MaterialCommunityIcons
-                            name="gender-male"
-                            size={windowWidth / 5}
-                            color={user.sex === "male" ? "#5ca0dc" : "#666666"}
-                        />
-                    </TO>
-                    <TO
-                        onPress={() => {
-                            changeSex("inter");
-                        }}
-                    >
-                        <MaterialCommunityIcons
-                            name="gender-male-female"
-                            size={windowWidth / 5}
-                            color={user.sex === "inter" ? "#b2acd8" : "#666666"}
-                        />
-                    </TO>
-                    <TO
-                        onPress={() => {
-                            changeSex("female");
-                        }}
-                    >
-                        <MaterialCommunityIcons
-                            name="gender-female"
-                            size={windowWidth / 5}
-                            color={
-                                user.sex === "female" ? "#f8b9d4" : "#666666"
-                            }
-                        />
-                    </TO>
-                </Container3>
-
                 <SectionTitle>
                     <Text bold color="#18d299">
                         Credits

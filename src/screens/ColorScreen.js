@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 
 import Text from "../components/Text";
 
-export default ClothingScreen = ({ route, navigation }) => {
+export default ColorScreen = ({ route, navigation }) => {
     const [user, setUser] = useContext(UserContext);
 
     const windowWidth = Dimensions.get("window").width;
