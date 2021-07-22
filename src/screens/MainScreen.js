@@ -64,7 +64,17 @@ export default MainScreen = ({ route, navigation }) => {
     };
 
     const renderPalette = ({ item }) => {
-        return null;
+        return (
+            <PaletteContainer>
+                {item.type === "add" ? (
+                    <MaterialCommunityIcons
+                        name="plus"
+                        size={windowWidth / 2}
+                        color="#1c4068"
+                    />
+                ) : null}
+            </PaletteContainer>
+        );
     };
 
     return (
@@ -133,5 +143,9 @@ const TO = styled.TouchableOpacity``;
 
 const Palette = styled.FlatList`
     width: 100%;
-    height: 100%;
+    height: 80%;
+    background-color: green;
+    flex-grow: 0;
 `;
+
+const PaletteContainer = styled.SafeAreaView``;
